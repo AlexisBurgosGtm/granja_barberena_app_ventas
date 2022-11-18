@@ -1004,7 +1004,7 @@ function fcnBusquedaProducto(idFiltro,idTablaResultado,idTipoPrecio){
 function getDataMedidaProducto(codprod,desprod,codmedida,cantidad,equivale,totalunidades,costo,precio,exento,existencia){
     console.log('existencia: ' + existencia);
 
-    if(parseInt(existencia)>0){
+    //if(parseInt(existencia)>0){
         GlobalSelectedCodprod = codprod;
         GlobalSelectedDesprod = desprod;
         GlobalSelectedCodmedida = codmedida;
@@ -1024,9 +1024,9 @@ function getDataMedidaProducto(codprod,desprod,codmedida,cantidad,equivale,total
         document.getElementById('txtCantidad').value = 1;
     
         $("#ModalCantidadProducto").modal('show');    
-    }else{
+    //document}else{
         funciones.AvisoError('Producto SIN EXISTENCIA')
-    }
+    //}
 
 
 };
