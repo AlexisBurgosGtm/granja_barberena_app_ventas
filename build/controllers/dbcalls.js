@@ -396,7 +396,7 @@ function selectProducto(filtro) {
 function downloadClientes (){
     return new Promise((resolve,reject)=>{
 
-        axios.post('/clientes/listavendedortodos', {
+        axios.post('/clientes/listavendedortodos2', {
             sucursal: GlobalCodSucursal,
             codven:GlobalCodUsuario
         })  
