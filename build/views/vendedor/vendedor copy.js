@@ -1,128 +1,49 @@
 function getView(){
     let view = {
-        body:()=>{
-            return `
-                <div class="col-12 p-0 shadow bg-white card-rounded">
-                  
-
-                    <div class="tab-content" id="myTabHomeContent">
-                        <div class="tab-pane fade show active" id="dias" role="tabpanel" aria-labelledby="dias-tab">
-
-                            ${view.dias()}
-
-                        </div>
-                        <div class="tab-pane fade" id="clientes" role="tabpanel" aria-labelledby="clientes-tab">
-                            ${view.tabsClientes()}
-                        </div>
-
-                        <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                   
-                          
-                        </div>
-                      
-                    
-                    </div>
-
-                    <ul class="nav nav-tabs hidden" id="myTabHome" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active negrita text-success" id="tab-dias" data-toggle="tab" href="#dias" role="tab" aria-controls="profile" aria-selected="false">
-                                <i class="fal fa-list"></i></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link negrita text-danger" id="tab-clientes" data-toggle="tab" href="#clientes" role="tab" aria-controls="home" aria-selected="true">
-                                <i class="fal fa-comments"></i></a>
-                        </li> 
-                        <li class="nav-item">
-                            <a class="nav-link negrita text-info" id="tab-home" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">
-                                <i class="fal fa-edit"></i></a>
-                        </li>
-                                                    
-                    </ul>
-
-                </div>
-               
-            `
-        },
-        dias : ()=>{
+        encabezado : ()=>{
             return `
                     <div class="card border-top-rounded">
                         <div class="card-header bg-white">
                             <h4 class="negrita" id="lbTotalDia">Seleccione Dia</h4>
                         </div>
                         <div class="card-body">
-                            
                             <div class="row">
-                                <div class="card card-rounded shadow hand col-12" onclick="getListaClientes('LUNES')">
-                                    <div class="card-body p-2 text-center">
-                                        <h5>LUNES</h5>
-                                    </div>
-                                </div>
-                            </div> 
-                            <br>
-                            <div class="row">
-                                <div class="card card-rounded shadow hand col-12" onclick="getListaClientes('MARTES')">
-                                    <div class="card-body p-2 text-center">
-                                        <h5>MARTES</h5>
-                                    </div>
-                                </div>
-                            </div> 
-                            <br>
-                            <div class="row">
-                                <div class="card card-rounded shadow hand col-12" onclick="getListaClientes('MIERCOLES')">
-                                    <div class="card-body p-2 text-center">
-                                        <h5>MIERCOLES</h5>
-                                    </div>
-                                </div>
-                            </div> 
-                            <br>
-                            <div class="row">
-                                <div class="card card-rounded shadow hand col-12" onclick="getListaClientes('JUEVES')">
-                                    <div class="card-body p-2 text-center">
-                                        <h5>JUEVES</h5>
-                                    </div>
-                                </div>
-                            </div> 
-                            <br>
-                            <div class="row">
-                                <div class="card card-rounded shadow hand col-12" onclick="getListaClientes('VIERNES')">
-                                    <div class="card-body p-2 text-center">
-                                        <h5>VIERNES</h5>
-                                    </div>
-                                </div>
-                            </div> 
-                            <br>
-                            <div class="row">
-                                <div class="card card-rounded shadow hand col-12" onclick="getListaClientes('SABADO')">
-                                    <div class="card-body p-2 text-center">
-                                        <h5>SABADO</h5>
-                                    </div>
-                                </div>
-                            </div> 
-                            <br>
-                            <div class="row">
-                                <div class="card card-rounded shadow hand col-12" onclick="getListaClientes('DOMINGO')">
-                                    <div class="card-body p-2 text-center">
-                                        <h5>DOMINGO</h5>
-                                    </div>
-                                </div>
-                            </div> 
-                            <br>
-                            <div class="row">
-                                <div class="card card-rounded shadow hand col-12" onclick="getListaClientes('OTROS')">
-                                    <div class="card-body p-2 text-center">
-                                        <h5>OTROS</h5>
-                                    </div>
-                                </div>
-                            </div> 
-                            <br>
-                            <div class="row hidden">
                                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">   
                                     <select class="negrita form-control border-secondary border-top-0 border-right-0 border-left-0" id="cmbDiaVisita"></select>                                          
                                 </div>
                             </div> 
-
                         </div>
 
+                    </div>
+            `
+        },
+        listaclientes: ()=>{
+            return `
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Lista de Clientes</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-responsive table-striped table-hover table-bordered" id="tblLista">
+                                    <thead class="bg-trans-gradient text-white">
+                                        <tr>
+                                            <td>Nombre/Código</td>
+                                            <td>Dirección</td>
+                                            <td>
+                                                <i class="fal fa-shopping-car"></i>
+                                            </td>
+                                            <td>
+                                                
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tblClientes">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
             `
         },
@@ -201,11 +122,6 @@ function getView(){
 
                     </div>
                 </div>
-            </div>
-            <div class="shortcut-menu align-left">
-                <button class="btn btn-secondary btn-circle btn-xl" id="btnAtrasClientes">
-                    <i class="fal fa-arrow-left"></i>
-                </button>
             </div>
             `
         },
@@ -466,7 +382,7 @@ function getView(){
         }
     }
 
-    root.innerHTML = view.body() + view.modalHistorialCliente() + view.modalCambiarDatosCliente() +  view.modalGps();
+    root.innerHTML = view.encabezado() + view.tabsClientes() + view.modalHistorialCliente() + view.modalCambiarDatosCliente() +  view.modalGps();
     rootMenuLateral.innerHTML = view.modalMenuCliente();
 };
 
@@ -602,9 +518,6 @@ async function setRecordatorioVisita(codigo, nit, nombre, direccion){
 
 async function addListeners(){
 
-    document.getElementById('btnAtrasClientes').addEventListener('click',()=>{
-        document.getElementById('tab-dias').click();
-    });
     
     document.getElementById('cmbEditTipoNegocio').innerHTML = funciones.getComboTipoClientes();
 
@@ -773,19 +686,12 @@ async function addListeners(){
     
 };
 
-
-function getListaClientes(nodia){
-
-    apigen.clientesVendedor(GlobalCodSucursal,GlobalCodUsuario,nodia,'tblClientes','tblClientesVisitados')
-    document.getElementById('tab-clientes').click();
-
-};
-
-
 function inicializarVista(){
     getView();
     addListeners();
 };
+
+
 
 
 function send_solicitud_cliente(codclie,nitclie,tiponegocio,negocio,nomclie,dirclie,lat,long){
