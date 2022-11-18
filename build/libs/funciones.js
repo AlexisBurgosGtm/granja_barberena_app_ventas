@@ -4,7 +4,11 @@ let funciones = {
         let container = document.getElementById('containerTicket');
 
 
-        let strEncabezado = `DISTRIBUIDORA ${GlobalEmpNombre} \n FORMATO DE FACTURA ELECTRONICA \n --------------------------------- \n`;
+        let strEncabezado = `<h5>DISTRIBUIDORA ${GlobalEmpNombre} </h5>
+                            <hr class="solid">
+                            <span>FORMATO DE FACTURA ELECTRONICA </span>
+                            <br><br><br>
+                            <hr class="solid">`;
 
         let strdata = '';
 
@@ -21,9 +25,9 @@ let funciones = {
             let total =0;
             data.map((rows)=>{
                     total = total + Number(rows.IMPORTE);
-                    strdata += '* ' + rows.DESPROD + "-"  + rows.CODMEDIDA + " Cant: " + rows.CANTIDAD.toString() + " - " + funciones.setMoneda(rows.IMPORTE,'Q').toString() + "\n";
+                    strdata += '* ' + rows.DESPROD + "-"  + rows.CODMEDIDA + " Cant: " + rows.CANTIDAD.toString() + " - " + funciones.setMoneda(rows.IMPORTE,'Q').toString() + "<hr class='solid'>";
             })
-            footer = `--------------------------------- \n Total a Pagar: ${funciones.setMoneda(total,'Q')}`
+            footer = `--------------------------------- <br> Total a Pagar: ${funciones.setMoneda(total,'Q')}`
             msg = strEncabezado + strdata + footer;
           
             container.innerHTML = msg;

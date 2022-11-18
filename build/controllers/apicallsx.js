@@ -554,9 +554,9 @@ let apigen = {
                                 <td>
                                     <b>${funciones.setMoneda(rows.IMPORTE,'Q')}</b>
                                     <br>
-                                    <button class="btn btn-outline-secondary btn-sm btn-circle"
+                                    <button class="btn btn-secondary btn-sm hand shadow"
                                         onclick="funciones.imprimirTicket('${rows.CODDOC}','${rows.CORRELATIVO}');">
-                                        w
+                                        FACTURA
                                     </button>  
                                 </td>
                             </tr>`
