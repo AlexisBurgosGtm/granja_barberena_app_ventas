@@ -556,6 +556,7 @@ let apigen = {
                                     <br>
                                     <button class="btn btn-secondary btn-sm hand shadow"
                                         onclick="funciones.imprimirTicket('${rows.CODDOC}','${rows.CORRELATIVO}');">
+                                        <i class="fal fa-print"></i>
                                         FACTURA
                                     </button>  
                                 </td>
