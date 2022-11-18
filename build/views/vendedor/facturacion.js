@@ -1037,8 +1037,8 @@ function getDataMedidaProducto(codprod,desprod,codmedida,cantidad,equivale,total
 async function fcnAgregarProductoVenta(codprod,desprod,codmedida,cantidad,equivale,totalunidades,costo,precio,exento){
    
     if(Number(GlobalSelectedExistencia)<Number(totalunidades)){
-        funciones.AvisoError('No pude agregar una cantidad mayor a la existencia');
-        return;
+        //funciones.AvisoError('No pude agregar una cantidad mayor a la existencia');
+        //return;
     };
 
     document.getElementById('btnAgregarProducto').innerHTML = GlobalLoader;

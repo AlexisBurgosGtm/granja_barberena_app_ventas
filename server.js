@@ -52,6 +52,59 @@ app.get("/login",function(req,res){
   res.redirect('/');
 }); 
 
+app.get("/ticket",function(req,res){
+  console.log(req.query);
+  const {fecha,codprod,desprod,codmedida,cantidad,persona,totalentregado,obs} = req.query;
+  
+  res.format ({
+    'text/html': function() {
+       res.send(`
+
+          <h3>FACTURA ELECTRÓNICA</h3>
+          <br>
+          <label>Fecha:</label><b>${fecha}</b>
+          <br>
+          
+          <br>
+          <table>
+            <thead>
+              <tr>
+                <td><b>Producto</b></td>
+                <td><b>Cantidad</b></td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>${desprod}
+                  <br>
+                  <br>
+                  <small>Codigo:${codprod}</small>      
+                </td>
+                <td>${cantidad} ${codmedida}
+                  <br>
+                  <br>
+                  <small>Uns Entregadas: ${totalentregado}</small>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <br>
+          <label>Entregado a:</label>
+          <h4>${persona}</h4>
+          <br>
+          <label><b>Observaciones:</b></label>
+          <br>
+          <label>${obs}</label>
+          <br>
+          <br>
+          <label><b>BLOCKERA DON RAUL</b></label>
+       `); 
+
+    }
+  })
+
+
+}); 
 
 //Router para SUCURSALES
 app.use('/sucursales', routerSucursales);
