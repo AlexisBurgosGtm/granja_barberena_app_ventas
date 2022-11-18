@@ -528,8 +528,7 @@ let apigen = {
                                         <small class="text-white bg-secondary">${rows.OBS}</small>
                                     <br>
                                     <div class="row">
-                                        <div class="col-3">
-                                        </div>
+                                      
                                         <div class="col-3">
                                             <button class="btn btn-info btn-sm btn-circle"
                                                 onclick="getDetallePedido('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}','${rows.CODCLIE}','${rows.NOMCLIE}','${rows.DIRCLIE}','${rows.ST}');">
@@ -548,10 +547,17 @@ let apigen = {
                                                 w
                                             </button>    
                                         </div>
+                                        <div class="col-3">
+                                        </div>
                                     </div>
                                 </td>
                                 <td>
                                     <b>${funciones.setMoneda(rows.IMPORTE,'Q')}</b>
+                                    <br>
+                                    <button class="btn btn-outline-secondary btn-sm btn-circle"
+                                        onclick="funciones.imprimirTicket('${rows.CODDOC}','${rows.CORRELATIVO}');">
+                                        w
+                                    </button>  
                                 </td>
                             </tr>`
             })

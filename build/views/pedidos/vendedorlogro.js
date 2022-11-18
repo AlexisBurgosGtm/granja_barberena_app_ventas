@@ -194,10 +194,18 @@ function getView(){
                 </div>
             </div>
             `
-        }
+        },
+        footer: ()=>{
+            return `
+            <hr class="solid">
+            <div class="" id="containerTicket"></div>
+               
+            </div>
+            `
+        },
     };
 
-    root.innerHTML = view.encabezado() + view.listado();
+    root.innerHTML = view.encabezado() + view.listado() + view.footer();
     rootMenuLateral.innerHTML = view.modalDetallePedido() + view.modalCantidad();
     lbMenuTitulo.innerText = "Detalle del Pedido";
 

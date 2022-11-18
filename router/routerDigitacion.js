@@ -108,6 +108,24 @@ router.post("/detallepedido", async(req,res)=>{
     execute.Query(res,qry);
 });
 
+router.post("/detallepedido3", async(req,res)=>{
+    const {sucursal,coddoc,correlativo}  = req.body;
+
+    let ncorrelativo = correlativo;
+    
+        
+    let qry = '';
+    qry = `SELECT ME_Docproductos.CODPROD, ME_Docproductos.DESCRIPCION AS DESPROD, ME_Docproductos.CODMEDIDA, ME_Docproductos.CANTIDAD, ME_Docproductos.PRECIO, ME_Docproductos.TOTALPRECIO AS IMPORTE, ME_Docproductos.DOC_ITEM, ME_Docproductos.TOTALCOSTO
+            FROM ME_Documentos LEFT OUTER JOIN
+            ME_Docproductos ON ME_Documentos.CODSUCURSAL = ME_Docproductos.CODSUCURSAL AND ME_Documentos.DOC_NUMERO = ME_Docproductos.DOC_NUMERO AND 
+            ME_Documentos.CODDOC = ME_Docproductos.CODDOC AND ME_Documentos.EMP_NIT = ME_Docproductos.EMP_NIT
+            WHERE  (ME_Documentos.CODSUCURSAL = '${sucursal}') 
+            AND (ME_Documentos.CODDOC = '${coddoc}') 
+            AND (ME_Documentos.DOC_NUMERO = '${ncorrelativo}')`;
+
+    execute.Query(res,qry);
+});
+
 router.put("/pedidoquitaritem", async(req,res)=>{
 
     const {sucursal,coddoc,correlativo,item,totalprecio,totalcosto} = req.body;

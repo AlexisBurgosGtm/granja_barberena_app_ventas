@@ -1,4 +1,47 @@
 let funciones = {
+  imprimirTicket(coddoc,correlativo){
+
+        let container = document.getElementById('containerTicket');
+
+
+        let strEncabezado = `DISTRIBUIDORA ${GlobalEmpNombre} \n FORMATO DE FACTURA ELECTRONICA \n --------------------------------- \n`;
+
+        let strdata = '';
+
+        let footer = '';
+        let msg = ''; 
+
+        axios.post('/digitacion/detallepedido3', {
+            sucursal: GlobalCodSucursal,
+            coddoc:coddoc,
+            correlativo:correlativo
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            let total =0;
+            data.map((rows)=>{
+                    total = total + Number(rows.IMPORTE);
+                    strdata += '* ' + rows.DESPROD + "-"  + rows.CODMEDIDA + " Cant: " + rows.CANTIDAD.toString() + " - " + funciones.setMoneda(rows.IMPORTE,'Q').toString() + "\n";
+            })
+            footer = `--------------------------------- \n Total a Pagar: ${funciones.setMoneda(total,'Q')}`
+            msg = strEncabezado + strdata + footer;
+          
+            container.innerHTML = msg;
+
+            funciones.imprimirSelec('containerTicket');
+
+            //msg = encodeURIComponent(msg);
+            //window.open('https://api.whatsapp.com/send?phone='+numero+'&text='+msg);
+
+        }, (error) => {
+            //funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+            container.innerHTML = '';
+
+        });
+
+
+  },
     convertDateNormal(date) {
       const [yy, mm, dd] = date.split(/-/g);
       return `${dd}/${mm}/${yy}`.replace('T00:00:00.000Z', '');
@@ -1335,6 +1378,16 @@ let funciones = {
     },
     gotoGoogleMaps:(lat,long)=>{
       window.open(`https://www.google.com/maps?q=${lat},${long}`);
+    },
+    imprimirSelec:(nombreDiv)=>{
+      var contenido= document.getElementById(nombreDiv).innerHTML;
+      var contenidoOriginal= document.body.innerHTML;
+  
+      document.body.innerHTML = contenido;
+  
+      window.print();
+  
+      document.body.innerHTML = contenidoOriginal;
     }
 };
 
