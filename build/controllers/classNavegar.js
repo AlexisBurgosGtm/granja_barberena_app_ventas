@@ -71,10 +71,19 @@ let classNavegar = {
                                 Lista de Precios
                             </button>
                             <hr class="solid">
-                            <button class="btn  btn-lg col-12 shadow card-rounded hand"  id="btnMenu2VendedorSync">
-                                <i class="fal fa-sync"></i>
-                                Descargar catálogos
-                            </button>      
+                           
+                            <button class="btn  btn-lg col-12 shadow card-rounded hand"  id="btnDownloadClientes">
+                                <i class="fal fa-user"></i>
+                                Descargar Clientes
+                            </button>
+                            <button class="btn  btn-lg col-12 shadow card-rounded hand"  id="btnDownloadProductos">
+                                <i class="fal fa-box"></i>
+                                Descargar Productos y Precios
+                            </button>   
+                            <button class="btn  btn-lg col-12 shadow card-rounded hand hidden"  id="btnMenu2VendedorSync">
+                            <i class="fal fa-sync"></i>
+                            Descargar catálogos
+                        </button>   
                             `
 
                     rootMenuFooter.innerHTML = strFooter;
@@ -128,6 +137,143 @@ let classNavegar = {
                         $('#modalListaPrecios').modal('show');
                     });
 
+                    //boton de descargas
+
+                    document.getElementById('btnDownloadProductos').addEventListener('click',()=>{
+                        funciones.Confirmacion('¿Está seguro que desea Descargar el catálogo de Productos?')
+                        .then((value)=>{
+                            if(value==true){
+                    
+                                setLog(`<label>Intentando conectarse y descargar los productos y precios</label>`,'rootWait')
+                                $('#modalWait').modal('show');
+                                
+                                downloadProductos()
+                                .then((data)=>{
+                                    setLog(`<label>Productos descargados, guardándolos localmente</label>`,'rootWait')
+                                    deleteProductos()
+                                    .then(()=>{
+                                        let contador = 1;
+                                        let totalrows = Number(data.rowsAffected[0]);
+                                          
+                                        data.recordset.map(async(rows)=>{
+                                            var datosdb = {
+                                                CODSUCURSAL:rows.CODSUCURSAL,
+                                                CODPROD:rows.CODPROD,
+                                                DESPROD:rows.DESPROD,
+                                                CODMEDIDA:rows.CODMEDIDA,
+                                                EQUIVALE:rows.EQUIVALE,
+                                                COSTO:rows.COSTO,
+                                                PRECIO:rows.PRECIO,
+                                                PRECIOA:rows.PRECIOA,
+                                                PRECIOB:rows.PRECIOB,
+                                                PRECIOC:rows.PRECIOC,
+                                                DESMARCA:rows.DESMARCA,
+                                                EXENTO:rows.EXENTO,
+                                                EXISTENCIA:rows.EXISTENCIA,
+                                                DESPROD3:rows.DESPROD3
+                                            }                
+                                            var noOfRowsInserted = await connection.insert({
+                                                into: "productos",
+                                                values: [datosdb], //you can insert multiple values at a time
+                                            });
+                                            if (noOfRowsInserted > 0) {
+                                                let porc = (Number(contador) / Number(totalrows)) * 100;
+                                                setLog(`<label>Productos agregados: ${contador} de ${totalrows} (${porc.toFixed(2)}%)</label>`,'rootWait')
+                                                contador += 1;
+                                                if(totalrows==contador){
+                                                    $('#modalWait').modal('hide');
+                                                    funciones.Aviso('Productos descargados exitosamente!!')
+                                                }
+                                            }
+                                        });
+                                    })
+                                    .catch(()=>{
+                                        //$('#modalWait').modal('hide');
+                                        hideWaitForm();
+                                       funciones.AvisoError('No se pudieron eliminar los productos previos')       
+                                    })
+                                })
+                                .catch(()=>{
+                                    console.log('no se descargó naa.')
+                                    hideWaitForm();
+                                    //$('#modalWait').modal('hide');
+                                    funciones.AvisoError('No se pudieron descargar los productos')
+                                })
+                    
+                                
+                                
+                            }
+                        })
+                    });
+                    
+                    document.getElementById('btnDownloadClientes').addEventListener('click',()=>{
+                        funciones.Confirmacion('¿Está seguro que desea Descargar el catálogo de Clientes?')
+                        .then((value)=>{
+                            if(value==true){
+                    
+                                setLog(`<label>Intentando descargar su lista de clientes</label>`,'rootWait')
+                                $('#modalWait').modal('show');
+                    
+                                downloadClientes()
+                                .then((data)=>{
+                                    setLog(`<label>Clientes descargados, ahora se guardarán localmente</label>`,'rootWait')
+                                    deleteClientes()
+                                    .then(()=>{
+                                        let totalrows = Number(data.rowsAffected[0]);
+                                        let contador = 1;
+                    
+                                        data.recordset.map(async(rows)=>{
+                                            var datosdb = {
+                                                CODSUCURSAL:rows.CODSUCURSAL,
+                                                CODIGO:rows.CODIGO,
+                                                DESMUNI:rows.DESMUNI,
+                                                DIRCLIE:rows.DIRCLIE,
+                                                LASTSALE:rows.LASTSALE,
+                                                LAT:rows.LAT,
+                                                LONG:rows.LONG,
+                                                NIT:rows.NIT,
+                                                NOMCLIE:rows.NOMCLIE,
+                                                REFERENCIA:rows.REFERENCIA,
+                                                STVISITA:rows.STVISITA,
+                                                VISITA:rows.VISITA,
+                                                TELEFONO:rows.TELEFONO,
+                                                TIPONEGOCIO:rows.TIPONEGOCIO,
+                                                NEGOCIO:rows.NEGOCIO
+                                            }                
+                                            var noOfRowsInserted = await connection.insert({
+                                                into: "clientes",
+                                                values: [datosdb], //you can insert multiple values at a time
+                                            });
+                                            if (noOfRowsInserted > 0) {
+                                                let porc = (Number(contador)/Number(totalrows))*100;
+                                                setLog(`<label>Clientes agregados: ${contador} de ${totalrows} (${porc.toFixed(2)} %)</label>`,'rootWait')
+                                                contador += 1;
+                                                if(totalrows==contador){
+                                                    hideWaitForm();
+                                                    //$('#modalWait').modal('hide');
+                                                    funciones.Aviso('Clientes descargados exitosamente!!')
+                                                }
+                                            }
+                                        });
+                                    })
+                                    .catch(()=>{
+                                        hideWaitForm();
+                                        //$('#modalWait').modal('hide');
+                                        funciones.AvisoError('No se pudieron eliminar los Clientes previos')
+                                    })
+                                })
+                                .catch(()=>{
+                                    hideWaitForm();
+                                    //$('#modalWait').modal('hide');
+                                    funciones.AvisoError('No se pudieron descargar los clientes')
+                                })
+                                      
+                                
+                            }
+                        })
+                    });
+
+                    //boton de descargas
                  
                     //actualiza la ubicación del empleado
                     await classEmpleados.updateMyLocation();
