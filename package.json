@@ -1,5 +1,5 @@
 {
-  "name": "gio_vendedor",
+  "name": "grupobuenavista",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -10,7 +10,6 @@
     "socket.io": "^2.3.0"
   },
   "scripts": {
-    "test": "nodemon server.js",
     "start": "node ./server.js"
   },
   "repository": {

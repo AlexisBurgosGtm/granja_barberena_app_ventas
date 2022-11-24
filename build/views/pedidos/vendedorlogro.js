@@ -2,13 +2,13 @@ function getView(){
     let view ={
         encabezado : ()=>{
             return `
-            <div class="row bg-trans-gradient text-white">
+            <div class="row bg-trans-gradient text-white oculto-impresion">
                 <div class="col-12">
                     <h5>Seleccione un Mes y un Reporte</h5>
                 </div>               
             </div>
 
-            <div class="row">
+            <div class="row oculto-impresion">
                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <div class="row">
 
@@ -27,7 +27,7 @@ function getView(){
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row oculto-impresion">
                 <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
                     <div class="form-group">
                         <label>Por Fecha</label>
@@ -54,9 +54,9 @@ function getView(){
         listado: ()=>{
             return `
                 <hr class="solid">
-            <div class="" id="containerTotal"></div>
+            <div class=" oculto-impresion" id="containerTotal"></div>
                 <br>
-            <div class="row card">
+            <div class="row card oculto-impresion">
                 <div class="table-responsive" id="tblReport">
                   
                 </div>

@@ -76,10 +76,13 @@ let classNavegar = {
                                 <i class="fal fa-user"></i>
                                 Descargar Clientes
                             </button>
+                            <hr class="solid">
+
                             <button class="btn  btn-lg col-12 shadow card-rounded hand"  id="btnDownloadProductos">
                                 <i class="fal fa-box"></i>
                                 Descargar Productos y Precios
                             </button>   
+
                             <button class="btn  btn-lg col-12 shadow card-rounded hand hidden"  id="btnMenu2VendedorSync">
                             <i class="fal fa-sync"></i>
                             Descargar catálogos
@@ -140,6 +143,8 @@ let classNavegar = {
                     //boton de descargas
 
                     document.getElementById('btnDownloadProductos').addEventListener('click',()=>{
+                        $("#modalMenuPrincipal").modal('hide');
+
                         funciones.Confirmacion('¿Está seguro que desea Descargar el catálogo de Productos?')
                         .then((value)=>{
                             if(value==true){
@@ -207,6 +212,8 @@ let classNavegar = {
                     });
                     
                     document.getElementById('btnDownloadClientes').addEventListener('click',()=>{
+                        $("#modalMenuPrincipal").modal('hide');
+
                         funciones.Confirmacion('¿Está seguro que desea Descargar el catálogo de Clientes?')
                         .then((value)=>{
                             if(value==true){
