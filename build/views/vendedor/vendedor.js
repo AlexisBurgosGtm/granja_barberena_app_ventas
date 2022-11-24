@@ -48,6 +48,7 @@ function getView(){
                     <div class="card border-top-rounded">
                         <div class="card-header bg-white">
                             <h4 class="negrita" id="lbTotalDia">Seleccione Dia</h4>
+                            <h4 class="negrita" id="">Seleccione Dia</h4>
                         </div>
                         <div class="card-body">
                             
@@ -115,6 +116,14 @@ function getView(){
                                 </div>
                             </div> 
                             <br>
+                            <div class="row">
+                                <div class="card card-rounded shadow hand col-12 border-info text-info" onclick="getListaClientes('AJENOS')">
+                                    <div class="card-body p-2 text-center">
+                                        <h5>BUSCAR CLIENTE</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
                             <div class="row hidden">
                                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">   
                                     <select class="negrita form-control border-secondary border-top-0 border-right-0 border-left-0" id="cmbDiaVisita"></select>                                          
@@ -131,9 +140,9 @@ function getView(){
             <div class="panel-container show">
                 <div class="panel-content bg-white">
                     <ul class="nav nav-pills nav-justified" role="tablist">
-                        <li class="nav-item"><a class="nav-link nav-link-custom active" data-toggle="tab" href="#panelNoVisitados">No Visit</a></li>
-                        <li class="nav-item"><a class="nav-link nav-link-custom " data-toggle="tab" href="#panelVisitados">Visitados</a></li>
-                        <li class="nav-item"><a class="nav-link nav-link-custom " data-toggle="tab" href="#panelAjenos">Ajenos</a></li>
+                        <li class="nav-item" id="btnTabNV"><a class="nav-link nav-link-custom active" data-toggle="tab" href="#panelNoVisitados">No Visit</a></li>
+                        <li class="nav-item" id="btnTabV"><a class="nav-link nav-link-custom " data-toggle="tab" href="#panelVisitados">Visitados</a></li>
+                        <li class="nav-item" id="btnTabAjenos"><a class="nav-link nav-link-custom " data-toggle="tab" href="#panelAjenos">Ajenos</a></li>
                     </ul>
                     <div class="tab-content py-3">
 
@@ -775,6 +784,18 @@ async function addListeners(){
 
 
 function getListaClientes(nodia){
+
+    if(nodia=='AJENOS'){
+        document.getElementById('btnTabAjenos').style = "visibility:hidden";
+        document.getElementById('btnTabNV').style = "visibility:hidden";
+        document.getElementById('btnTabV').style = "visibility:hidden";
+
+        document.getElementById('btnTabAjenos').click();
+    }else{
+        document.getElementById('btnTabAjenos').style = "visibility:hidden";
+        document.getElementById('btnTabNV').style = "visibility:visible";
+        document.getElementById('btnTabV').style = "visibility:visible";
+    }
 
     apigen.clientesVendedor(GlobalCodSucursal,GlobalCodUsuario,nodia,'tblClientes','tblClientesVisitados')
     document.getElementById('tab-clientes').click();
