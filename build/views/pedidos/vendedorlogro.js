@@ -39,12 +39,9 @@ function getView(){
                         <label>Seleccione un Reporte</label>
                         <select class="form-control border-danger negrita text-danger" id="cmbReporte">
                             <option value="1">PEDIDOS DEL DIA (DIA)</option>
-                            <option value="2">MARCAS VENDIDAS (DIA)</option>
                             <option value="3">PRODUCTOS VENDIDOS (DIA)</option>
                             <option value="4">VENTAS POR FECHA (MES)</option>
                             <option value="5">PRODUCTOS DEL MES (MES)</option>
-                            <option value="6">MARCAS DEL MES (MES)</option>
-                            <option value="7">VENTAS NETAS - OBJETIVO (MES)</option>
                         </select>
                     </div>
                 </div>

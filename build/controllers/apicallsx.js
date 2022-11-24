@@ -493,7 +493,7 @@ let apigen = {
         lbTotal.innerText = '---';
 
         let tableheader = `<table class="table table-responsive table-hover table-striped table-bordered">
-                            <thead class="bg-trans-gradient text-white">
+                            <thead class="bg-secondary   text-white">
                                 <tr>
                                     <td>Documento</td>
                                     <td>Cliente</td>
@@ -527,6 +527,8 @@ let apigen = {
                                     <br>
                                         <small class="text-white bg-secondary">${rows.OBS}</small>
                                     <br>
+                                        <small class="text-danger">FEL:${rows.FEL_UDDI}</small>
+                                    <br>
                                     <div class="row">
                                       
                                         <div class="col-3">
@@ -553,11 +555,11 @@ let apigen = {
                                 </td>
                                 <td>
                                     <b>${funciones.setMoneda(rows.IMPORTE,'Q')}</b>
-                                    <br>
+                                    <br><br>
                                     <button class="btn btn-secondary btn-sm hand shadow"
-                                        onclick="funciones.imprimirTicket('${rows.CODDOC}','${rows.CORRELATIVO}');">
+                                        onclick="funciones.solicitar_fel('${rows.CODDOC}','${rows.CORRELATIVO}');">
                                         <i class="fal fa-print"></i>
-                                        FACTURA
+                                        SOLICITAR FACTURA
                                     </button>  
                                 </td>
                             </tr>`

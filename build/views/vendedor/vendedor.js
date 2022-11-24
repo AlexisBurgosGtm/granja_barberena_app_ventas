@@ -142,7 +142,7 @@ function getView(){
                     <ul class="nav nav-pills nav-justified" role="tablist">
                         <li class="nav-item" id="btnTabNV"><a class="nav-link nav-link-custom active" data-toggle="tab" href="#panelNoVisitados">No Visit</a></li>
                         <li class="nav-item" id="btnTabV"><a class="nav-link nav-link-custom " data-toggle="tab" href="#panelVisitados">Visitados</a></li>
-                        <li class="nav-item" id="btnTabAjenos"><a class="nav-link nav-link-custom " data-toggle="tab" href="#panelAjenos">Ajenos</a></li>
+                        <li class="nav-item hidden" id="btnTabAjenos"><a class="nav-link nav-link-custom " data-toggle="tab" href="#panelAjenos">Ajenos</a></li>
                     </ul>
                     <div class="tab-content py-3">
 
@@ -183,9 +183,11 @@ function getView(){
 
                         <div class="tab-pane fade" id="panelAjenos" role="tabpanel">
                             
+                            <hr class="solid">
+                            
                             <div class="form-group">
                                 <div class="input-group">               
-                                    <input type="text" class="form-control border-secondary border-top-0 border-right-0 border-left-0" id="txtClientesAjenosBuscar" placeholder="Escriba para buscar cliente...">    
+                                    <input type="text" class="form-control border-secondary" id="txtClientesAjenosBuscar" placeholder="Escriba para buscar cliente...">    
                                     <div class="input-group-append">
                                         <button class="btn btn-md btn-icon btn-round" id="btnClientesAjenosBuscar">
                                             <i class="fal fa-search"></i>
@@ -786,15 +788,15 @@ async function addListeners(){
 function getListaClientes(nodia){
 
     if(nodia=='AJENOS'){
-        document.getElementById('btnTabAjenos').style = "visibility:hidden";
+        //document.getElementById('btnTabAjenos').style = "visibility:hidden";
         document.getElementById('btnTabNV').style = "visibility:hidden";
         document.getElementById('btnTabV').style = "visibility:hidden";
-
         document.getElementById('btnTabAjenos').click();
     }else{
-        document.getElementById('btnTabAjenos').style = "visibility:hidden";
+        //document.getElementById('btnTabAjenos').style = "visibility:hidden";
         document.getElementById('btnTabNV').style = "visibility:visible";
         document.getElementById('btnTabV').style = "visibility:visible";
+        document.getElementById('btnTabNV').click();
     }
 
     apigen.clientesVendedor(GlobalCodSucursal,GlobalCodUsuario,nodia,'tblClientes','tblClientesVisitados')
