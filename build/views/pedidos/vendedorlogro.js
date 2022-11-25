@@ -199,7 +199,7 @@ function getView(){
                
             </div>
             `
-        },
+        }
     };
 
     root.innerHTML = view.encabezado() + view.listado() + view.footer();

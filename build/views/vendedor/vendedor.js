@@ -142,7 +142,7 @@ function getView(){
                     <ul class="nav nav-pills nav-justified" role="tablist">
                         <li class="nav-item" id="btnTabNV"><a class="nav-link nav-link-custom active" data-toggle="tab" href="#panelNoVisitados">No Visit</a></li>
                         <li class="nav-item" id="btnTabV"><a class="nav-link nav-link-custom " data-toggle="tab" href="#panelVisitados">Visitados</a></li>
-                        <li class="nav-item hidden" id="btnTabAjenos"><a class="nav-link nav-link-custom " data-toggle="tab" href="#panelAjenos">Ajenos</a></li>
+                        <li class="nav-item hidden" id="btnTabAjenos"><a id="btnTabAjenos2" class="nav-link nav-link-custom " data-toggle="tab" href="#panelAjenos">Ajenos</a></li>
                     </ul>
                     <div class="tab-content py-3">
 
@@ -186,10 +186,12 @@ function getView(){
                             <hr class="solid">
                             
                             <div class="form-group">
+                                <label class="negrita">Búsqueda de Cliente:</label>
                                 <div class="input-group">               
-                                    <input type="text" class="form-control border-secondary" id="txtClientesAjenosBuscar" placeholder="Escriba para buscar cliente...">    
+                            
+                                    <input type="text" class="form-control border-info" id="txtClientesAjenosBuscar" placeholder="Escriba para buscar cliente...">    
                                     <div class="input-group-append">
-                                        <button class="btn btn-md btn-icon btn-round" id="btnClientesAjenosBuscar">
+                                        <button class="btn btn-md btn-icon btn-info btn-round" id="btnClientesAjenosBuscar">
                                             <i class="fal fa-search"></i>
                                         </button>    
                                     </div>
@@ -791,7 +793,7 @@ function getListaClientes(nodia){
         //document.getElementById('btnTabAjenos').style = "visibility:hidden";
         document.getElementById('btnTabNV').style = "visibility:hidden";
         document.getElementById('btnTabV').style = "visibility:hidden";
-        document.getElementById('btnTabAjenos').click();
+        document.getElementById('btnTabAjenos2').click();
     }else{
         //document.getElementById('btnTabAjenos').style = "visibility:hidden";
         document.getElementById('btnTabNV').style = "visibility:visible";
