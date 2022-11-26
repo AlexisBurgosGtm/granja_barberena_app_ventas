@@ -74,6 +74,63 @@ let funciones = {
   },
   enviar_FEL_firmado(coddoc,correlativo,xml){
     return new Promise((resolve,reject)=>{
+        
+          var myHeaders = new Headers();
+          myHeaders.append("llave", FEL.ACCESO_REQ_CLAVE.toString());
+          myHeaders.append("usuario", FEL.ACCESO_REQ_NOMBRE.toString());
+          myHeaders.append("identificador", `${GlobalCodSucursal}-${coddoc}-${correlativo}`);
+          myHeaders.append("Content-Type", "application/json");
+
+          var raw = JSON.stringify({
+            nit_emisor:FEL.NITEmisor, 
+            correo_copia:"contadorgeneral@grupobuenavista.com.gt", 
+            xml_dte:xml.toString()
+          })
+
+          var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+          };
+          
+          fetch("https://certificador.feel.com.gt/fel/certificacion/v2/dte/", requestOptions)
+            .then((response)=>{
+              console.log(response);
+              resolve(response)
+            })
+            .catch(error => reject(error));
+    })
+  },
+
+  enviar_FEL_firmado3(coddoc,correlativo,xml){
+    return new Promise((resolve,reject)=>{
+      axios({
+        method: 'POST',
+        url: 'https://certificador.feel.com.gt/fel/certificacion/v2/dte/',
+        body: {
+          "nit_emisor": FEL.NITEmisor.toString(), 
+          "correo_copia": "contadorgeneral@grupobuenavista.com.gt", 
+          "xml_dte": xml.toString()},
+        headers: {
+              usuario: FEL.ACCESO_REQ_NOMBRE,
+              llave:FEL.ACCESO_REQ_CLAVE,
+              identificador: `${GlobalCodSucursal}-${coddoc}-${correlativo}`,
+              'Content-Type': 'application/json'
+        }
+      })
+          .then((response) => {
+              const data = response.data;
+
+              resolve(data);
+          }, (error) => {
+           
+              reject(error);
+          });
+    })
+  },
+  enviar_FEL_firmado2(coddoc,correlativo,xml){
+    return new Promise((resolve,reject)=>{
           axios.post('https://certificador.feel.com.gt/fel/certificacion/v2/dte/',
           {nit_emisor: FEL.NITEmisor, 
             correo_copia: "contadorgeneral@grupobuenavista.com.gt", 
