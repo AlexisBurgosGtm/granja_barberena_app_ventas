@@ -557,7 +557,7 @@ let apigen = {
                                     <b>${funciones.setMoneda(rows.IMPORTE,'Q')}</b>
                                     <br><br>
                                     <button class="btn btn-secondary btn-sm hand shadow"
-                                        onclick="funciones.solicitar_fel('${rows.CODDOC}','${rows.CORRELATIVO}');">
+                                        onclick="funciones.fcn_solicitar_fel('${rows.CODDOC}','${rows.CORRELATIVO}','CF','CLIENTES VARIOS','CIUDAD','GUATEMALA','GUATEMALA');">
                                         <i class="fal fa-print"></i>
                                         SOLICITAR FACTURA
                                     </button>  

@@ -1,4 +1,4 @@
-let versionapp = 'Versión 10.2022';
+let versionapp = 'Versión 11.2022';
 
 let root = document.getElementById('root');
 let rootMenu = document.getElementById('rootMenu');
@@ -84,14 +84,25 @@ let GlobalLoader = `
                 </div>
                 `
 
-//'<div class="spinner-grow text-info" role="status"><span class="sr-only">Loading...</span></div>'
-
-
-//'<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>';
-
 let GlobalUrl = document.location.origin.toString();
 
 let nowhatsapp = '50257255092';
+
+let FEL = {
+    CodigoEstablecimiento:"01",
+    NITEmisor:"88135918",
+    NombreComercial:"GRANJA AVICOLA SANTA FE",
+    NombreEmisor:"GRANJA AVICOLA SANTA FE, S.A.",
+    Direccion:"ALDEA DON GREGORIO ZONA 0",
+    CodigoPostal:"06012",
+    Municipio:"SANTA CRUZ NARANJO",
+    Departamento:"SANTA ROSA",
+    ACCESO_REQ_NOMBRE:"GRANJAASF",
+    ACCESO_REQ_CLAVE:"259F073DC0CB38A65BEEB1DF0F557830",
+    ACCESO_FIRMA_USUARIO:"GRANJAASF",
+    ACCESO_FIRMA_CLAVE:"654fd0346131d4e1f83850558322dd57"
+};
+
 
 
 function showWaitForm(){

@@ -1,4 +1,228 @@
 let funciones = {
+  fcn_solicitar_fel(coddoc,correlativo,nit,nombre,direccion,municipio,departamento){
+      funciones.Confirmacion('¿Está seguro que desea intentar certificar esta factura?')
+      .then((value)=>{
+        if(value==true){
+
+              funciones.getXmlFel(coddoc,correlativo,nit,nombre,direccion,municipio,departamento)
+              .then((xmlstring)=>{
+                
+                      funciones.converBase64(xmlstring)
+                      .then((valor)=>{
+                            funciones.solicitar_FEL(coddoc,correlativo,valor)
+                            .then((data)=>{
+                                if(data.resultado==true){
+                                    console.log(data);
+
+                                    funciones.enviar_FEL_firmado(coddoc,correlativo,data.archivo)
+                                    .then((data)=>{
+                                        console.log(data);
+                                        if(data.resultado==true){
+                                          funciones.Aviso('Factura firmada exitosamente!!');
+                                          
+                                        }else{
+                                          funciones.AvisoError('No se pudo crear la factura');
+                                        }
+                                      
+                                        
+                                    })
+                                    .catch((error)=>{
+                                      console.log('Error: ');
+                                      console.log(error);
+                                      funciones.AvisoError('No se pudo crear la factura');
+                                    })
+                                    
+                                    
+                                }else{
+                                  funciones.AvisoError('Factura no se pudo certificar')
+                                }
+                                
+                            })
+                            .catch((error)=>{
+                                console.log(error);
+                                funciones.AvisoError('Error al certificar')
+                            })
+                      })      
+              })
+              .catch((err)=>{
+                  funciones.AvisoError('No se pudo obtener el xml')
+              })
+
+        
+        } 
+    })
+      
+  },
+  solicitar_FEL(coddoc,correlativo,xml){
+      return new Promise((resolve,reject)=>{
+            axios.post('https://signer-emisores.feel.com.gt/sign_solicitud_firmas/firma_xml', {
+                llave: FEL.ACCESO_FIRMA_CLAVE, 
+                archivo: xml, 
+                codigo: `${GlobalCodSucursal}-${coddoc}-${correlativo}`, 
+                alias: FEL.ACCESO_FIRMA_USUARIO, 
+                es_anulacion: "N" 
+            })
+            .then((response) => {
+                console.log(response);
+                const data = response.data;
+                resolve(data);
+            }, (error) => {
+             
+                reject(error);
+            });
+      })
+  },
+  enviar_FEL_firmado(coddoc,correlativo,xml){
+    return new Promise((resolve,reject)=>{
+          axios.post('https://certificador.feel.com.gt/fel/certificacion/v2/dte/',
+          {nit_emisor: FEL.NITEmisor, 
+            correo_copia: "contadorgeneral@grupobuenavista.com.gt", 
+            xml_dte: xml
+          }, 
+          {
+            headers: {
+              usuario: FEL.ACCESO_REQ_NOMBRE,
+              llave:FEL.ACCESO_REQ_CLAVE,
+              identificador: `${GlobalCodSucursal}-${coddoc}-${correlativo}`,
+              'Content-Type': 'application/json'
+            } 
+          })
+          .then((response) => {
+              const data = response.data;
+
+              resolve(data);
+          }, (error) => {
+           
+              reject(error);
+          });
+    })
+  },
+  getXmlFel(coddoc,correlativo,nit,nombre,direccion,municipio,departamento){
+      
+      let xmlstring = '';
+
+      return new Promise((resolve,reject)=>{
+        let fechaemision = '2022-11-25T10:49:22.000-06:00';
+
+        //let numeroacceso = (Number(400000000)+Number(correlativo)).toString();
+       
+        let numeroacceso = '400000001';
+  
+        let encabezado = `<dte:GTDocumento xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:dte="http://www.sat.gob.gt/dte/fel/0.2.0"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="0.1" xsi:schemaLocation="http://www.sat.gob.gt/dte/fel/0.2.0">
+                            <dte:SAT ClaseDocumento="dte">
+                            <dte:DTE ID="DatosCertificados">
+                              <dte:DatosEmision ID="DatosEmision">
+                              <dte:DatosGenerales CodigoMoneda="GTQ" FechaHoraEmision="${fechaemision}" NumeroAcceso="${numeroacceso}" Tipo="FACT" />
+                            `
+  
+        let emisor = `  <dte:Emisor AfiliacionIVA="GEN" CodigoEstablecimiento="${FEL.CodigoEstablecimiento}" CorreoEmisor="" NITEmisor="${FEL.NITEmisor}" NombreComercial="${FEL.NombreComercial}" NombreEmisor="${FEL.NombreEmisor}">
+                          <dte:DireccionEmisor>
+                            <dte:Direccion>${FEL.Direccion}</dte:Direccion>
+                            <dte:CodigoPostal>${FEL.CodigoPostal}</dte:CodigoPostal>
+                            <dte:Municipio>${FEL.Municipio}</dte:Municipio>
+                            <dte:Departamento>${FEL.Departamento}</dte:Departamento>
+                            <dte:Pais>GT</dte:Pais>
+                          </dte:DireccionEmisor>
+                        </dte:Emisor>`;
+  
+        let receptor = ` <dte:Receptor CorreoReceptor="" IDReceptor="${nit}" NombreReceptor="${nombre}">
+                          <dte:DireccionReceptor>
+                            <dte:Direccion>${direccion}</dte:Direccion>
+                            <dte:CodigoPostal>0</dte:CodigoPostal>
+                            <dte:Municipio>${municipio}</dte:Municipio>
+                            <dte:Departamento>${departamento}</dte:Departamento>
+                            <dte:Pais>GT</dte:Pais>
+                          </dte:DireccionReceptor>
+                        </dte:Receptor>`;
+                          
+        
+        let frases = ` <dte:Frases>
+                        <dte:Frase CodigoEscenario="1" TipoFrase="1" />
+                      </dte:Frases>`
+  
+        let totales = '';
+        let items = '';
+  
+        let footer = `</dte:DatosEmision>
+                        </dte:DTE>
+                        <dte:Adenda>
+                        <dte:Valor1>${coddoc}</dte:Valor1>
+                        <dte:Valor2>${correlativo}</dte:Valor2>
+                        </dte:Adenda>
+                      </dte:SAT>
+                      </dte:GTDocumento>`
+  
+        let strdata ='';
+  
+        axios.post('/digitacion/detallepedido3', {
+            sucursal: GlobalCodSucursal,
+            coddoc:coddoc,
+            correlativo:correlativo
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            let total =0;
+            let totaliva = 0;
+            let numerolinea = 0;
+            data.map((rows)=>{
+                    numerolinea += 1;
+                    let subtotal = 0;
+                    let iva = 0;
+                    total = total + Number(rows.IMPORTE);
+                    iva = (Number(rows.IMPORTE)/1.12).toFixed(2);
+                    subtotal = (Number(rows.IMPORTE)-iva).toFixed(2);
+                    totaliva += iva;
+                    strdata += funciones.getStrItem(numerolinea,rows.CANTIDAD,rows.CODMEDIDA,rows.DESPROD,rows.PRECIO,0,subtotal,iva);
+            })
+            items = '<dte:Items>' + strdata + '</dte:Items>';
+  
+            totales = ` <dte:Totales>
+                          <dte:TotalImpuestos>
+                          <dte:TotalImpuesto NombreCorto="IVA" TotalMontoImpuesto="${totaliva}" />
+                          </dte:TotalImpuestos>
+                          <dte:GranTotal>${total}</dte:GranTotal>
+                        </dte:Totales>`;
+           xmlstring = encabezado + emisor + receptor + frases + items + totales + footer;
+           resolve(xmlstring);
+        }, (error) => {
+            xmlstring='NO';
+            reject(xmlstring);
+        });
+
+
+      })
+
+     
+
+ 
+
+  },
+  getStrItem(numerolinea,cantidad,codmedida,descripcion,precioun,descuento,subtotal,iva){
+       
+    let totalprecio = (Number(precioun)*Number(cantidad));
+   
+    let str = ` 
+            <dte:Item BienOServicio="B" NumeroLinea="${numerolinea}">
+            <dte:Cantidad>${cantidad}</dte:Cantidad>
+            <dte:UnidadMedida>${codmedida.substring(0,3)}</dte:UnidadMedida>
+            <dte:Descripcion>${descripcion}</dte:Descripcion>
+            <dte:PrecioUnitario>${precioun}</dte:PrecioUnitario>
+            <dte:Precio>${totalprecio}</dte:Precio>
+            <dte:Descuento>${Number(descuento)}</dte:Descuento>
+            <dte:Impuestos>
+              <dte:Impuesto>
+              <dte:NombreCorto>IVA</dte:NombreCorto>
+              <dte:CodigoUnidadGravable>1</dte:CodigoUnidadGravable>
+              <dte:MontoGravable>${subtotal}</dte:MontoGravable>
+              <dte:MontoImpuesto>${iva}</dte:MontoImpuesto>
+              </dte:Impuesto>
+            </dte:Impuestos>
+            <dte:Total>${(Number(totalprecio)-Number(descuento))}</dte:Total>
+            </dte:Item>   
+          `;
+    
+    return str;
+  },
   imprimirTicket(coddoc,correlativo){
 
         let container = document.getElementById('containerTicket');
@@ -46,53 +270,6 @@ let funciones = {
 
 
   },
-    solicitar_fel(coddoc,correlativo){
-
-          let container = document.getElementById('containerTicket');
-
-
-          let strEncabezado = `<h5>DISTRIBUIDORA ${GlobalEmpNombre} </h5>
-                              <hr class="solid">
-                              <span>FORMATO DE FACTURA ELECTRONICA </span>
-                              <br><br><br>
-                              <hr class="solid">`;
-
-          let strdata = '';
-
-          let footer = '';
-          let msg = ''; 
-
-          axios.post('/digitacion/detallepedido3', {
-              sucursal: GlobalCodSucursal,
-              coddoc:coddoc,
-              correlativo:correlativo
-          })
-          .then((response) => {
-              const data = response.data.recordset;
-              let total =0;
-              data.map((rows)=>{
-                      total = total + Number(rows.IMPORTE);
-                      strdata += '* ' + rows.DESPROD + "-"  + rows.CODMEDIDA + " Cant: " + rows.CANTIDAD.toString() + " - " + funciones.setMoneda(rows.IMPORTE,'Q').toString() + "<hr class='solid'>";
-              })
-              footer = `--------------------------------- <br> Total a Pagar: ${funciones.setMoneda(total,'Q')}`
-              msg = strEncabezado + strdata + footer;
-            
-              container.innerHTML = msg;
-
-              funciones.imprimirSelec('containerTicket');
-
-              //msg = encodeURIComponent(msg);
-              //window.open('https://api.whatsapp.com/send?phone='+numero+'&text='+msg);
-
-          }, (error) => {
-              //funciones.AvisoError('Error en la solicitud');
-              strdata = '';
-              container.innerHTML = '';
-
-          });
-
-
-    },
     convertDateNormal(date) {
       const [yy, mm, dd] = date.split(/-/g);
       return `${dd}/${mm}/${yy}`.replace('T00:00:00.000Z', '');
@@ -1439,7 +1616,48 @@ let funciones = {
       window.print();
   
       document.body.innerHTML = contenidoOriginal;
-    }
+    },
+    converFileBase64:(file)=>{
+      return new Promise((resolve, reject)=>{
+          var reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = function() {
+                //console.log(reader.result);
+                resolve(reader.result);
+          };
+          reader.onerror = function(e){
+                console.log('Error: ', e);
+                reject(e);
+          };
+      })
+
+      //usage:
+      /*
+
+       let file = document.querySelector('#txtClienteFoto').files[0];
+          funciones.converBase64(file)
+          .then((valor)=>{
+              document.getElementById('txtCliente64Foto').value = valor;
+          })
+          .catch((e)=>{
+              document.getElementById('txtCliente64Foto').value = e.toString();    
+          })
+       
+       */
+    },
+    converBase64:(xmlstring)=>{
+        return new Promise((resolve, reject)=>{
+            let str = btoa(xmlstring)
+            resolve(str);
+        })
+    },
+    revertBase64:(base64string)=>{
+      return new Promise((resolve, reject)=>{
+
+          let str = atob(base64string)
+          resolve(str);
+      })
+  }
 };
 
 //export default funciones;
