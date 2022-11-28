@@ -498,14 +498,12 @@ function getView(){
                                         <div class="form-group">
                                             <label>Forma de Pago:</label>
                                             <select id="cmbEntregaConcre" class="form-control">
-                                                <option value="CONTADO">CONTADO</option>
+                                                
                                                 <option value="CREDITO">CREDITO</option>
-                                                <option value="VALE">VALE AL VENDEDOR</option>
-                                                <option value="FACTURA">FACTURA CONTABLE</option>
                                             </select>
                                         </div>
 
-                                        <div class="form-group">
+                                        <div class="form-group hidden">
                                             <label>Observaciones</label>
                                             <textarea rows="4" cols="80" class="form-control" id="txtEntregaObs" placeholder="Escriba aqui sus observaciones..."></textarea>
                                         </div>                                                              
@@ -1025,7 +1023,7 @@ function getDataMedidaProducto(codprod,desprod,codmedida,cantidad,equivale,total
     
         $("#ModalCantidadProducto").modal('show');    
     //document}else{
-        funciones.AvisoError('Producto SIN EXISTENCIA')
+        //funciones.AvisoError('Producto SIN EXISTENCIA')
     //}
 
 

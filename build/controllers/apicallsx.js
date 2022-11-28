@@ -522,6 +522,7 @@ let apigen = {
                     totalpedidos = totalpedidos + 1;
                     let uudi = rows.FEL_UDDI;
                     let strBotonCertificar = '';
+                    let strClassOpciones= ' hidden';
                     if(uudi=='SN'){
                         strBotonCertificar =  `<button id='${idBtnSolicitar}' class="btn btn-secondary btn-sm hand shadow"
                                                 onclick="funciones.fcn_solicitar_fel('${rows.CODDOC}','${rows.CORRELATIVO}','${rows.NIT}','${rows.NOMCLIE}','${rows.DIRCLIE}','GUATEMALA','GUATEMALA','${idBtnSolicitar}','${rows.FECHA}');">
@@ -532,7 +533,7 @@ let apigen = {
                                                 onclick="funciones.imprimirTicket('${rows.CODDOC}','${rows.CORRELATIVO}','${rows.FECHA}','${rows.NIT}','${rows.NOMCLIE}','${rows.DIRCLIE}','${rows.FEL_UDDI}','${rows.FEL_SERIE}','${rows.FEL_NUMERO}','${rows.FEL_FECHA}');">
                                                 <i class="fal fa-print"></i>
                                                 IMPRIMIR
-                                            </button>`;};
+                                            </button>`;strClassOpciones='';};
                     strdata = strdata + `<tr>
                                 <td colspan="2">
                                         <b class="text-danger">${rows.CODDOC + '-' + rows.CORRELATIVO}</b>
@@ -548,13 +549,13 @@ let apigen = {
                                     <div class="row">
                                       
                                         <div class="col-3">
-                                            <button class="btn btn-info btn-sm btn-circle"
+                                            <button class="btn btn-info btn-sm btn-circle ${strClassOpciones}"
                                                 onclick="getDetallePedido('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}','${rows.CODCLIE}','${rows.NOMCLIE}','${rows.DIRCLIE}','${rows.ST}');">
                                                 <i class="fal fa-edit"></i>
                                             </button>    
                                         </div>
                                         <div class="col-3">
-                                            <button class="btn btn-danger btn-sm btn-circle"
+                                            <button class="btn btn-danger btn-sm btn-circle ${strClassOpciones}"
                                                 onclick="deletePedidoVendedor('${rows.FECHA.toString().replace('T00:00:00.000Z','')}','${rows.CODDOC}','${rows.CORRELATIVO}','${rows.ST}');">
                                                 <i class="fal fa-trash"></i>
                                             </button>    

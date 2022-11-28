@@ -215,7 +215,7 @@ function getView(){
                     </div>
                 </div>
             </div>
-            <div class="shortcut-menu align-left">
+            <div class="shortcut-menu align-left hidden">
                 <button class="btn btn-secondary btn-circle btn-xl" id="btnAtrasClientes">
                     <i class="fal fa-arrow-left"></i>
                 </button>
