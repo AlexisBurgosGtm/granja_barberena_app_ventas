@@ -10,7 +10,7 @@ function getView(){
 
             <div class="col-md-4 col-sm-12 col-lg-4 col-lx-4">
    
-                <div class="card shadow p-2 border-top-rounded border-bottom-rounded">
+                <div class="card shadow p-2 card-rounded border-primary">
 
                     <div class="card-header text-center bg-white">
                         <div class="row">
@@ -64,7 +64,7 @@ function getView(){
                             </div>
 
                             <div class="form-group" align="right">  
-                                <small class="text-secondary">v1.16</small>
+                                <small class="text-secondary">Grupo Buena Vista v1.16</small>
                                 <br>
                                 <small>
                                     <!--
