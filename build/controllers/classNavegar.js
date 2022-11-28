@@ -60,11 +60,7 @@ let classNavegar = {
                                 <i class="fal fa-chart-pie"></i>
                                 Logro
                             </button>
-                            <hr class="solid">
-                            <button class="btn  btn-lg col-12 shadow card-rounded hand" id="btnMenu2Censo">
-                                <i class="fal fa-edit"></i>
-                                Cliente Nuevo
-                            </button>
+                           
                            
                             <hr class="solid">
                            
@@ -79,15 +75,21 @@ let classNavegar = {
                                 Descargar Productos y Precios
                             </button>   
 
+                            
                             <button class="btn  btn-lg col-12 shadow card-rounded hand hidden"  id="btnMenu2VendedorSync">
                                 <i class="fal fa-sync"></i>
                                 Descargar catálogos
                             </button> 
                             
-                            <hr class="solid">
+                            
                             <button class="btn  btn-lg col-12 shadow card-rounded hand hidden" id="btnListaP">
                                 <i class="fal fa-search"></i>
                                 Lista de Precios
+                            </button>
+                        
+                            <button class="btn  btn-lg col-12 shadow card-rounded hand hidden" id="btnMenu2Censo">
+                                <i class="fal fa-edit"></i>
+                                Cliente Nuevo
                             </button>
                             `
 

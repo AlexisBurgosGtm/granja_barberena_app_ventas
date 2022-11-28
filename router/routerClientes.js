@@ -1,7 +1,34 @@
 const execute = require('./connection');
 const express = require('express');
 const router = express.Router();
+const axios = require('axios');
 
+
+router.post("/fel", async(req,res)=>{
+
+    const {nitemisor,xmldte, felnombre, felclave, identificador} = req.body;
+
+    axios.post('https://certificador.feel.com.gt/fel/certificacion/v2/dte/',
+    {nit_emisor: nitemisor, 
+      correo_copia: "contadorgeneral@grupobuenavista.com.gt", 
+      xml_dte: xmldte
+    }, 
+    {
+      headers: {
+        usuario: felnombre,
+        llave: felclave,
+        identificador: identificador,
+        'Content-Type': 'application/json'
+      } 
+    })
+    .then((response) => {
+        const data = response.data;
+        res.send(data);
+    }, (error) => {
+        res.send(error);
+    });
+   
+});
 
 
 router.post("/solicitud_cambios_cliente", async(req,res)=>{

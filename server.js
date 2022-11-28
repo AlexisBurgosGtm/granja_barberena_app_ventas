@@ -15,13 +15,17 @@ var routerProductos = require('./router/routerProductos');
 let routerDigitacion = require('./router/routerDigitacion');
 let routerUsuarios = require('./router/routerUsuarios');
 let routerCenso = require('./router/routerCenso');
+var routerFEL = require('./router/routerFEL.js');
 
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 const PORT = process.env.PORT || 5500;
 
-app.use(bodyParser.json());
+//app.use(bodyParser.json());
+app.use(express.json({limit: '25mb'}));
+app.use(express.urlencoded({limit: '25mb', extended: true}));
+
 
 app.use(express.static('build'));
 
@@ -39,7 +43,7 @@ router.use(function (req,res,next) {
         // Set to true if you need the website to include cookies in the requests sent
       res.setHeader('Access-Control-Allow-Credentials', true);
   */
-  console.log("/" + req.toString());
+  //console.log("/" + req.toString());
   next();
 });
 
@@ -85,6 +89,9 @@ app.use('/digitacion', routerDigitacion);
 
 // Router para usuarios
 app.use('/usuarios', routerUsuarios);
+
+// Router para facturación electrónica FEL
+app.use('/fel', routerFEL);
 
 
 app.use("/",router);

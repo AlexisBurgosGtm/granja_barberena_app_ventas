@@ -1,8 +1,14 @@
 let funciones = {
-  fcn_solicitar_fel(coddoc,correlativo,nit,nombre,direccion,municipio,departamento){
+  fcn_solicitar_fel(coddoc,correlativo,nit,nombre,direccion,municipio,departamento,idbtn){
+    
+      let btnCertif = document.getElementById(idbtn);
+
       funciones.Confirmacion('¿Está seguro que desea intentar certificar esta factura?')
       .then((value)=>{
         if(value==true){
+              
+              btnCertif.innerHTML = 'Solicitando...';
+              btnCertif.disabled = true;
 
               funciones.getXmlFel(coddoc,correlativo,nit,nombre,direccion,municipio,departamento)
               .then((xmlstring)=>{
@@ -12,39 +18,56 @@ let funciones = {
                             funciones.solicitar_FEL(coddoc,correlativo,valor)
                             .then((data)=>{
                                 if(data.resultado==true){
-                                    console.log(data);
-
+                                    //console.log(data);
                                     funciones.enviar_FEL_firmado(coddoc,correlativo,data.archivo)
                                     .then((data)=>{
-                                        console.log(data);
-                                        if(data.resultado==true){
-                                          funciones.Aviso('Factura firmada exitosamente!!');
-                                          
-                                        }else{
-                                          funciones.AvisoError('No se pudo crear la factura');
-                                        }
-                                      
-                                        
+                                            //console.log(data);
+                                            if(data.resultado==true){
+                                              funciones.Aviso('Factura firmada exitosamente!!');
+
+                                              btnCertif.innerHTML = '<i class="fal fa-print"></i>SOLICITAR FACTURA';
+                                              btnCertif.disabled = false;
+                                              
+                                              funciones.update_FEL_series(coddoc,correlativo,data.uuid.toString(),data.serie.toString(),data.numero.toString(),data.fecha.toString())
+                                              .then(()=>{
+                                                  apigen.pedidosVendedor(GlobalCodSucursal,GlobalCodUsuario,funciones.devuelveFecha('txtFecha'),'tblReport','containerTotal');
+                                              })
+                                              .catch(()=>{
+                                                  funciones.AvisoError('No se pudo Cargar la lista')
+                                              })
+                                            }else{
+                                              btnCertif.innerHTML = '<i class="fal fa-print"></i>SOLICITAR FACTURA';
+                                              btnCertif.disabled = false;
+                                              funciones.AvisoError('No se pudo crear la factura');
+                                            }
                                     })
                                     .catch((error)=>{
                                       console.log('Error: ');
                                       console.log(error);
+                                      btnCertif.innerHTML = '<i class="fal fa-print"></i>SOLICITAR FACTURA';
+                                      btnCertif.disabled = false;
                                       funciones.AvisoError('No se pudo crear la factura');
                                     })
                                     
                                     
                                 }else{
+                                  btnCertif.innerHTML = '<i class="fal fa-print"></i>SOLICITAR FACTURA';
+                                  btnCertif.disabled = false;
                                   funciones.AvisoError('Factura no se pudo certificar')
                                 }
                                 
                             })
                             .catch((error)=>{
                                 console.log(error);
+                                btnCertif.innerHTML = '<i class="fal fa-print"></i>SOLICITAR FACTURA';
+                                btnCertif.disabled = false;
                                 funciones.AvisoError('Error al certificar')
                             })
                       })      
               })
               .catch((err)=>{
+                  btnCertif.innerHTML = '<i class="fal fa-print"></i>SOLICITAR FACTURA';
+                  btnCertif.disabled = false;
                   funciones.AvisoError('No se pudo obtener el xml')
               })
 
@@ -63,7 +86,7 @@ let funciones = {
                 es_anulacion: "N" 
             })
             .then((response) => {
-                console.log(response);
+                //console.log(response);
                 const data = response.data;
                 resolve(data);
             }, (error) => {
@@ -74,64 +97,50 @@ let funciones = {
   },
   enviar_FEL_firmado(coddoc,correlativo,xml){
     return new Promise((resolve,reject)=>{
-        
-      var data = JSON.stringify({
-        "correo_copia": "contadorgeneral@grupobuenavista.com.gt",
-        "nit_emisor": "88135918",
-        "xml_dte": "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPGR0ZTpHVERvY3VtZW50byB4bWxuczpkcz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgeG1sbnM6ZHRlPSJodHRwOi8vd3d3LnNhdC5nb2IuZ3QvZHRlL2ZlbC8wLjIuMCIgeG1sbnM6eHNpPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYS1pbnN0YW5jZSIgVmVyc2lvbj0iMC4xIiB4c2k6c2NoZW1hTG9jYXRpb249Imh0dHA6Ly93d3cuc2F0LmdvYi5ndC9kdGUvZmVsLzAuMi4wIj4KICA8ZHRlOlNBVCBDbGFzZURvY3VtZW50bz0iZHRlIj4KICAgIDxkdGU6RFRFIElEPSJEYXRvc0NlcnRpZmljYWRvcyI+CiAgICAgIDxkdGU6RGF0b3NFbWlzaW9uIElEPSJEYXRvc0VtaXNpb24iPgogICAgICAgIDxkdGU6RGF0b3NHZW5lcmFsZXMgQ29kaWdvTW9uZWRhPSJHVFEiIEZlY2hhSG9yYUVtaXNpb249IjIwMjItMTEtMjVUMTA6NDk6MjIuMDAwLTA2OjAwIiBOdW1lcm9BY2Nlc289IjQwMDAwMDAwMSIgVGlwbz0iRkFDVCIvPgogICAgICAgIDxkdGU6RW1pc29yIEFmaWxpYWNpb25JVkE9IkdFTiIgQ29kaWdvRXN0YWJsZWNpbWllbnRvPSIwMSIgQ29ycmVvRW1pc29yPSIiIE5JVEVtaXNvcj0iODgxMzU5MTgiIE5vbWJyZUNvbWVyY2lhbD0iR1JBTkpBIEFWSUNPTEEgU0FOVEEgRkUiIE5vbWJyZUVtaXNvcj0iR1JBTkpBIEFWSUNPTEEgU0FOVEEgRkUsIFMuQS4iPgogICAgICAgICAgPGR0ZTpEaXJlY2Npb25FbWlzb3I+CiAgICAgICAgICAgIDxkdGU6RGlyZWNjaW9uPkFMREVBIERPTiBHUkVHT1JJTyBaT05BIDA8L2R0ZTpEaXJlY2Npb24+CiAgICAgICAgICAgIDxkdGU6Q29kaWdvUG9zdGFsPjA2MDEyPC9kdGU6Q29kaWdvUG9zdGFsPgogICAgICAgICAgICA8ZHRlOk11bmljaXBpbz5TQU5UQSBDUlVaIE5BUkFOSk88L2R0ZTpNdW5pY2lwaW8+CiAgICAgICAgICAgIDxkdGU6RGVwYXJ0YW1lbnRvPlNBTlRBIFJPU0E8L2R0ZTpEZXBhcnRhbWVudG8+CiAgICAgICAgICAgIDxkdGU6UGFpcz5HVDwvZHRlOlBhaXM+CiAgICAgICAgICA8L2R0ZTpEaXJlY2Npb25FbWlzb3I+CiAgICAgICAgPC9kdGU6RW1pc29yPgogICAgICAgIDxkdGU6UmVjZXB0b3IgQ29ycmVvUmVjZXB0b3I9IiIgSURSZWNlcHRvcj0iQ0YiIE5vbWJyZVJlY2VwdG9yPSJDTElFTlRFUyBWQVJJT1MiPgogICAgICAgICAgPGR0ZTpEaXJlY2Npb25SZWNlcHRvcj4KICAgICAgICAgICAgPGR0ZTpEaXJlY2Npb24+Q0lVREFEPC9kdGU6RGlyZWNjaW9uPgogICAgICAgICAgICA8ZHRlOkNvZGlnb1Bvc3RhbD4wPC9kdGU6Q29kaWdvUG9zdGFsPgogICAgICAgICAgICA8ZHRlOk11bmljaXBpbz5HVUFURU1BTEE8L2R0ZTpNdW5pY2lwaW8+CiAgICAgICAgICAgIDxkdGU6RGVwYXJ0YW1lbnRvPkdVQVRFTUFMQTwvZHRlOkRlcGFydGFtZW50bz4KICAgICAgICAgICAgPGR0ZTpQYWlzPkdUPC9kdGU6UGFpcz4KICAgICAgICAgIDwvZHRlOkRpcmVjY2lvblJlY2VwdG9yPgogICAgICAgIDwvZHRlOlJlY2VwdG9yPgogICAgICAgIDxkdGU6RnJhc2VzPgogICAgICAgICAgPGR0ZTpGcmFzZSBDb2RpZ29Fc2NlbmFyaW89IjEiIFRpcG9GcmFzZT0iMSIvPgogICAgICAgIDwvZHRlOkZyYXNlcz4KICAgICAgICA8ZHRlOkl0ZW1zPgogICAgICAgICAgPGR0ZTpJdGVtIEJpZW5PU2VydmljaW89IkIiIE51bWVyb0xpbmVhPSIxIj4KICAgICAgICAgICAgPGR0ZTpDYW50aWRhZD4xPC9kdGU6Q2FudGlkYWQ+CiAgICAgICAgICAgIDxkdGU6VW5pZGFkTWVkaWRhPkxJQjwvZHRlOlVuaWRhZE1lZGlkYT4KICAgICAgICAgICAgPGR0ZTpEZXNjcmlwY2lvbj5MSUJSQVMgREUgTUVOVURPPC9kdGU6RGVzY3JpcGNpb24+CiAgICAgICAgICAgIDxkdGU6UHJlY2lvVW5pdGFyaW8+NS4yNTwvZHRlOlByZWNpb1VuaXRhcmlvPgogICAgICAgICAgICA8ZHRlOlByZWNpbz41LjI1PC9kdGU6UHJlY2lvPgogICAgICAgICAgICA8ZHRlOkRlc2N1ZW50bz4wPC9kdGU6RGVzY3VlbnRvPgogICAgICAgICAgICA8ZHRlOkltcHVlc3Rvcz4KICAgICAgICAgICAgICA8ZHRlOkltcHVlc3RvPgogICAgICAgICAgICAgICAgPGR0ZTpOb21icmVDb3J0bz5JVkE8L2R0ZTpOb21icmVDb3J0bz4KICAgICAgICAgICAgICAgIDxkdGU6Q29kaWdvVW5pZGFkR3JhdmFibGU+MTwvZHRlOkNvZGlnb1VuaWRhZEdyYXZhYmxlPgogICAgICAgICAgICAgICAgPGR0ZTpNb250b0dyYXZhYmxlPjAuNTY8L2R0ZTpNb250b0dyYXZhYmxlPgogICAgICAgICAgICAgICAgPGR0ZTpNb250b0ltcHVlc3RvPjQuNjk8L2R0ZTpNb250b0ltcHVlc3RvPgogICAgICAgICAgICAgIDwvZHRlOkltcHVlc3RvPgogICAgICAgICAgICA8L2R0ZTpJbXB1ZXN0b3M+CiAgICAgICAgICAgIDxkdGU6VG90YWw+NS4yNTwvZHRlOlRvdGFsPgogICAgICAgICAgPC9kdGU6SXRlbT4KICAgICAgICA8L2R0ZTpJdGVtcz4KICAgICAgICA8ZHRlOlRvdGFsZXM+CiAgICAgICAgICA8ZHRlOlRvdGFsSW1wdWVzdG9zPgogICAgICAgICAgICA8ZHRlOlRvdGFsSW1wdWVzdG8gTm9tYnJlQ29ydG89IklWQSIgVG90YWxNb250b0ltcHVlc3RvPSIwNC42OSIvPgogICAgICAgICAgPC9kdGU6VG90YWxJbXB1ZXN0b3M+CiAgICAgICAgICA8ZHRlOkdyYW5Ub3RhbD41LjI1PC9kdGU6R3JhblRvdGFsPgogICAgICAgIDwvZHRlOlRvdGFsZXM+CiAgICAgIDwvZHRlOkRhdG9zRW1pc2lvbj4KICAgIDwvZHRlOkRURT4KICAgIDxkdGU6QWRlbmRhPgogICAgICA8ZHRlOlZhbG9yMT5QRUQwMTwvZHRlOlZhbG9yMT4KICAgICAgPGR0ZTpWYWxvcjI+ICAgICAgICAgOTwvZHRlOlZhbG9yMj4KICAgIDwvZHRlOkFkZW5kYT4KICA8L2R0ZTpTQVQ+CjxkczpTaWduYXR1cmUgeG1sbnM6ZHM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiIElkPSJTaWduYXR1cmUtYTE5NTAwMjAtMTdjOC00MTYxLWFmNWItMTdlMjE3Y2YxMDgxIj4KICA8ZHM6U2lnbmVkSW5mbz4KICAgIDxkczpDYW5vbmljYWxpemF0aW9uTWV0aG9kIEFsZ29yaXRobT0iaHR0cDovL3d3dy53My5vcmcvVFIvMjAwMS9SRUMteG1sLWMxNG4tMjAwMTAzMTUiLz4KICAgIDxkczpTaWduYXR1cmVNZXRob2QgQWxnb3JpdGhtPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNyc2Etc2hhMjU2Ii8+CiAgICA8ZHM6UmVmZXJlbmNlIFVSST0iI0RhdG9zRW1pc2lvbiI+PGRzOlRyYW5zZm9ybXM+PGRzOlRyYW5zZm9ybSBBbGdvcml0aG09Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyNlbnZlbG9wZWQtc2lnbmF0dXJlIi8+PC9kczpUcmFuc2Zvcm1zPgogICAgICA8ZHM6RGlnZXN0TWV0aG9kIEFsZ29yaXRobT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS8wNC94bWxlbmMjc2hhMjU2Ii8+CiAgICAgIDxkczpEaWdlc3RWYWx1ZT44S3NZZ1lCeXZTaXkzME1kRUsyVURUK0RhbFM0cFZ2eVFXQ09hUWJmTGp3PTwvZHM6RGlnZXN0VmFsdWU+CiAgICA8L2RzOlJlZmVyZW5jZT4KICAgIDxkczpSZWZlcmVuY2UgVHlwZT0iaHR0cDovL3VyaS5ldHNpLm9yZy8wMTkwMyNTaWduZWRQcm9wZXJ0aWVzIiBVUkk9IiNTaWduZWRQcm9wZXJ0aWVzLVNpZ25hdHVyZS1hMTk1MDAyMC0xN2M4LTQxNjEtYWY1Yi0xN2UyMTdjZjEwODEiPgogICAgICA8ZHM6RGlnZXN0TWV0aG9kIEFsZ29yaXRobT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS8wNC94bWxlbmMjc2hhMjU2Ii8+CiAgICAgIDxkczpEaWdlc3RWYWx1ZT5iZUNpdHVLZTllaWFrTXk1Qy9MeVI1bTNmUFZuRmlQanB6UmJTWGI2U1RFPTwvZHM6RGlnZXN0VmFsdWU+CiAgICA8L2RzOlJlZmVyZW5jZT4KICA8L2RzOlNpZ25lZEluZm8+CiAgPGRzOlNpZ25hdHVyZVZhbHVlIElkPSJTaWduYXR1cmUtYTE5NTAwMjAtMTdjOC00MTYxLWFmNWItMTdlMjE3Y2YxMDgxLXNpZ3ZhbHVlIj4wQ2dneDJvYlZ4ZWNqb0kzMjF0dEZIekxrNVZDd21GMUlsWERxWmp6NXlhajczVHo1a29YLzVST2RteTgrUlh0aDVvaXFITXdyNmRwZnRGcGJlOEVuT3dPUC85aFpiZ1E0WUNHTEZUb29uUlBNdDZXczdxMmdYOTR3YW1WNW1hcCs1RWtvSnV0VmZzelJKajhDUjQwNW5JZ3NnbGxCdjQ2WGFPZFZkdkRnVWhNWUxBWU9sNS84aWpIUGZ6NEtMVFBtTlczb2NIWWt3QW9pT1RkNE5KaXZpNEovQ1Y4RlBrVzRST1hmRVJRaUVtK2d5dkVxVDBDdVh2MHpZamp2cVM3WkI3OFRmc0lqbUpMZGpMQTBaYzFTaUdwV3V2TGlRRkE3RlY1ZE1Xa0Zmb1g0QXgrc05nckVmcERuR2lCbE1uUlpBdEdFbHhVZWhlcnZ2cytuQXl0SEE9PTwvZHM6U2lnbmF0dXJlVmFsdWU+CiAgPGRzOktleUluZm8+CiAgICA8ZHM6WDUwOURhdGE+CiAgICAgIDxkczpYNTA5Q2VydGlmaWNhdGU+TUlJRFlUQ0NBa21nQXdJQkFnSUlFUHROcmVxSjZsRXdEUVlKS29aSWh2Y05BUUVMQlFBd09ERTJNRFFHQTFVRUF3d3RVM1Z3WlhKcGJuUmxibVJsYm1OcFlTQmtaU0JCWkcxcGJtbHpkSEpoWTJsdmJpQlVjbWxpZFhSaGNtbGhNQjRYRFRJeE1EVXhOekl3TVRNME5sb1hEVEl6TURVeE56SXdNVE0wTmxvd0tERVJNQThHQTFVRUF3d0lPRGd4TXpVNU1UZ3hFekFSQmdOVkJBb01Dbk5oZEM1bmIySXVaM1F3Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRRHRxVHE2NnJ6Z2xzSFYyNFVuOWFQQnVjQkY5RHNLZWRLUUo1aERmYTB2dHNUQkdmL3dKZkRtbEhPd2o1ZG84b0lsUUtHWnQvV1ZIcVBoU3B6TjIyV1JXUEtEK01vdkowVFdxZC80eFRJeUh3RHVkTEJ4eS9zWkxSbGEvaWI1cHYxZ2JaR0lLM3FnR2NEOVVFL3ZwVXFNMkMzR1Z1dnE2cFdqUTlVb0ZySGpQRm43MTJQUjZ2Q2pLTTErcVg1dHk0TlhUZGxEd0gydlUyVWNjRXVoRkw5R3NKU2kwUlpiSWc0M0M0NUdkekJqRldURXBvSVlmTUMramE2OGtFeFJ5RlNzOVRQaU4wbE9TTWx0S0JzL3RPM243WHJGSlJuNmNFdURrYUhuNlhrR0tXbE05NWhyR1BMZE5zYjJFQ3BQRXMxbVJGTnRLZ08xUHhYWkpuVGtWa3Y5QWdNQkFBR2pmekI5TUF3R0ExVWRFd0VCL3dRQ01BQXdId1lEVlIwakJCZ3dGb0FVV0lKMmpWZ29zY2xEQkFLMDFjaGVhaS8vK0Vvd0hRWURWUjBsQkJZd0ZBWUlLd1lCQlFVSEF3SUdDQ3NHQVFVRkJ3TUVNQjBHQTFVZERnUVdCQlQ0ZUlFNytNc1NTczQwY0ZLNWM2Sk1pKy9KbVRBT0JnTlZIUThCQWY4RUJBTUNCZUF3RFFZSktvWklodmNOQVFFTEJRQURnZ0VCQUVzQVVtM21LcU5XVVlpVFBmeWlaWnRQQjFHY2VHQzVOTUpPeEp3R21wbEc5VlFPQWxaTzVqWHdXa2JhbVozdUR0bk9ZZDR3MUZDYU1qd2Z0Tzk2MEpLMWp6bkQwYmJvS2lLZG1OdEJ6bCt2S2NaS09Dem14b3QwWWJrOUxCcmk4SitxZ01RS01UV1N4dSs5clpEdlRub050aXFJNWtsWXBFdC92c1NCNTNNTGVtNzhBOEpYdlNCU0ttaUlLK2ZXMHB2MnVZdUhyOXNwWWVEUWNqaENiZDN0N0lMeEk1elRrNGN5cVFzcG9NNDgrd1Nwa28wdGJXeG9hTzZodHk4OUNYdlZkdzB5RVQ1VWVlZDBBQmtNcGhueE5MOXNta1ducmFMbk53SE1ISnc5ejhPR2NWQkFsYjh1OWNNM3V4N01Fc0g2Qm03cWQ0Sjg5Z0tVTkNmc01rZz08L2RzOlg1MDlDZXJ0aWZpY2F0ZT4KICAgICAgPGRzOlg1MDlTdWJqZWN0TmFtZT5PPXNhdC5nb2IuZ3QsIENOPTg4MTM1OTE4PC9kczpYNTA5U3ViamVjdE5hbWU+CiAgICAgIDxkczpYNTA5U0tJPitIaUJPL2pMRWtyT05IQlN1WE9pVEl2dnlaaz08L2RzOlg1MDlTS0k+CiAgICA8L2RzOlg1MDlEYXRhPgogIDwvZHM6S2V5SW5mbz4KICA8ZHM6T2JqZWN0PgogICAgPHhhZGVzOlF1YWxpZnlpbmdQcm9wZXJ0aWVzIHhtbG5zOnhhZGVzPSJodHRwOi8vdXJpLmV0c2kub3JnLzAxOTAzL3YxLjMuMiMiIElkPSJRdWFsaWZ5aW5nUHJvcGVydGllcy1hYTI2MjQxNi04NjA3LTRmMDItODg5Ny0wYTY0NDBhMWFlMDMiIFRhcmdldD0iI1NpZ25hdHVyZS1hMTk1MDAyMC0xN2M4LTQxNjEtYWY1Yi0xN2UyMTdjZjEwODEiPg0KICAgIDx4YWRlczpTaWduZWRQcm9wZXJ0aWVzIElkPSJTaWduZWRQcm9wZXJ0aWVzLVNpZ25hdHVyZS1hMTk1MDAyMC0xN2M4LTQxNjEtYWY1Yi0xN2UyMTdjZjEwODEiPg0KICAgICAgICA8eGFkZXM6U2lnbmVkU2lnbmF0dXJlUHJvcGVydGllcz4NCiAgICAgICAgICAgIDx4YWRlczpTaWduaW5nVGltZT4yMDIyLTExLTI1VDE5OjM2OjUxLTA2OjAwPC94YWRlczpTaWduaW5nVGltZT4NCiAgICAgICAgICAgIDx4YWRlczpTaWduaW5nQ2VydGlmaWNhdGU+DQogICAgICAgICAgICAgICAgPHhhZGVzOkNlcnQ+DQogICAgICAgICAgICAgICAgICAgIDx4YWRlczpDZXJ0RGlnZXN0Pg0KICAgICAgICAgICAgICAgICAgICAgICAgPGRzOkRpZ2VzdE1ldGhvZCBBbGdvcml0aG09Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvMDQveG1sZW5jI3NoYTI1NiIvPg0KICAgICAgICAgICAgICAgICAgICAgICAgPGRzOkRpZ2VzdFZhbHVlPm51OU80VzhXK3dlQys4aWg2bndyVHpxSlZjRVZqOG9rSnZCY3JvaGx5RTQ9PC9kczpEaWdlc3RWYWx1ZT4NCiAgICAgICAgICAgICAgICAgICAgPC94YWRlczpDZXJ0RGlnZXN0Pg0KICAgICAgICAgICAgICAgIDwveGFkZXM6Q2VydD4NCiAgICAgICAgICAgIDwveGFkZXM6U2lnbmluZ0NlcnRpZmljYXRlPg0KICAgICAgICA8L3hhZGVzOlNpZ25lZFNpZ25hdHVyZVByb3BlcnRpZXM+DQogICAgPC94YWRlczpTaWduZWRQcm9wZXJ0aWVzPg0KPC94YWRlczpRdWFsaWZ5aW5nUHJvcGVydGllcz4NCjwvZHM6T2JqZWN0Pgo8L2RzOlNpZ25hdHVyZT48L2R0ZTpHVERvY3VtZW50bz4K"
-      });
       
-      var config = {
-        method: 'post',
-        url: 'https://certificador.feel.com.gt/fel/certificacion/v2/dte/',
-        headers: { 
-          'llave': '259F073DC0CB38A65BEEB1DF0F557830', 
-          'usuario': 'GRANJAASF', 
-          'identificador': '8813591-8-PED01-         9', 
-          'Content-Type': 'application/json'
-        },
-        data : data
-      };
-      
-      axios(config)
-      .then(function (response) {
-        console.log(JSON.stringify(response.data));
-        resolve()
-      })
-      .catch(function (error) {
-        console.log(error);
-        reject();
-      });
-    })
-  },
-
-  enviar_FEL_firmado3(coddoc,correlativo,xml){
-    return new Promise((resolve,reject)=>{
       axios({
         method: 'POST',
-        url: 'https://certificador.feel.com.gt/fel/certificacion/v2/dte/',
-        body: {
-          "nit_emisor": FEL.NITEmisor.toString(), 
-          "correo_copia": "contadorgeneral@grupobuenavista.com.gt", 
-          "xml_dte": xml.toString()},
-        headers: {
-              usuario: FEL.ACCESO_REQ_NOMBRE,
-              llave:FEL.ACCESO_REQ_CLAVE,
-              identificador: `${GlobalCodSucursal}-${coddoc}-${correlativo}`,
-              'Content-Type': 'application/json'
+        url: '/fel/fel_certificar',
+        data: {
+          nitemisor: FEL.NITEmisor,
+          xmldte:xml, 
+          felnombre:FEL.ACCESO_REQ_NOMBRE, 
+          felclave:FEL.ACCESO_REQ_CLAVE, 
+          identificador: `${GlobalCodSucursal}-${coddoc}-${correlativo}`
         }
       })
-          .then((response) => {
+      .then((response) => {
               const data = response.data;
-
               resolve(data);
-          }, (error) => {
-           
+      }, (error) => {
               reject(error);
-          });
+      });
+
     })
   },
-  enviar_FEL_firmado2(coddoc,correlativo,xml){
+  update_FEL_series(coddoc,correlativo,uddi,serie,numero,fechacertificacion){
+
+    return new Promise((resolve,reject)=>{
+        axios.post('/fel/fel_certificar_update_documento', {
+          sucursal:GlobalCodSucursal,
+          coddoc:coddoc,
+          correlativo:correlativo,
+          uudi:uddi,
+          serie:serie,
+          numero:numero,
+          fechacertificacion:fechacertificacion
+        })
+        .then((response) => {
+            const data = response.data;
+            resolve(data);
+        }, (error) => {
+        
+            reject(error);
+        });
+    })
+
+  },
+  enviar_FEL_firmado_FRONTEND_ERROR_CORS(coddoc,correlativo,xml){
     return new Promise((resolve,reject)=>{
           axios.post('https://certificador.feel.com.gt/fel/certificacion/v2/dte/',
           {nit_emisor: FEL.NITEmisor, 
@@ -161,11 +170,11 @@ let funciones = {
       let xmlstring = '';
 
       return new Promise((resolve,reject)=>{
-        let fechaemision = '2022-11-25T10:49:22.000-06:00';
+        let fechaemision = '2022-11-27T10:49:22.000-06:00';
 
         //let numeroacceso = (Number(400000000)+Number(correlativo)).toString();
        
-        let numeroacceso = '400000001';
+        let numeroacceso = '400000005';
   
         let encabezado = `<dte:GTDocumento xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:dte="http://www.sat.gob.gt/dte/fel/0.2.0"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="0.1" xsi:schemaLocation="http://www.sat.gob.gt/dte/fel/0.2.0">
                             <dte:SAT ClaseDocumento="dte">
@@ -197,6 +206,7 @@ let funciones = {
         
         let frases = ` <dte:Frases>
                         <dte:Frase CodigoEscenario="1" TipoFrase="1" />
+                        <dte:Frase CodigoEscenario="1" TipoFrase="2" />
                       </dte:Frases>`
   
         let totales = '';
@@ -228,7 +238,8 @@ let funciones = {
                     let subtotal = 0;
                     let iva = 0;
                     total = total + Number(rows.IMPORTE);
-                    iva = (Number(rows.IMPORTE)/1.12).toFixed(2);
+                    iva = (Number(rows.IMPORTE.toFixed(2)) - (Number(rows.IMPORTE.toFixed(2))/1.12)).toFixed(2);
+                    console.log(iva);
                     subtotal = (Number(rows.IMPORTE)-iva).toFixed(2);
                     totaliva += iva;
                     strdata += funciones.getStrItem(numerolinea,rows.CANTIDAD,rows.CODMEDIDA,rows.DESPROD,rows.PRECIO,0,subtotal,iva);
@@ -287,7 +298,7 @@ let funciones = {
         let container = document.getElementById('containerTicket');
 
 
-        let strEncabezado = `<h5>DISTRIBUIDORA ${GlobalEmpNombre} </h5>
+        let strEncabezado = `<h5>${GlobalEmpNombre} </h5>
                             <hr class="solid">
                             <span>FORMATO DE FACTURA ELECTRONICA </span>
                             <br><br><br>

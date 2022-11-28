@@ -64,7 +64,7 @@ function getView(){
                             </div>
 
                             <div class="form-group" align="right">  
-                                <small class="text-secondary">v1.14</small>
+                                <small class="text-secondary">v1.16</small>
                                 <br>
                                 <small>
                                     <!--

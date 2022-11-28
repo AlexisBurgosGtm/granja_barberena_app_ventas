@@ -2,7 +2,7 @@ function getView(){
     let view ={
         encabezado : ()=>{
             return `
-            <div class="row bg-trans-gradient text-white oculto-impresion">
+            <div class="row bg-info text-white oculto-impresion">
                 <div class="col-12">
                     <h5>Seleccione un Mes y un Reporte</h5>
                 </div>               
@@ -50,7 +50,7 @@ function getView(){
         },
         listado: ()=>{
             return `
-                <hr class="solid">
+            <hr class="solid">
             <div class=" oculto-impresion" id="containerTotal"></div>
                 <br>
             <div class="row card oculto-impresion">
@@ -58,6 +58,9 @@ function getView(){
                   
                 </div>
             </div>
+            <button class="btn btn-outline-secondary btn-xl btn-circle btn-bottom-r shadow hand" id="btnFiltroPedidos">
+                <i class="fal fa-filter"></i>
+            </button>
             `
         },
         modalDetallePedido:()=>{
@@ -192,6 +195,35 @@ function getView(){
             </div>
             `
         },
+        modalParametros:()=>{
+            return `
+            <div class="modal fade" id="ModalParametros" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info text-white">
+                            <label class="modal-title text-white h3" id="">Parámetros de Filtrado</label>
+                        </div>
+
+                        <div class="modal-body">
+
+                            ${view.encabezado()}
+                           
+                        
+                        </div>
+                        <div class="modal-footer">
+                                
+                                <div class="col-4">
+                                    <button class="btn btn-secondary btn-xl btn-circle hand shadow" data-dismiss="modal">
+                                            <i class="fal fa-arrow-left"></i>
+                                    </button>
+                                </div>  
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            `
+        },
         footer: ()=>{
             return `
             <hr class="solid">
@@ -202,13 +234,19 @@ function getView(){
         }
     };
 
-    root.innerHTML = view.encabezado() + view.listado() + view.footer();
+    root.innerHTML = view.listado() + view.footer() + view.modalParametros();
+    //root.innerHTML = view.encabezado() + view.listado() + view.footer();
     rootMenuLateral.innerHTML = view.modalDetallePedido() + view.modalCantidad();
     lbMenuTitulo.innerText = "Detalle del Pedido";
 
 };
 
 function addListeners(){
+
+    
+    document.getElementById('btnFiltroPedidos').addEventListener('click',()=>{
+        $("#ModalParametros").modal('show');
+    });
 
     document.getElementById('txtFecha').value = funciones.getFecha();
     document.getElementById('txtFecha').addEventListener('change',()=>{

@@ -1,5 +1,5 @@
-const staticCacheName = 'pre-cache-v10';
-const dynamicCacheName = 'runtime-cache-v10';
+const staticCacheName = 'pre-cache-v16';
+const dynamicCacheName = 'runtime-cache-v16';
 
 // Pre Caching Assets
 const precacheAssets = [
@@ -105,7 +105,7 @@ self.addEventListener('activate', function (event) {
 // FETCH Event
 self.addEventListener('fetch', function (event) {
     
-    return;
+    //return;
 
     event.respondWith(
         caches.match(event.request).then(cacheRes => {

@@ -88,8 +88,9 @@ let GlobalUrl = document.location.origin.toString();
 
 let nowhatsapp = '50257255092';
 
+
 let FEL = {
-    CodigoEstablecimiento:"01",
+    CodigoEstablecimiento:"1",
     NITEmisor:"88135918",
     NombreComercial:"GRANJA AVICOLA SANTA FE",
     NombreEmisor:"GRANJA AVICOLA SANTA FE, S.A.",
@@ -100,10 +101,9 @@ let FEL = {
     ACCESO_REQ_NOMBRE:"GRANJAASF",
     ACCESO_REQ_CLAVE:"259F073DC0CB38A65BEEB1DF0F557830",
     ACCESO_FIRMA_USUARIO:"GRANJAASF",
-    ACCESO_FIRMA_CLAVE:"654fd0346131d4e1f83850558322dd57"
+    ACCESO_FIRMA_CLAVE:"654fd0346131d4e1f83850558322dd57",
+    URL_REPORT_INFILE: "https://report.feel.com.gt/ingfacereport/ingfacereport_documento?uuid="
 };
-
-
 
 function showWaitForm(){
     $('#modalWait').modal('show');

@@ -492,7 +492,7 @@ let apigen = {
         let lbTotal = document.getElementById(idLbTotal);
         lbTotal.innerText = '---';
 
-        let tableheader = `<table class="table table-responsive table-hover table-striped table-bordered">
+        let tableheader = `<table class="table table-responsive table-hover table-striped table-bordered col-12">
                             <thead class="bg-secondary   text-white">
                                 <tr>
                                     <td>Documento</td>
@@ -514,9 +514,25 @@ let apigen = {
         .then((response) => {
             const data = response.data.recordset;
             let total =0;
+            let id = 0;
             data.map((rows)=>{
+                    id += 1;
+                    let idBtnSolicitar = `btnCertificar${id}`;
                     total = total + Number(rows.IMPORTE);
                     totalpedidos = totalpedidos + 1;
+                    let uudi = rows.FEL_UDDI;
+                    let strBotonCertificar = '';
+                    if(uudi=='SN'){
+                        strBotonCertificar =  `<button id='${idBtnSolicitar}' class="btn btn-secondary btn-sm hand shadow"
+                                                onclick="funciones.fcn_solicitar_fel('${rows.CODDOC}','${rows.CORRELATIVO}','${rows.NIT}','${rows.NOMCLIE}','${rows.DIRCLIE}','GUATEMALA','GUATEMALA','${idBtnSolicitar}');">
+                                                <i class="fal fa-print"></i>
+                                                SOLICITAR FACTURA
+                                            </button>`;
+                    }else{strBotonCertificar=`<button id='${idBtnSolicitar}' class="btn btn-info btn-sm hand shadow"
+                                                onclick="funciones.imprimirTicket('${rows.CODDOC}','${rows.CORRELATIVO}');">
+                                                <i class="fal fa-print"></i>
+                                                IMPRIMIR
+                                            </button>`;};
                     strdata = strdata + `<tr>
                                 <td colspan="2">
                                         <b class="text-danger">${rows.CODDOC + '-' + rows.CORRELATIVO}</b>
@@ -527,7 +543,7 @@ let apigen = {
                                     <br>
                                         <small class="text-white bg-secondary">${rows.OBS}</small>
                                     <br>
-                                        <small class="text-danger">FEL:${rows.FEL_UDDI}</small>
+                                        <small class="text-danger negrita">${'Cert:' + rows.FEL_UDDI}</small>
                                     <br>
                                     <div class="row">
                                       
@@ -556,11 +572,7 @@ let apigen = {
                                 <td>
                                     <b>${funciones.setMoneda(rows.IMPORTE,'Q')}</b>
                                     <br><br>
-                                    <button class="btn btn-secondary btn-sm hand shadow"
-                                        onclick="funciones.fcn_solicitar_fel('${rows.CODDOC}','${rows.CORRELATIVO}','CF','CLIENTES VARIOS','CIUDAD','GUATEMALA','GUATEMALA');">
-                                        <i class="fal fa-print"></i>
-                                        SOLICITAR FACTURA
-                                    </button>  
+                                    ${strBotonCertificar}
                                 </td>
                             </tr>`
             })
@@ -2561,7 +2573,7 @@ let apigen = {
 
 
         
-        let strEncabezado = `DISTRIBUIDORA ${GlobalEmpNombre} \n Recordatorio de Pedido \n --------------------------------- \n`;
+        let strEncabezado = `${GlobalEmpNombre} \n Recordatorio de Pedido \n --------------------------------- \n`;
 
         let strdata = '';
 
