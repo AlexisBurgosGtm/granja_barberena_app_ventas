@@ -573,8 +573,13 @@ router.post("/listapedidos", async(req,res)=>{
                     ME_Documentos.DOC_FECHA AS FECHA, 
                     ME_Documentos.LAT, 
                     ME_Documentos.LONG, 
-                             ME_Documentos.DOC_OBS AS OBS, ME_Documentos.DOC_MATSOLI AS DIRENTREGA, ME_Documentos.DOC_ESTATUS AS ST,
-                             ISNULL(ME_Documentos.FEL_UDDI,'SN') AS FEL_UDDI, ME_Documentos.FEL_SERIE, ME_Documentos.FEL_NUMERO, ME_Documentos.FEL_FECHA
+                    ME_Documentos.DOC_OBS AS OBS, 
+                    ME_Documentos.DOC_MATSOLI AS DIRENTREGA, 
+                    ME_Documentos.DOC_ESTATUS AS ST,
+                    ISNULL(ME_Documentos.FEL_UDDI,'SN') AS FEL_UDDI, 
+                    ME_Documentos.FEL_SERIE, 
+                    ME_Documentos.FEL_NUMERO, 
+                    ME_Documentos.FEL_FECHA
     FROM            ME_Documentos LEFT OUTER JOIN
                              ME_Clientes ON ME_Documentos.NITCLIE = ME_Clientes.NITCLIE AND ME_Documentos.CODSUCURSAL = ME_Clientes.CODSUCURSAL
     WHERE        (ME_Documentos.CODSUCURSAL = '${sucursal}') 

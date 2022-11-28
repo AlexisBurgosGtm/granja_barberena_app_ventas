@@ -310,16 +310,74 @@ let funciones = {
     
     return str;
   },
-  imprimirTicket(coddoc,correlativo){
+  imprimirTicket(coddoc,correlativo,fechaemision,nit,nombre,direccion,fel_uudi,fel_serie,fel_numero,fel_fecha){
 
         let container = document.getElementById('containerTicket');
+        let strEncabezado = '';
 
+        switch (GlobalCodSucursal) {
+          case '8813591-8':
+            strEncabezado = `
+            <div class="row">
+              <div class="col-12 text-center">
+                <img src='./logos/santafe.png' width="150" height="100"></img>
+                <br>
+                <h1>GRANJA AVICOLA SANTA FE, S.A.</h1>
+                <h3>GRANJA AVICOLA SANTA FE</h3>
+                <h3>NIT: 8813591-8</h3>
+                <h3>ESTABLECIMIENTO No. 1</h3>
+                <h3>ALDEA DON GREGORIO ZONA 0</h3>
+                <h3>SANTA ROSA, SANTA CRUZ NARANJO</h3>
+                <h3>PBX: 77250279</h3>
+                <h3>41504806</h3>
+                <br>
+                <h3>FACTURA</h3>
+              </div>
+            </div>
+            <br>
+            <div class="row">
+              <div class="col-6">
+                  <h3>SERIE:</h3>
+                  <h3>NUMERO:</h3>
+                  <h3>DOC. REF:</h3>
+                  <br>
+                  <h3>FECHA:</h3>
+                  <h3>CERTIFICACIÓN:</h3>
+                  <br>
+                  <h3>NIT:</h3>
+                  <h3>NOMBRE:</h3>
+                  <h3>DIRECCION</h3>
+              </div>
+              <div class="col-6">
+                  <h3>${fel_serie}</h3>
+                  <h3>${fel_numero}</h3>
+                  <h3>${coddoc}-${correlativo}:</h3>
+                  <br>
+                  <h3>${fel_fecha}</h3>
+                  <h3>${fel_uudi}</h3>
+                  <br>
+                  <h3>${nit}</h3>
+                  <h3>${nombre}</h3>
+                  <h3>${direccion}</h3>
+              </div>
+            </div>
+            
+            <br>
 
-        let strEncabezado = `<h5>${GlobalEmpNombre} </h5>
-                            <hr class="solid">
-                            <span>FORMATO DE FACTURA ELECTRONICA </span>
-                            <br><br><br>
-                            <hr class="solid">`;
+            <div class="row">
+                <div class="col-3"><h3>DESCRIPCION</h3></div>
+                <div class="col-3"><h3>UNIDADES</h3></div>
+                <div class="col-3"><h3>PRECIO</h3></div>
+                <div class="col-3"><h3>TOTAL</h3></div>
+            </div>            
+           `;
+            break;
+        
+          default:
+            break;
+        }
+
+       
 
         let strdata = '';
 
@@ -336,9 +394,38 @@ let funciones = {
             let total =0;
             data.map((rows)=>{
                     total = total + Number(rows.IMPORTE);
-                    strdata += '* ' + rows.DESPROD + "-"  + rows.CODMEDIDA + " Cant: " + rows.CANTIDAD.toString() + " - " + funciones.setMoneda(rows.IMPORTE,'Q').toString() + "<hr class='solid'>";
+                    strdata += `
+                    <div class="row">
+                        <div class="col-3"><h3>${rows.DESPROD}</h3></div>
+                        <div class="col-3"><h3>${rows.CANTIDAD.toString()}</h3></div>
+                        <div class="col-3"><h3>${funciones.setMoneda(rows.PRECIO,'Q')}</h3></div>
+                        <div class="col-3"><h3>${funciones.setMoneda(rows.IMPORTE,'Q')}</h3></div>
+                    </div>  
+                    `;
             })
-            footer = `--------------------------------- <br> Total a Pagar: ${funciones.setMoneda(total,'Q')}`
+            footer = `
+                      <br>
+                      <h1>TOTAL: ${funciones.setMoneda(total,'Q')}</h1>
+                      
+                      <div class="row">
+                          <div class="col-12 text-center">
+                              <h2>SUJETO A PAGOS TRIMESTRALES ISR</h2>
+                              <br>
+                              <h3>NO SE HACEN DEVOLUCIONES EN EFECTIVO</h3>
+                              <br>
+                              <h5>Para cualquier sugerencia o</h5>
+                              <h5>comentario comunicarse al correo</h5>
+                              <h5>correo: cobros@grupobuenavista.com.gt</h5>
+                              <h5>FECHA/HORA DE CERTIFICACION</h5>
+                              <h5>${fel_fecha}</h5>
+                              <h5>NUMERO DE AUTORIZACION:</h5>
+                              <h5>${fel_uudi}</h5>
+                              <h5>DOCUMENTO TRIBUTARIO ELECTRONICO</h5>
+                              <h5>CERTIFICADOR: INFILE, S.A.</h5>
+                              <h5>NIT: 12521337</h5>
+                          </div>
+                      </div>
+                      `
             msg = strEncabezado + strdata + footer;
           
             container.innerHTML = msg;

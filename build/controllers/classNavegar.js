@@ -53,12 +53,12 @@ let classNavegar = {
                             <br> 
                             <button class="btn  btn-lg col-12 shadow card-rounded hand"  id="btnMenu2VendedorClientes">
                                 <i class="fal fa-shopping-cart"></i>
-                                Clientes
+                                VENTAS
                             </button>
                             <hr class="solid">
                             <button class="btn  btn-lg col-12 shadow card-rounded" id="btnMenu2VendedorLogro">
                                 <i class="fal fa-chart-pie"></i>
-                                Logro
+                                PEDIDOS LEVANTADOS
                             </button>
                            
                            
@@ -66,13 +66,13 @@ let classNavegar = {
                            
                             <button class="btn  btn-lg col-12 shadow card-rounded hand"  id="btnDownloadClientes">
                                 <i class="fal fa-user"></i>
-                                Descargar Clientes
+                                DESCARGA CLIENTES
                             </button>
                             <hr class="solid">
 
                             <button class="btn  btn-lg col-12 shadow card-rounded hand"  id="btnDownloadProductos">
                                 <i class="fal fa-box"></i>
-                                Descargar Productos y Precios
+                                DESCARGA PRODUCTOS/PRECIOS
                             </button>   
 
                             

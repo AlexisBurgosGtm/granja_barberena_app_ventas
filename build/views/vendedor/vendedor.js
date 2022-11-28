@@ -780,7 +780,7 @@ async function addListeners(){
 
     });
 
-
+    getListaClientes('AJENOS')
 
     funciones.slideAnimationTabs();
     
