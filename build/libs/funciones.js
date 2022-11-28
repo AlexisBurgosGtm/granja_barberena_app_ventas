@@ -254,22 +254,22 @@ let funciones = {
                     numerolinea += 1;
                     let subtotal = 0;
                     let iva = 0;
-                    total = total + Number(rows.IMPORTE);
+                    total = Number(total) + Number(rows.IMPORTE);
                     iva = (Number(rows.IMPORTE.toFixed(2)) - (Number(rows.IMPORTE.toFixed(2))/1.12)).toFixed(2);
-                    console.log(iva);
                     subtotal = (Number(rows.IMPORTE)-iva).toFixed(2);
-                    totaliva += iva;
+                    totaliva += Number(iva);
                     strdata += funciones.getStrItem(numerolinea,rows.CANTIDAD,rows.CODMEDIDA,rows.DESPROD,rows.PRECIO,0,subtotal,iva);
             })
             items = '<dte:Items>' + strdata + '</dte:Items>';
-  
+            console.log('totaliva:' + totaliva);
             totales = ` <dte:Totales>
                           <dte:TotalImpuestos>
-                          <dte:TotalImpuesto NombreCorto="IVA" TotalMontoImpuesto="${totaliva}" />
+                          <dte:TotalImpuesto NombreCorto="IVA" TotalMontoImpuesto="${Number(totaliva).toFixed(2)}" />
                           </dte:TotalImpuestos>
                           <dte:GranTotal>${total}</dte:GranTotal>
                         </dte:Totales>`;
            xmlstring = encabezado + emisor + receptor + frases + items + totales + footer;
+          
            resolve(xmlstring);
         }, (error) => {
             xmlstring='NO';
