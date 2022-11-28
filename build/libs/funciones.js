@@ -1,5 +1,24 @@
 let funciones = {
-  fcn_solicitar_fel(coddoc,correlativo,nit,nombre,direccion,municipio,departamento,idbtn){
+  get_FEL_fecha(date) {
+
+    let strFecha = '';
+
+    const [yy, mm, dd] = date.split(/-/g);
+
+    let hoy = new Date();
+      let hora = hoy.getHours();
+      if(hora.toString().length==1){hora="0" + hora.toString()};
+      let minuto = hoy.getMinutes();
+      if(minuto.toString().length==1){minuto="0" + minuto.toString()};
+      let segundo = hoy.getSeconds();
+      if(segundo.toString().length==1){segundo="0" + segundo.toString()};
+    
+    strFecha = `${yy}-${mm}-${dd}T${hora.toString()}:${minuto.toString()}:${segundo.toString()}.000-06:00`.replace('T00:00:00.000Z', '');
+    return strFecha;
+
+    //s'2022-11-27T10:49:22.000-06:00'
+  },
+  fcn_solicitar_fel(coddoc,correlativo,nit,nombre,direccion,municipio,departamento,idbtn,fecha){
     
       let btnCertif = document.getElementById(idbtn);
 
@@ -10,7 +29,7 @@ let funciones = {
               btnCertif.innerHTML = 'Solicitando...';
               btnCertif.disabled = true;
 
-              funciones.getXmlFel(coddoc,correlativo,nit,nombre,direccion,municipio,departamento)
+              funciones.getXmlFel(coddoc,correlativo,nit,nombre,direccion,municipio,departamento,fecha)
               .then((xmlstring)=>{
                 
                       funciones.converBase64(xmlstring)
@@ -165,16 +184,14 @@ let funciones = {
           });
     })
   },
-  getXmlFel(coddoc,correlativo,nit,nombre,direccion,municipio,departamento){
+  getXmlFel(coddoc,correlativo,nit,nombre,direccion,municipio,departamento,fecha){
       
       let xmlstring = '';
 
       return new Promise((resolve,reject)=>{
-        let fechaemision = '2022-11-27T10:49:22.000-06:00';
+        let fechaemision = funciones.get_FEL_fecha(fecha); //'2022-11-27T10:49:22.000-06:00';
 
-        //let numeroacceso = (Number(400000000)+Number(correlativo)).toString();
-       
-        let numeroacceso = '400000005';
+        let numeroacceso = '400000110';
   
         let encabezado = `<dte:GTDocumento xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:dte="http://www.sat.gob.gt/dte/fel/0.2.0"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="0.1" xsi:schemaLocation="http://www.sat.gob.gt/dte/fel/0.2.0">
                             <dte:SAT ClaseDocumento="dte">

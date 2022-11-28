@@ -561,9 +561,18 @@ router.post("/listapedidos", async(req,res)=>{
     const {sucursal,codven,fecha}  = req.body;
     
     let qry = '';
-    qry = `SELECT  ME_Clientes.NITFACTURA AS NIT, ME_Documentos.CODDOC, ME_Documentos.DOC_NUMERO AS CORRELATIVO, ME_Documentos.NITCLIE AS CODCLIE, 
-    ME_Clientes.NOMFAC AS NEGOCIO, ME_Documentos.DOC_NOMREF AS NOMCLIE, 
-                             ME_Documentos.DOC_DIRENTREGA AS DIRCLIE, '' AS DESMUNI, ISNULL(ME_Documentos.DOC_TOTALVENTA, 0) AS IMPORTE, ME_Documentos.DOC_FECHA AS FECHA, ME_Documentos.LAT, ME_Documentos.LONG, 
+    qry = `SELECT  ME_Clientes.NITFACTURA AS NIT, 
+                    ME_Documentos.CODDOC, 
+                    ME_Documentos.DOC_NUMERO AS CORRELATIVO, 
+                    ME_Documentos.NITCLIE AS CODCLIE, 
+                    ME_Clientes.NOMFAC AS NEGOCIO, 
+                    ME_Documentos.DOC_NOMREF AS NOMCLIE, 
+                    ME_Documentos.DOC_DIRENTREGA AS DIRCLIE, 
+                    '' AS DESMUNI, 
+                    ISNULL(ME_Documentos.DOC_TOTALVENTA, 0) AS IMPORTE, 
+                    ME_Documentos.DOC_FECHA AS FECHA, 
+                    ME_Documentos.LAT, 
+                    ME_Documentos.LONG, 
                              ME_Documentos.DOC_OBS AS OBS, ME_Documentos.DOC_MATSOLI AS DIRENTREGA, ME_Documentos.DOC_ESTATUS AS ST,
                              ISNULL(ME_Documentos.FEL_UDDI,'SN') AS FEL_UDDI, ME_Documentos.FEL_SERIE, ME_Documentos.FEL_NUMERO, ME_Documentos.FEL_FECHA
     FROM            ME_Documentos LEFT OUTER JOIN
@@ -571,7 +580,7 @@ router.post("/listapedidos", async(req,res)=>{
     WHERE        (ME_Documentos.CODSUCURSAL = '${sucursal}') 
                 AND (ME_Documentos.DOC_FECHA = '${fecha}') AND (ME_Documentos.CODVEN = ${codven}) 
                 AND (ME_Documentos.DOC_ESTATUS <> 'A')
-    ORDER BY ME_Documentos.DOC_NUMERO`
+    ORDER BY ME_Documentos.DOC_NUMERO DESC`
 
     
     execute.Query(res,qry);

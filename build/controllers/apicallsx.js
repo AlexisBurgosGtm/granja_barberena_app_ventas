@@ -524,7 +524,7 @@ let apigen = {
                     let strBotonCertificar = '';
                     if(uudi=='SN'){
                         strBotonCertificar =  `<button id='${idBtnSolicitar}' class="btn btn-secondary btn-sm hand shadow"
-                                                onclick="funciones.fcn_solicitar_fel('${rows.CODDOC}','${rows.CORRELATIVO}','${rows.NIT}','${rows.NOMCLIE}','${rows.DIRCLIE}','GUATEMALA','GUATEMALA','${idBtnSolicitar}');">
+                                                onclick="funciones.fcn_solicitar_fel('${rows.CODDOC}','${rows.CORRELATIVO}','${rows.NIT}','${rows.NOMCLIE}','${rows.DIRCLIE}','GUATEMALA','GUATEMALA','${idBtnSolicitar}','${rows.FECHA}');">
                                                 <i class="fal fa-print"></i>
                                                 SOLICITAR FACTURA
                                             </button>`;
