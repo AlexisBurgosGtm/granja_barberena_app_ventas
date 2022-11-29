@@ -528,12 +528,12 @@ let apigen = {
                                                 onclick="funciones.fcn_solicitar_fel('${rows.CODDOC}','${rows.CORRELATIVO}','${rows.NIT}','${rows.NOMCLIE}','${rows.DIRCLIE}','GUATEMALA','GUATEMALA','${idBtnSolicitar}','${rows.FECHA}');">
                                                 <i class="fal fa-print"></i>
                                                 SOLICITAR FACTURA
-                                            </button>`;
+                                            </button>`;strClassOpciones='';
                     }else{strBotonCertificar=`<button id='${idBtnSolicitar}' class="btn btn-info btn-sm hand shadow"
                                                 onclick="funciones.imprimirTicket('${rows.CODDOC}','${rows.CORRELATIVO}','${rows.FECHA}','${rows.NIT}','${rows.NOMCLIE}','${rows.DIRCLIE}','${rows.FEL_UDDI}','${rows.FEL_SERIE}','${rows.FEL_NUMERO}','${rows.FEL_FECHA}');">
                                                 <i class="fal fa-print"></i>
                                                 IMPRIMIR
-                                            </button>`;strClassOpciones='';};
+                                            </button>`;};
                     strdata = strdata + `<tr>
                                 <td colspan="2">
                                         <b class="text-danger">${rows.CODDOC + '-' + rows.CORRELATIVO}</b>

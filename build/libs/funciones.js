@@ -95,6 +95,60 @@ let funciones = {
     })
       
   },
+  fcn_solicitar_fel_directo(coddoc,correlativo,nit,nombre,direccion,municipio,departamento,idbtn,fecha){
+  
+      return new Promise((resolve,reject)=>{
+
+        funciones.getXmlFel(coddoc,correlativo,nit,nombre,direccion,municipio,departamento,fecha)
+            .then((xmlstring)=>{      
+                    funciones.converBase64(xmlstring)
+                    .then((valor)=>{
+                          funciones.solicitar_FEL(coddoc,correlativo,valor)
+                          .then((data)=>{
+                              if(data.resultado==true){
+
+                                  setLog(`<label class="text-info">Factura firmada exitosamente, enviando a certificación</label>`,'rootWait');
+                                  
+                                  funciones.enviar_FEL_firmado(coddoc,correlativo,data.archivo)
+                                  .then((data)=>{
+                                          //console.log(data);
+                                          if(data.resultado==true){
+                                            
+                                            setLog(`<label class="text-info">Factura CERTIFICADA exitosamente!!</label>`,'rootWait');
+                                            
+                                            funciones.update_FEL_series(coddoc,correlativo,data.uuid.toString(),data.serie.toString(),data.numero.toString(),data.fecha.toString())
+                                            .then(()=>{
+                                                resolve()
+                                            })
+                                            .catch(()=>{
+                                                reject('La factura se certificó pero no se actualizaron los datos')
+                                            })
+                                          }else{
+                                              reject('La factura no pudo ser certificada. Error: ' + data.descripcion)
+                                          }
+                                  })
+                                  .catch((error)=>{
+                                      reject('La factura no pudo ser certificada. Error: ' +  error)
+                                  })
+                                  
+                                  
+                              }else{
+                                reject('Factura no se pudo firmar. Error: ' + data.descripcion)
+                              }
+                              
+                          })
+                          .catch((error)=>{
+                            reject('Factura no se pudo firmar. Error: ' + error)
+                          })
+                    })      
+            })
+            .catch((err)=>{
+                reject('No se pudo obtener el xml')
+            })
+
+      })
+    
+  },
   solicitar_FEL(coddoc,correlativo,xml){
       return new Promise((resolve,reject)=>{
             axios.post('https://signer-emisores.feel.com.gt/sign_solicitud_firmas/firma_xml', {
