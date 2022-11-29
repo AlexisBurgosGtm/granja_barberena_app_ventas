@@ -310,7 +310,7 @@ let funciones = {
     
     return str;
   },
-  imprimirTicket(coddoc,correlativo,fechaemision,nit,nombre,direccion,fel_uudi,fel_serie,fel_numero,fel_fecha){
+  imprimirTicket2(coddoc,correlativo,fechaemision,nit,nombre,direccion,fel_uudi,fel_serie,fel_numero,fel_fecha){
 
         let container = document.getElementById('containerTicket');
         let strEncabezado = '';
@@ -443,6 +443,11 @@ let funciones = {
         });
 
 
+  },
+  imprimirTicket(coddoc,correlativo,fechaemision,nit,nombre,direccion,fel_uudi,fel_serie,fel_numero,fel_fecha){
+      
+      window.open(FEL.URL_REPORT_INFILE.toString() + fel_uudi)      
+  
   },
     convertDateNormal(date) {
       const [yy, mm, dd] = date.split(/-/g);
