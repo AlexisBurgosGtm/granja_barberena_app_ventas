@@ -884,7 +884,7 @@ router.post('/reportemarcasmes',async(req,res)=>{
 // INSERTA UN PEDIDO EN LAS TABLAS DE DOCUMENTOS Y DOCPRODUCTOS
 router.post("/insertventa", async (req,res)=>{
     
-    const {jsondocproductos,codsucursal,empnit,anio,mes,dia,coddoc,correl,fecha,fechaentrega,formaentrega,codcliente,nomclie,codbodega,totalcosto,totalprecio,nitclie,dirclie,obs,direntrega,usuario,codven,lat,long,hora} = req.body;
+    const {jsondocproductos,codsucursal,empnit,anio,mes,dia,coddoc,correl,fecha,fechaentrega,formaentrega,codcliente,nomclie,codbodega,totalcosto,totalprecio,nitclie,dirclie,obs,direntrega,usuario,codven,lat,long,hora,nitdoc} = req.body;
   
     let app = codsucursal;
   
@@ -895,8 +895,8 @@ router.post("/insertventa", async (req,res)=>{
     let qrycorrelativo = ''; //actualiza el correlativo del documento
 
     let correlativo = correl;
-      //carga los espacios en blanco en el correlativo actual
-      correlativo = getCorrelativo(correlativo);
+    //carga los espacios en blanco en el correlativo actual
+    correlativo = getCorrelativo(correlativo);
 
     tblDocproductos.map((p)=>{
         qrydoc = qrydoc + `INSERT INTO ME_DOCPRODUCTOS 
@@ -977,7 +977,7 @@ router.post("/insertventa", async (req,res)=>{
                 '${hora}', '${fecha}', 0, '${concre}', 0,
                 0, 0, 0, ${totalprecio}, ${totalprecio},
                 '${nitclie}', 0, '${codven}', 0, ${saldo}, 
-                0, '${nitclie}', 0, '', 1, 
+                0, '${nitdoc}', 0, '', 1, 
                 0, 0, '', '', '${obs}',
                 0, 0, 0, 0, 
                 0, '', '${formaentrega}', '', '',

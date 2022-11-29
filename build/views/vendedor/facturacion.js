@@ -16,21 +16,7 @@ function getView(){
                     <div class="panel-container collapse">
                         <div class="panel-content">
                             <div class="">
-                                <div class="input-group">
-                                    <input id="txtNit" type="text" ref="txtNit" class="form-control" placeholder="Código del cliente.." aria-label="" aria-describedby="button-addon4" />
-                                    <div class="input-group-prepend">
-                                        <button class="btn btn-info waves-effect waves-themed" type="button" id="btnBusquedaClientes">
-                                            <i class="fal fa-search"></i>
-                                        </button>
-                                        <div class="card"></div>
-                                        <button class="btn btn-success waves-effect waves-themed" id="btnNuevoCliente">
-                                            +
-                                        </button>
-                                    </div>
-                                    
-                                </div>
-                                <input class="form-control" id="txtNombre" placeholder="Nombre de cliente..">
-                                <input class="form-control" id="txtDireccion" placeholder="Dirección cliente">
+                               
                             </div>
                         </div>
                     </div>
@@ -498,9 +484,67 @@ function getView(){
                                         <div class="form-group">
                                             <label>Forma de Pago:</label>
                                             <select id="cmbEntregaConcre" class="form-control">
-                                                
                                                 <option value="CREDITO">CREDITO</option>
+                                                <option value="CONTADO">CONTADO</option>
                                             </select>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                           
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <label>Código:</label>
+                                                    <input id="txtNit" type="text" class="form-control" disabled="true" />
+                                                </div>
+                                                <div class="col-6">
+                                                    <label>NIT:</label>
+                                                    <input id="txtNitDocumento" type="text" class="form-control" disabled="true" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Nombre:</label>
+                                            <input class="form-control" id="txtNombre" placeholder="Nombre de cliente.." disabled="true" >
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Dirección:</label>
+                                            <input class="form-control" id="txtDireccion" placeholder="Dirección cliente" disabled="true" >
+                                        </div>
+                                        
+                                        <hr class="solid">
+
+                                        <div class="row">
+                                            <div class="col-5">
+                                                <button class="btn btn-outline-secondary btn-lg  btn-pills btn-block waves-effect waves-themed" data-dismiss="modal" id="btnEntregaCancelar">
+                                                    <i class="fal fa-ban mr-1"></i>
+                                                    Cancelar
+                                                </button>                                
+                                            </div>
+                
+                                            <div class="col-1"></div>
+                
+                                            <div class="col-5">
+                                                <button class="btn btn-info btn-lg btn-pills btn-block waves-effect waves-themed" id="btnFinalizarPedido">
+                                                    <i class="fal fa-paper-plane mr-1"></i>Generar Factura
+                                                </button>
+                                            </div>
+                                            
+                                            
+                                        </div>
+
+                                        <div class="input-group hidden">
+                                                
+                                            <div class="input-group-prepend">
+                                                <button class="btn btn-info waves-effect waves-themed hidden" type="button" id="btnBusquedaClientes">
+                                                    <i class="fal fa-search"></i>
+                                                </button>
+                                                
+                                                <button class="btn btn-success waves-effect waves-themed hidden" id="btnNuevoCliente">
+                                                    +
+                                                </button>
+                                            </div>
+                                            
                                         </div>
 
                                         <div class="form-group hidden">
@@ -517,24 +561,7 @@ function getView(){
                                     
                                     <br>
             
-                                    <div class="row">
-                                        <div class="col-5">
-                                            <button class="btn btn-outline-secondary btn-lg  btn-pills btn-block waves-effect waves-themed" data-dismiss="modal" id="btnEntregaCancelar">
-                                                <i class="fal fa-ban mr-1"></i>
-                                                Cancelar
-                                            </button>                                
-                                        </div>
-            
-                                        <div class="col-1"></div>
-            
-                                        <div class="col-5">
-                                            <button class="btn btn-outline-success btn-lg btn-pills btn-block waves-effect waves-themed" id="btnFinalizarPedido">
-                                                <i class="fal fa-paper-plane mr-1"></i>Generar Factura
-                                            </button>
-                                        </div>
-                                        
-                                        
-                                    </div>
+                                   
                             
                             </div>
                         
@@ -676,7 +703,7 @@ function getView(){
 
 };
 
-async function iniciarVistaVentas(nit,nombre,direccion){
+async function iniciarVistaVentas(nit,nombre,direccion,nitdoc){
 
     
     //inicializa la vista
@@ -840,7 +867,8 @@ async function iniciarVistaVentas(nit,nombre,direccion){
     addEventsModalCambioCantidad();
 
     //carga los datos del cliente
-    document.getElementById('txtNit').value = nit;
+    document.getElementById('txtNit').value = nit; //codclie
+    document.getElementById('txtNitDocumento').value = nitdoc;
     document.getElementById('txtNombre').value = nombre;
     document.getElementById('txtDireccion').value = direccion;
     
@@ -1495,6 +1523,7 @@ async function fcnFinalizarPedido(){
     let correlativoDoc = document.getElementById('txtCorrelativo').value;
     let cmbVendedor = document.getElementById('cmbVendedor');
     let nit = document.getElementById('txtNit').value;
+    let nitdocumento = document.getElementById('txtNitDocumento').value;
     let latdoc = document.getElementById('lbDocLat').innerText;
     let longdoc = document.getElementById('lbDocLong').innerText;
 
@@ -1575,7 +1604,8 @@ async function fcnFinalizarPedido(){
                             codven:cmbVendedor.value,
                             lat:latdoc,
                             long:longdoc,
-                            hora:hora
+                            hora:hora,
+                            nitdoc:nitdocumento
                         })
                         .then(async(response) => {
                             const data = response.data;
@@ -1612,7 +1642,7 @@ async function fcnFinalizarPedido(){
 
                                 setLog(`<label class="text-info">Pedido enviado, generando factura FEL...</label>`,'rootWait');
                        
-                                funciones.fcn_solicitar_fel_directo(coddoc,correlativoDoc,nit,ClienteNombre,dirclie,'GUATEMALA','GUATEMALA','SN',fecha)
+                                funciones.fcn_solicitar_fel_directo(coddoc,funciones.getCorrelativo_isc(correlativoDoc),nitdocumento,ClienteNombre,dirclie,'GUATEMALA','GUATEMALA','SN',fecha)
                                 .then((msn)=>{
                                     hideWaitForm();
 
@@ -1630,7 +1660,7 @@ async function fcnFinalizarPedido(){
                                 })
                                 .catch((error)=>{
                                     hideWaitForm();
-                                    
+
                                     funciones.AvisoError('No se generó la factura. Intente nuevamente desde la lista de Pedidos');
                                   
                                     document.getElementById('btnEntregaCancelar').click();

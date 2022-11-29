@@ -481,6 +481,7 @@ function getView(){
 
     root.innerHTML = view.body() + view.modalHistorialCliente() + view.modalCambiarDatosCliente() +  view.modalGps();
     rootMenuLateral.innerHTML = view.modalMenuCliente();
+
 };
 
 function Lmap(lat,long){
@@ -523,7 +524,7 @@ function getMenuCliente(codigo,nombre,direccion,telefono,lat,long,nit){
     GlobalSelectedDirCliente = direccion;
     
 
-    classNavegar.ventas(GlobalSelectedCodCliente,GlobalSelectedNomCliente,GlobalSelectedDirCliente);
+    classNavegar.ventas(GlobalSelectedCodCliente,GlobalSelectedNomCliente,GlobalSelectedDirCliente,nit);
 
     //showMenuLateral('Opciones del Cliente');
 

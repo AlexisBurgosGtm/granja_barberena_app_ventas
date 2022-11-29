@@ -102,7 +102,8 @@ let FEL = {
     ACCESO_REQ_CLAVE:"259F073DC0CB38A65BEEB1DF0F557830",
     ACCESO_FIRMA_USUARIO:"GRANJAASF",
     ACCESO_FIRMA_CLAVE:"654fd0346131d4e1f83850558322dd57",
-    URL_REPORT_INFILE: "https://report.feel.com.gt/ingfacereport/ingfacereport_documento?uuid="
+    URL_REPORT_INFILE: "https://report.feel.com.gt/ingfacereport/ingfacereport_documento?uuid=",
+    CONFIG_FEL_HABILITADO: 'SI'
 };
 
 function showWaitForm(){

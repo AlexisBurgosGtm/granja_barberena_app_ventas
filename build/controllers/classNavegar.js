@@ -325,12 +325,12 @@ let classNavegar = {
             window.history.pushState({"page":5}, "censo", '/censo');
         })
     },
-    ventas: async(nit,nombre,direccion)=>{
+    ventas: async(nit,nombre,direccion,nitdoc)=>{
         
             funciones.loadScript('./views/vendedor/facturacion.js','root')
             .then(()=>{
                 GlobalSelectedForm ='VENTAS';
-                iniciarVistaVentas(nit,nombre,direccion);
+                iniciarVistaVentas(nit,nombre,direccion,nitdoc);
                 window.history.pushState({"page":2}, "facturacion", GlobalUrl + '/facturacion')
             })
           
@@ -387,17 +387,6 @@ let classNavegar = {
                 }else{
                 window.history.pushState({"page":5}, "logromes", GlobalUrl + '/logromes')
                 }
-        })
-    },
-    despacho: async()=>{
-        funciones.loadView('../views/despacho/index.html','root')
-        .then(()=>{
-            funciones.loadScript('./views/despacho/controller.js','root')
-            .then(()=>{
-                GlobalSelectedForm ='DESPACHO';
-                controllerdespacho.iniciarVistaDespacho();
-
-            })
         })
     },
     ConfigVendedor: ()=>{
