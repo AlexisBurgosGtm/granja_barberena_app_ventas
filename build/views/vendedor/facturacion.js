@@ -651,6 +651,10 @@ function getView(){
                                         <div class="form-group">
                                             <label>Nueva cantidad:</label>
                                             <input type="number" class="form-control border-info shadow col-10" id="txtCantNuevaCant">
+                                        </div>   
+                                        <div class="form-group">
+                                            <label>Nuevo Precio:</label>
+                                            <input type="number" class="form-control border-info shadow col-10" id="txtCantNuevoPrecio">
                                         </div>                                                             
                                             
                                     </div>
@@ -883,15 +887,29 @@ async function iniciarVistaVentas(nit,nombre,direccion,nitdoc){
 function addEventsModalCambioCantidad(){
 
     document.getElementById('btnCantGuardar').addEventListener('click',()=>{
-        let nuevacantidad = Number(document.getElementById('txtCantNuevaCant').value);
-        if(nuevacantidad>0){
-            fcnUpdateTempRow(GlobalSelectedId,nuevacantidad)
-            .then(()=>{
-                $('#modalCambiarCantidadProducto').modal('hide');
-            })
+        
+        let nuevacantidad = Number(document.getElementById('txtCantNuevaCant').value) || 0;
+        let nuevoprecio = Number(document.getElementById('txtCantNuevoPrecio').value) || 0;
+
+        if(nuevoprecio>0){
         }else{
-            funciones.AvisoError('Escriba una cantidad válida')
-        }  
+            funciones.AvisoError('Precio inválido');
+            return;
+        };
+
+        if(nuevacantidad>0){ 
+        }else{
+            funciones.AvisoError('Cantidad inválido');
+            return;
+        };
+          
+
+        fcnUpdateTempRow(GlobalSelectedId,nuevacantidad,nuevoprecio)
+        .then(()=>{
+            $('#modalCambiarCantidadProducto').modal('hide');
+        });
+       
+
     }) 
 
 };
@@ -1188,7 +1206,7 @@ async function fcnCargarGridTempVentas(idContenedor){
                                 <div class="row">
                                     <div class="col-4"></div>
                                     <div class="col-4 " align="right">
-                                        <button class="btn btn-secondary btn-sm btn-circle" onClick="fcnCambiarCantidad(${rows.ID},${rows.CANTIDAD},'${rows.CODPROD}',${rows.EXISTENCIA});">
+                                        <button class="btn btn-secondary btn-sm btn-circle" onClick="fcnCambiarCantidad(${rows.ID},${rows.CANTIDAD},'${rows.CODPROD}',${rows.EXISTENCIA},${rows.PRECIO});">
                                             <i class="fal fa-edit"></i>
                                         </button>    
                                     </div>
@@ -1225,18 +1243,18 @@ async function fcnCargarGridTempVentas(idContenedor){
     }
 };
 
-async function fcnUpdateTempRow(id,cantidad){
+async function fcnUpdateTempRow(id,cantidad,precio){
 
     //--------------------------
     if(Number(GlobalSelectedExistencia)<Number(cantidad)){
-        funciones.AvisoError('No pude agregar una cantidad mayor a la existencia');
-        return;
+        //funciones.AvisoError('No pude agregar una cantidad mayor a la existencia');
+        //return;
     };
     //--------------------------
 
     return new Promise((resolve, reject) => {
             //OBTIENE LOS DATOS DE LA ROW    
-            selectDataRowVenta(id,cantidad)
+            selectDataRowVenta(id,cantidad,precio)
             .then(()=>{
                 fcnCargarGridTempVentas('tblGridTempVentas');
                 resolve();
@@ -1249,12 +1267,14 @@ async function fcnUpdateTempRow(id,cantidad){
         });
 };
 
-async function fcnCambiarCantidad(id,cantidad,codprod, existencia){
+async function fcnCambiarCantidad(id,cantidad,codprod, existencia,precio){
     
     GlobalSelectedId = id;
     GlobalSelectedExistencia = Number(existencia);
     //$('#ModalCantidad').modal('show');
     document.getElementById('txtCantNuevaCant').value = cantidad;
+    document.getElementById('txtCantNuevoPrecio').value = precio;
+
     $('#modalCambiarCantidadProducto').modal('show');
     
 };

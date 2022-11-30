@@ -368,7 +368,7 @@ function selectTempventas(usuario) {
     });
 };
 
-function selectDataRowVenta(id,nuevacantidad) {
+function selectDataRowVenta(id,nuevacantidad,nuevoprecio) {
     let costo = 0; let precio = 0; let equivale =0; let exento=0; let cantidad= nuevacantidad;
     return new Promise(async(resolve,reject)=>{
         var response = await connection.select({
@@ -379,7 +379,7 @@ function selectDataRowVenta(id,nuevacantidad) {
         });
         response.map((rows)=>{
             costo = rows.COSTO;
-            precio = rows.PRECIO;
+            precio = nuevoprecio; //rows.PRECIO;
             equivale = rows.EQUIVALE;
             exento = rows.EXENTO;
         });
@@ -394,6 +394,7 @@ function selectDataRowVenta(id,nuevacantidad) {
                 CANTIDAD:Number(nuevacantidad),
                 TOTALUNIDADES:totalunidades,
                 TOTALCOSTO:totalcosto,
+                PRECIO:nuevoprecio,
                 TOTALPRECIO:totalprecio,
                 EXENTO:totalexento
             },

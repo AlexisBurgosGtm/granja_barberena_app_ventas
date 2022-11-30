@@ -366,7 +366,7 @@ let classNavegar = {
         })
     },
     ConfigVendedor: ()=>{
-        funciones.loadScript('../views/config.js','root')
+        funciones.loadScript('../views/supervisor/config.js','root')
         .then(()=>{
             GlobalSelectedForm='CONFIG';
             initView();

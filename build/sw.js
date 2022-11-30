@@ -1,5 +1,5 @@
-const staticCacheName = 'pre-cache-v24';
-const dynamicCacheName = 'runtime-cache-v24';
+const staticCacheName = 'pre-cache-v25';
+const dynamicCacheName = 'runtime-cache-v25';
 
 // Pre Caching Assets
 const precacheAssets = [
