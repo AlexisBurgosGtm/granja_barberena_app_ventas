@@ -1643,7 +1643,7 @@ async function fcnFinalizarPedido(){
                                 setLog(`<label class="text-info">Pedido enviado, generando factura FEL...</label>`,'rootWait');
                        
                                 funciones.fcn_solicitar_fel_directo(coddoc,funciones.getCorrelativo_isc(correlativoDoc),nitdocumento,ClienteNombre,dirclie,'GUATEMALA','GUATEMALA','SN',fecha)
-                                .then((msn)=>{
+                                .then((uudi)=>{
                                     hideWaitForm();
 
                                     funciones.Aviso('Factura Generada Exitosamente !!!')
@@ -1655,6 +1655,8 @@ async function fcnFinalizarPedido(){
                                     //elimina el temp ventas asociado al empleado
                                     deleteTempVenta(GlobalUsuario);
                                          
+                                    //imprime el pedido
+                                    funciones.imprimirTicket_uudi(uudi);
                                     //prepara todo para un nuevo pedido
                                     fcnNuevoPedido();
                                 })

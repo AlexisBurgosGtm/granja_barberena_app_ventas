@@ -8,43 +8,7 @@ function getView(){
                     </div>
                     <div class="card-body">
 
-                        <hr class="solid">
-
-                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                            <div class="form-group">
-                                <label class="negrita text-success">Nueva Clave de Inicio</label>
-                                <input type="text" class="form-control" id="txtPassNueva">
-                            </div>
-                            <button class="btn btn-outline-success btn-lg hand shadow" id="btnActualizarPass">
-                                <i class="fal fa-save"></i>
-                                Cambiar Clave
-                            </button>
-                        </div>
-
-                        <hr class="solid">
-                        <hr class="solid">
-
-                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                            <div class="form-group">
-                                <label class="negrita text-info">Adelantar Correlativo de Pedidos</label>
-                                <input type="text" class="form-control" id="txtCorrelativo">
-                            </div>
-                            <button class="btn btn-outline-info btn-lg hand shadow" id="btnActualizarCorrelativo">
-                                <i class="fal fa-save"></i>
-                                Actualizar Correlativo
-                            </button>
-                        </div>
-
-                        <hr class="solid">
-
-
-                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                          
-                            <button class="btn btn-outline-info btn-lg hand shadow" id="btnGps">
-                                <i class="fal fa-map"></i>
-                                Permiso GPS
-                            </button>
-                        </div>
+                            <div class="table-responsive" id="tblUsuarios"></div>
 
                     </div>
                 </div>
@@ -82,54 +46,15 @@ function getView(){
         }
     }
 
-    root.innerHTML = view.body();
+    root.innerHTML = view.body() + view.modalCambiarPass();
 
 };
 
 function addListeners(){
 
-    //cambio de clave de usuario
-    //--------------------------------
-    let txtPassNueva = document.getElementById('txtPassNueva');
-    txtPassNueva.value = GlobalPassUsuario;
+      
 
-    let btnActualizarPass = document.getElementById('btnActualizarPass');
-    btnActualizarPass.addEventListener('click',()=>{
-        funciones.Confirmacion('¿Está seguro que desea cambiar su clave de inicio, esto también aplica a la app de censo?')
-        .then((value)=>{
-            if(value==true){
-
-                btnActualizarPass.disabled = true;
-                btnActualizarPass.innerHTML = `<i class="fal fa-save fa-spin"></i>`;
-
-                apigen.config_cambiar_clave(GlobalCodSucursal,GlobalCodUsuario,txtPassNueva.value)
-                .then((data)=>{
-                  
-                    funciones.Aviso('Clave actualizada exitosamente !!');
-                    
-                    btnActualizarPass.disabled = false;
-                    btnActualizarPass.innerHTML = `<i class="fal fa-save"></i> Cambiar Clave`;
-                    GlobalPassUsuario = txtPassNueva.value;
-                })
-                .catch(()=>{
-                    funciones.AvisoError('No se pudo cambiar la clave de usuario');
-                    btnActualizarPass.disabled = false;
-                    btnActualizarPass.innerHTML = `<i class="fal fa-save"></i> Cambiar Clave`;
-                })
-
-
-            }
-        })
-    });
-
-    //--------------------------------
-
-    var noop = function () {};
-    let btnGps = document.getElementById('btnGps');
-    btnGps.addEventListener('click',()=>{
-        navigator.geolocation.getCurrentPosition(noop);
-    })
-
+        getListaUsuarios();
 };
 
 
@@ -139,3 +64,100 @@ function initView(){
     addListeners();
 
 };
+
+
+
+
+
+
+function getListaUsuarios(){
+
+    let container = document.getElementById('tblUsuarios');
+        container.innerHTML = GlobalLoader;
+        
+      
+        let strdata = '';
+        let tbl = `<table class="table table-responsive table-hover table-striped">
+                        <thead class="bg-trans-gradient text-white">
+                            <tr>
+                                <td>Usuario</td>
+                                <td>Clave</td>
+                                <td>Tipo</td>
+                                <td>Coddoc</td>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+
+        let tblfoot = `</tbody></table>`;
+
+        axios.post('/config/listado', {
+            sucursal:GlobalSistema
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+
+            data.map((rows)=>{
+
+                    strdata = strdata + `<tr>
+                                            <td>
+                                                ${rows.NOMBRE}
+                                            </td>
+                                            <td>
+                                                ${rows.PASS}
+                                            </td>
+                                            <td>
+                                                ${rows.TIPO}
+                                            </td>
+                                            <td>
+                                                ${rows.CODDOC}
+                                            </td>
+                                           
+                                        </tr>`
+            })
+            container.innerHTML = tbl + strdata + tblfoot;
+            //lbTotal.innerHTML = `<h3 class="negrita text-danger">Importe: ${funciones.setMoneda(total,'Q ')}`;
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+            container.innerHTML = '';
+            //lbTotal.innerHTML = '-- --';
+        });
+
+};
+
+
+function update_clave(){
+      //cambio de clave de usuario
+        //--------------------------------
+        let txtPassNueva = document.getElementById('txtPassNueva');
+        txtPassNueva.value = GlobalPassUsuario;
+
+        let btnActualizarPass = document.getElementById('btnActualizarPass');
+        btnActualizarPass.addEventListener('click',()=>{
+            funciones.Confirmacion('¿Está seguro que desea cambiar su clave de inicio, esto también aplica a la app de censo?')
+            .then((value)=>{
+                if(value==true){
+
+                    btnActualizarPass.disabled = true;
+                    btnActualizarPass.innerHTML = `<i class="fal fa-save fa-spin"></i>`;
+
+                    apigen.config_cambiar_clave(GlobalCodSucursal,GlobalSelectedId,txtPassNueva.value)
+                    .then((data)=>{
+                    
+                        funciones.Aviso('Clave actualizada exitosamente !!');
+                        
+                        btnActualizarPass.disabled = false;
+                        btnActualizarPass.innerHTML = `<i class="fal fa-save"></i> Cambiar Clave`;
+                        GlobalPassUsuario = txtPassNueva.value;
+                    })
+                    .catch(()=>{
+                        funciones.AvisoError('No se pudo cambiar la clave de usuario');
+                        btnActualizarPass.disabled = false;
+                        btnActualizarPass.innerHTML = `<i class="fal fa-save"></i> Cambiar Clave`;
+                    })
+
+
+                }
+            })
+        });
+}

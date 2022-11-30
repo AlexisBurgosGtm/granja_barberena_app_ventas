@@ -13,7 +13,7 @@ let classNavegar = {
             .then(()=>{
                 GlobalSelectedForm='LOGIN';
                 InicializarVista();
-                rootMenuFooter.innerHTML = '<b class="text-white">Mercados Efectivos</b>';
+                rootMenuFooter.innerHTML = '<b class="text-white"></b>';
                 if(historial=='SI'){
 
                 }else{
@@ -291,21 +291,6 @@ let classNavegar = {
 
                     //classNavegar.ventasMapaClientes();
                     classNavegar.inicioVendedorListado();
-
-
-                    let btnMConfig = document.getElementById('btnMConfig');
-                    btnMConfig.addEventListener('click',()=>{                      
-
-                        if(GlobalSelectedForm=='LOGIN'){
-                            funciones.AvisoError('Debe iniciar sesión para ver esta sección');
-                            return;
-                        };
-
-                        $("#modalMenuPrincipal").modal('show');
-
-                        //classNavegar.ConfigVendedor();
-                    });
-
                   
              
     },
@@ -356,15 +341,6 @@ let classNavegar = {
             }
         })
     },
-    vendedorReparto: async()=>{
-        
-        funciones.loadScript('./views/vendedor/reparto.js','root')
-        .then(()=>{
-            GlobalSelectedForm ='VENDEDORREPARTO';
-            iniciarVistaVendedorReparto();
-        })
-      
-    },
     pedidos: async (historial)=>{
         funciones.loadScript('../views/pedidos/vendedor.js','root')
         .then(()=>{
@@ -397,38 +373,45 @@ let classNavegar = {
         })
     },
     inicio_supervisor : async ()=>{
-        let strFooter =    `<button class="btn btn-sm "  id="btnMenu2SuperMapa">
-                                <i class="fal fa-map"></i>
-                                Mapa vendedores
-                            </button> 
-                            <button class="btn btn-sm "  id="btnMenu2SuperVentas">
+        let strFooter =    `<hr class="solid">
+                            <button class="btn  btn-lg col-12 shadow card-rounded hand"  id="btnMenu2SuperMapa">
                                 <i class="fal fa-shopping-cart"></i>
+                                Mapa vendedores
+                            </button>
+
+                            <hr class="solid">
+                            <button class="btn  btn-lg col-12 shadow card-rounded" id="btnMenu2SuperVentas">
+                                <i class="fal fa-chart-pie"></i>
                                 Reportes de Ventas
                             </button>
-                          
-                         
-                    
+                                               
+                            <hr class="solid">
+                            <button class="btn  btn-lg col-12 shadow card-rounded hand"  id="btnMenu2SuperConfig">
+                                <i class="fal fa-cog"></i>
+                                Configuraciones Vendedor
+                            </button>        
                             `
 
                     rootMenuFooter.innerHTML = strFooter;
                                                  
-                            
-              
-                 
+        
                     let btnMenu2SuperMapa = document.getElementById('btnMenu2SuperMapa');
                     btnMenu2SuperMapa.addEventListener('click',()=>{
-
-                            classNavegar.supervisor_mapa();
-
+                        $("#modalMenuPrincipal").modal('hide');
+                        classNavegar.supervisor_mapa();
                     });
 
                     let btnMenu2SuperVentas = document.getElementById('btnMenu2SuperVentas');
                     btnMenu2SuperVentas.addEventListener('click',()=>{
-
-                            classNavegar.supervisor_ventas();
-
+                        $("#modalMenuPrincipal").modal('hide');
+                        classNavegar.supervisor_ventas();
                     });
 
+                    let btnMenu2SuperConfig = document.getElementById('btnMenu2SuperConfig');
+                    btnMenu2SuperConfig.addEventListener('click',()=>{
+                        $("#modalMenuPrincipal").modal('hide');
+                        classNavegar.ConfigVendedor();
+                    });
                 
                  
                     //actualiza la ubicación del empleado
@@ -437,9 +420,7 @@ let classNavegar = {
                     //actualiza las credenciales
                     updateDateDownload();
 
-                    classNavegar.supervisor_ventas();
-
-                  
+                    classNavegar.supervisor_ventas();             
              
     },
     supervisor_ventas:()=>{

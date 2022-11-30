@@ -16,7 +16,7 @@ function getView(){
                         <div class="row">
                             <div class="col-12">
 
-                                <img src="./favicon.png" width="100" height="100">                            
+                                <img src="./favicon.png" width="120" height="120">                            
                          
                                
                             </div>    
@@ -26,13 +26,14 @@ function getView(){
                     <div class="card-body">
                         <form class="" id="frmLogin" autocomplete="off">
                             <div class="form-group">
+                                <label class="negrita text-primary">Empresa:</label>
                                 <select class="negrita form-control" id="cmbSucursal">
                                     
                                 </select>
                                 
                             </div>
                             <div class="form-group">
-                                
+                                <label class="negrita text-primary">Usuario:</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">
@@ -45,6 +46,7 @@ function getView(){
                             </div>
 
                             <div class="form-group">
+                                <label class="negrita text-primary">Clave:</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">
@@ -58,21 +60,14 @@ function getView(){
 
                             <br>
                             <div class="form-group" align="right">
-                                <button class="btn btn-info btn-xl shadow btn-circle"  type="submit" id="btnIniciar">
+                                <button class="btn btn-primary btn-xl shadow btn-circle"  type="submit" id="btnIniciar">
                                     <i class="fal fa-unlock"></i>  
                                 </button>
                             </div>
 
                             <div class="form-group" align="right">  
-                                <small class="text-secondary">Grupo Buena Vista v1.23</small>
-                                <br>
-                                <small>
-                                    <!--
-                                    <a href="https://apigen.whatsapp.com/send?phone=50257255092&text=Ayudame%20con%20la%20app%20de%20Mercados%20Efectivos...%20">
-                                        por Alexis Burgos
-                                    </a>
-                                    -->
-                                </small>
+                                <small class="text-secondary">Grupo Buena Vista v1.24</small>
+                              
                             </div>
                         </form>
                     </div>
@@ -144,7 +139,8 @@ function InicializarVista(){
    addListeners();
 
    //getCredenciales();
- 
+    
+   document.getElementById('btnPedidosPend').style ="visibility:hidden";
 
 };
 

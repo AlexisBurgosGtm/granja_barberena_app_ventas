@@ -120,7 +120,7 @@ let funciones = {
                                             
                                             funciones.update_FEL_series(coddoc,correlativo,data.uuid.toString(),data.serie.toString(),data.numero.toString(),data.fecha.toString())
                                             .then(()=>{
-                                                resolve()
+                                                resolve(data.uuid.toString())
                                             })
                                             .catch(()=>{
                                                 reject('La factura se certificó pero no se actualizaron los datos')
@@ -505,6 +505,11 @@ let funciones = {
       window.open(FEL.URL_REPORT_INFILE.toString() + fel_uudi)      
   
   },
+  imprimirTicket_uudi(fel_uudi){
+      
+    window.open(FEL.URL_REPORT_INFILE.toString() + fel_uudi)      
+
+},
     convertDateNormal(date) {
       const [yy, mm, dd] = date.split(/-/g);
       return `${dd}/${mm}/${yy}`.replace('T00:00:00.000Z', '');

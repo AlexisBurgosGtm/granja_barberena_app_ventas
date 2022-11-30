@@ -35,6 +35,20 @@ InicializarServiceWorkerNotif();
 
 
 
+let btnMConfig = document.getElementById('btnMConfig');
+btnMConfig.addEventListener('click',()=>{                      
+
+    if(GlobalSelectedForm=='LOGIN'){
+        funciones.AvisoError('Debe iniciar sesión para ver esta sección');
+        return;
+    };
+
+    $("#modalMenuPrincipal").modal('show');
+
+    //classNavegar.ConfigVendedor();
+});
+
+
 // LISTENER DE LOS BOTONES DEL MENU
 let btnMenuInicioSalir = document.getElementById('btnMenuInicioSalir');
 btnMenuInicioSalir.addEventListener('click',()=>{

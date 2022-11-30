@@ -1,5 +1,5 @@
-const staticCacheName = 'pre-cache-v23';
-const dynamicCacheName = 'runtime-cache-v23';
+const staticCacheName = 'pre-cache-v24';
+const dynamicCacheName = 'runtime-cache-v24';
 
 // Pre Caching Assets
 const precacheAssets = [
@@ -62,8 +62,8 @@ const precacheAssets = [
     './views/vendedor/mapaclientes.js',
     './views/vendedor/facturacion.js',
     './views/vendedor/censo.js',
-    './views/pedidos/vendedorlogro.js',
-    './views/pedidos/vendedor.js',
+    './views/vendedor/vendedorlogro.js',
+    './views/vendedor/clientes.js',
     './views/login/index.js',
     './views/programador.js',
     './views/config.js',

@@ -781,7 +781,9 @@ async function addListeners(){
 
     });
 
-    getListaClientes('AJENOS')
+    getListaClientes('AJENOS');
+
+    document.getElementById('btnPedidosPend').style ="visibility:visible";
 
     funciones.slideAnimationTabs();
     
