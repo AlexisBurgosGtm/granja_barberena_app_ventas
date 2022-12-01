@@ -1,5 +1,5 @@
-const staticCacheName = 'pre-cache-v25';
-const dynamicCacheName = 'runtime-cache-v25';
+const staticCacheName = 'pre-cache-v26';
+const dynamicCacheName = 'runtime-cache-v26';
 
 // Pre Caching Assets
 const precacheAssets = [
@@ -64,9 +64,11 @@ const precacheAssets = [
     './views/vendedor/censo.js',
     './views/vendedor/vendedorlogro.js',
     './views/vendedor/clientes.js',
+    './views/supervisor/config.js',
+    './views/supervisor/mapa.js',
+    './views/supervisor/ventas.js',
     './views/login/index.js',
     './views/programador.js',
-    './views/config.js',
     './favicon.png',
     './listaprecios.js',
     './sw.js',
@@ -85,6 +87,7 @@ self.addEventListener('install', function (event) {
             return cache.addAll(precacheAssets);
         })
     );
+
 });
 
 // ACTIVATE Event

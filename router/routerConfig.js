@@ -51,16 +51,19 @@ router.post("/update_coddoc", async(req,res)=>{
 
 router.post("/update_correlativo", async(req,res)=>{
     
-    const {sucursal, id, correlativo} = req.body;
-        
-    let qry =''; 
-    qry = `UPDATE ME_USUARIOS
-            SET CORRELATIVO=${correlativo}
-            WHERE CODSUCURSAL='${sucursal}'AND ID=${id};`;     
-    
-      
-    execute.Query(res, qry);
 
+        const {sucursal,coddoc,correlativon} = req.body;
+    
+    
+        let qrycorrelativo =`UPDATE ME_TIPODOCUMENTOS 
+                                SET CORRELATIVO=${correlativon} 
+                                WHERE CODSUCURSAL='${sucursal}' AND CODDOC='${coddoc}';
+                            UPDATE ME_USUARIOS 
+                                SET CORRELATIVO=${correlativon} 
+                                WHERE CODSUCURSAL='${sucursal}' AND CODDOC='${coddoc}';`
+      
+        execute.Query(res,qrycorrelativo);
+    
     
 });
 

@@ -43,18 +43,88 @@ function getView(){
                     </div>
                 </div>
             `
+        },
+        modalCambiarCorrelativo: ()=>{
+            return `
+                <div class="modal fade" id="modalCambiarCorrelativo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-md" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <label class="modal-title h3">Actualice el correlativo del documento</label>
+                            </div>
+
+                            <div class="modal-body card-rounded">
+                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                    <div class="form-group">
+                                        <h3 class="negrita text-danger" id="lbCoddoc">Coddoc</h3>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="negrita">Nuevo Correlativo</label>
+                                        <input type="number" class="form-control" id="txtCorrelativo">
+                                    </div>
+                                </div>
+                                <br><br>
+                                <button class="btn btn-outline-success btn-lg" id="btnActualizarCorrelativo">
+                                    <i class="fal fa-save"></i>
+                                    Actualizar
+                                </button>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            `
         }
     }
 
-    root.innerHTML = view.body() + view.modalCambiarPass();
+    root.innerHTML = view.body() + view.modalCambiarCorrelativo() + view.modalCambiarPass();
 
 };
 
 function addListeners(){
 
-      
+        let btnActualizarCorrelativo = document.getElementById('btnActualizarCorrelativo');
+        btnActualizarCorrelativo.addEventListener('click',()=>{
+                funciones.Confirmacion('¿Está seguro que desea actualizar este Correlativo?')
+                .then((value)=>{
+                    if(value==true){
+
+                        btnActualizarCorrelativo.disabled = true;
+                        btnActualizarCorrelativo.innerHTML ='Actualizando...';
+
+                        let nuevocorrelativo = document.getElementById('txtCorrelativo').value || '0';
+
+                        if(nuevocorrelativo=='0'){
+                            funciones.AvisoError('Correlativo inválido');
+                            btnActualizarCorrelativo.disabled = false;
+                            btnActualizarCorrelativo.innerHTML ='<i class="fal fa-save"></i>Actualizar';
+                            return;
+                        }
+                        
+                        update_correlativo(GlobalSelectedCoddoc,nuevocorrelativo)
+                        .then(()=>{
+                            
+                            btnActualizarCorrelativo.disabled = false;
+                            btnActualizarCorrelativo.innerHTML ='<i class="fal fa-save"></i>Actualizar';
+
+                            $("#modalCambiarCorrelativo").modal('hide');
+                            getListaUsuarios();
+                        })
+                        .catch(()=>{
+                            
+                            btnActualizarCorrelativo.disabled = false;
+                            btnActualizarCorrelativo.innerHTML ='<i class="fal fa-save"></i>Actualizar';
+
+                            funciones.AvisoError('No se logró actualizar el correlativo')
+                        });
+                    }
+                })
+        });
 
         getListaUsuarios();
+
+
 };
 
 
@@ -66,10 +136,6 @@ function initView(){
 };
 
 
-
-
-
-
 function getListaUsuarios(){
 
     let container = document.getElementById('tblUsuarios');
@@ -78,7 +144,7 @@ function getListaUsuarios(){
       
         let strdata = '';
         let tbl = `<table class="table table-responsive table-hover table-striped">
-                        <thead class="bg-trans-gradient text-white">
+                        <thead class="bg-secondary text-white">
                             <tr>
                                 <td>Usuario</td>
                                 <td>Clave</td>
@@ -110,6 +176,12 @@ function getListaUsuarios(){
                                             </td>
                                             <td>
                                                 ${rows.CODDOC}
+                                                <br>
+                                                <small>${rows.CORRELATIVO}</small>
+                                                <br>
+                                                <button class="btn btn-sm btn-info hand shadow" onclick="change_correlativo('${rows.CODDOC}','${rows.CORRELATIVO}')">
+                                                    <i class="fal fa-sync"></i> Cambiar
+                                                </button>
                                             </td>
                                            
                                         </tr>`
@@ -126,7 +198,7 @@ function getListaUsuarios(){
 };
 
 
-function update_clave(){
+function fcn_update_clave(){
       //cambio de clave de usuario
         //--------------------------------
         let txtPassNueva = document.getElementById('txtPassNueva');
@@ -160,4 +232,39 @@ function update_clave(){
                 }
             })
         });
-}
+};
+
+
+function change_correlativo(coddoc,correlativoactual){
+
+    GlobalSelectedCoddoc = coddoc;
+    document.getElementById('lbCoddoc').innerText = coddoc;
+    document.getElementById('txtCorrelativo').value = correlativoactual;
+
+    $("#modalCambiarCorrelativo").modal('show');
+
+
+};
+
+function update_correlativo(coddoc,correlativonuevo){
+
+    return new Promise((resolve,reject)=>{
+        axios.post('/config/update_correlativo',{
+            sucursal : GlobalCodSucursal,
+            coddoc:coddoc,
+            correlativon:correlativonuevo
+        })
+        .then((response) => {
+            let data = response.data;
+            if(Number(data.rowsAffected[0])>0){
+                resolve(data);             
+            }else{
+                reject();
+            }      
+        }, (error) => {
+           reject();
+        });    
+    })
+    
+
+};

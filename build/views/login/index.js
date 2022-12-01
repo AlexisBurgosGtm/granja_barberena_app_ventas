@@ -16,7 +16,7 @@ function getView(){
                         <div class="row">
                             <div class="col-12">
 
-                                <img src="./favicon.png" width="120" height="120">                            
+                                <img src="./favicon.png" width="140" height="140">                            
                          
                                
                             </div>    
@@ -65,9 +65,8 @@ function getView(){
                                 </button>
                             </div>
 
-                            <div class="form-group" align="right">  
-                                <small class="text-secondary">Grupo Buena Vista v1.25</small>
-                              
+                            <div class="form-group" align="left">  
+                                <small class="text-secondary">Grupo Buena Vista v1.26</small>
                             </div>
                         </form>
                     </div>
