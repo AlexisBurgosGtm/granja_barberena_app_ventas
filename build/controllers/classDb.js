@@ -1,4 +1,4 @@
-const DbName = "ventasoffline";
+const DbName = "ventasoffline2";
 
 var tblDocumentos = {
     name: 'documentos',
@@ -25,6 +25,7 @@ var tblDocumentos = {
         CODVEN:{dataType: "number"},
         LAT:{dataType: "string"},
         LONG:{dataType: "string"},
+        FECHA_OPERACION:{dataType: "string"},
         JSONPRODUCTOS:{dataType: "string"}
     }
 };

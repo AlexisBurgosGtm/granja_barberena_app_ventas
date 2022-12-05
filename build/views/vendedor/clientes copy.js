@@ -6,12 +6,12 @@ function getView(){
                   
 
                     <div class="tab-content" id="myTabHomeContent">
-                        <div class="tab-pane fade" id="dias" role="tabpanel" aria-labelledby="dias-tab">
+                        <div class="tab-pane fade show active" id="dias" role="tabpanel" aria-labelledby="dias-tab">
 
                             ${view.dias()}
 
                         </div>
-                        <div class="tab-pane fade show active" id="clientes" role="tabpanel" aria-labelledby="clientes-tab">
+                        <div class="tab-pane fade" id="clientes" role="tabpanel" aria-labelledby="clientes-tab">
                             ${view.tabsClientes()}
                         </div>
 
@@ -139,10 +139,14 @@ function getView(){
             return `
             <div class="panel-container show">
                 <div class="panel-content bg-white">
-                   
+                    <ul class="nav nav-pills nav-justified" role="tablist">
+                        <li class="nav-item" id="btnTabNV"><a class="nav-link nav-link-custom" data-toggle="tab" href="#panelNoVisitados">No Visit</a></li>
+                        <li class="nav-item" id="btnTabV"><a class="nav-link nav-link-custom " data-toggle="tab" href="#panelVisitados">Visitados</a></li>
+                        <li class="nav-item hidden" id="btnTabAjenos"><a id="btnTabAjenos2" class="nav-link nav-link-custom active" data-toggle="tab" href="#panelAjenos">Ajenos</a></li>
+                    </ul>
                     <div class="tab-content py-3">
 
-                        <div class="tab-pane fade" id="panelNoVisitados" role="tabpanel">
+                        <div class="tab-pane fade active show" id="panelNoVisitados" role="tabpanel">
                             <div class="table-responsive">
                                 
                                 <input type="text" id="txtFiltrarCliente" class="form-control border-secondary border-top-0 border-right-0 border-left-0" placeholder="Buscar en la lista...">
@@ -177,9 +181,11 @@ function getView(){
 
                         </div>
 
-                        <div class="tab-pane fade active show" id="panelAjenos" role="tabpanel">
-                                                                                 
-                            <div class="form-group p-2">
+                        <div class="tab-pane fade" id="panelAjenos" role="tabpanel">
+                            
+                            <hr class="solid">
+                            
+                            <div class="form-group">
                                 <label class="negrita">Búsqueda de Cliente:</label>
                                 <div class="input-group">               
                             
@@ -207,13 +213,6 @@ function getView(){
                         </div>
 
                     </div>
-                
-                    <ul class="nav nav-pills nav-justified" role="tablist">
-                        <li class="nav-item" id="btnTabNV"><a class="nav-link nav-link-custom" data-toggle="tab" href="#panelNoVisitados">No Visit</a></li>
-                        <li class="nav-item" id="btnTabV"><a class="nav-link nav-link-custom " data-toggle="tab" href="#panelVisitados">Visitados</a></li>
-                        <li class="nav-item hidden" id="btnTabAjenos"><a id="btnTabAjenos2" class="nav-link nav-link-custom active" data-toggle="tab" href="#panelAjenos">Ajenos</a></li>
-                    </ul>
-                    
                 </div>
             </div>
             <div class="shortcut-menu align-left hidden">
@@ -697,29 +696,31 @@ async function addListeners(){
 
     await apigen.clientesVendedor(GlobalCodSucursal,GlobalCodUsuario,cmbDiaVisita.value,'tblClientes','tblClientesVisitados')
 
- 
+    document.getElementById('txtClientesAjenosBuscar').addEventListener('keyup',(e)=>{
+      
+        let filtro = document.getElementById('txtClientesAjenosBuscar');
+        filtro.value = filtro.value.toUpperCase(); //cambia el valor de la búsqueda a mayúsculas
+
+        let txtClientesAjenosBuscar = filtro.value;
+        if(e.code=='Enter'){
+                apigen.clientesAjenosVendedor(GlobalCodSucursal,txtClientesAjenosBuscar.value,'tblClientesAjenos')
+        }
+        if(e.code=='NumpadEnter'){
+                apigen.clientesAjenosVendedor(GlobalCodSucursal,txtClientesAjenosBuscar.value,'tblClientesAjenos')
+        }
+    })
 
     let btnClientesAjenosBuscar = document.getElementById('btnClientesAjenosBuscar');
     btnClientesAjenosBuscar.addEventListener('click', async ()=>{
         
-        let txtClientesAjenosBuscar = document.getElementById('txtClientesAjenosBuscar').value;
-        await apigen.clientesAjenosVendedor(GlobalCodSucursal,txtClientesAjenosBuscar,'tblClientesAjenos')
+        let filtro = document.getElementById('txtClientesAjenosBuscar');
+        filtro.value = filtro.value.toUpperCase(); //cambia el valor de la búsqueda a mayúsculas
+
+        let txtClientesAjenosBuscar = filtro.value;
+        await apigen.clientesAjenosVendedor(GlobalCodSucursal,txtClientesAjenosBuscar.value,'tblClientesAjenos')
 
     })
     
-    document.getElementById('txtClientesAjenosBuscar').addEventListener('keyup',(e)=>{
-       
-        let filtro = document.getElementById('txtClientesAjenosBuscar');
-        filtro.value = filtro.value.toUpperCase(); //cambia el valor de la búsqueda a mayúsculas
-        
-        if(e.code=='Enter'){
-            btnClientesAjenosBuscar.click();
-        }
-        if(e.code=='NumpadEnter'){
-            btnClientesAjenosBuscar.click();
-        }
-    })
-
     await apigen.vendedorTotalDia(GlobalCodSucursal,GlobalCodUsuario,funciones.getFecha(),'lbTotalDia');
 
     //verifica si hay pedidos pendientes

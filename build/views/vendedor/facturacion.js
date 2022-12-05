@@ -46,7 +46,7 @@ function getView(){
                             </div>
                             <div class="row">
                                 <div class="col-6">
-                                    Fecha: <input type="date" class="form-control bg-subtlelight pl-4 text-sm" id="txtFecha">
+                                    
                                 </div>
                                 <div class="col-6">
                                     Vendedor:
@@ -292,11 +292,11 @@ function getView(){
                             <div class="row">
                                 <div class="input-group">
                                     <select class="form-control col-3 shadow border-secondary negrita border-left-0 border-right-0 border-top-0" id="cmbTipoPrecio">
-                                        <option value="P">DET</option>
-                                        <option value="C">PreB</option>
-                                        <option value="B">PreA</option>
-                                        <option value="A">MAY</option>
-                                        <option value="K">CAMBIO</option>
+                                        <option value="P">P</option>
+                                        <option value="C">MC</option>
+                                        <option value="B">MB</option>
+                                        <option value="A">MA</option>
+                                       
                                     </select>
                                     <input id="txtBusqueda" type="text" ref="txtBusqueda" class="bg-amarillo form-control col-7 shadow" placeholder="Buscar código o descripción..." aria-label="" aria-describedby="button-addon4" />
                                     <div class="input-group-prepend">
@@ -480,7 +480,13 @@ function getView(){
                             <div class="modal-body shadow">
                                     <div class="">            
                                         
+                                        <h4 class="negrita text-danger">Datos de Facturación</h4>
 
+                                        <div class="form-group">
+                                            <label>Fecha de Facturación:</label>
+                                            <input type="date" class="form-control bg-subtlelight pl-4 text-sm" id="txtFecha">
+                                        </div>
+                                        
                                         <div class="form-group">
                                             <label>Forma de Pago:</label>
                                             <select id="cmbEntregaConcre" class="form-control">
@@ -1578,6 +1584,7 @@ async function fcnFinalizarPedido(){
                 CODVEN:Number(cmbVendedor.value),
                 LAT:latdoc,
                 LONG:longdoc,
+                FECHA_OPERACION:funciones.getFecha(),
                 JSONPRODUCTOS:JSON.stringify(docproductos_ped)
         };
 
@@ -1625,7 +1632,8 @@ async function fcnFinalizarPedido(){
                             lat:latdoc,
                             long:longdoc,
                             hora:hora,
-                            nitdoc:nitdocumento
+                            nitdoc:nitdocumento,
+                            fecha_operacion:funciones.getFecha()
                         })
                         .then(async(response) => {
                             const data = response.data;

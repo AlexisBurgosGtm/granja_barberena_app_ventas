@@ -1,5 +1,5 @@
-const staticCacheName = 'pre-cache-v26';
-const dynamicCacheName = 'runtime-cache-v26';
+const staticCacheName = 'pre-cache-v27';
+const dynamicCacheName = 'runtime-cache-v27';
 
 // Pre Caching Assets
 const precacheAssets = [
@@ -116,7 +116,7 @@ self.addEventListener('fetch', function (event) {
                 return caches.open(dynamicCacheName).then(function (cache) {
                     cache.put(event.request, response.clone());
                     return response;
-             0   })
+                })
             });
         }).catch(function() {
             // Fallback Page, When No Internet Connection
