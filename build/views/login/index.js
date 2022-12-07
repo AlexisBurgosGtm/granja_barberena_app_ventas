@@ -66,12 +66,12 @@ function getView(){
                             </div>
 
                             <div class="form-group" align="left">  
-                                <small class="text-primary">Grupo Buena Vista v1.27</small>
+                                <small class="text-primary">Grupo Buena Vista v1.28</small>
+                                <br>
                                 <small class="negrita text-secondary">Activity Log:</small>
                                 <br>
-                                <small class="text-secondary">- Cambio de fecha al facturar</small>
-                                <br>
-                                <small class="text-secondary">- Automáticamente cambia a mayúsculas en buscar cliente</small>
+                                <small class="text-secondary">- Limpieza de número de nit al facturar</small>
+                               
                             </div>
                         </form>
                     </div>

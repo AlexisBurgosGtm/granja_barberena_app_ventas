@@ -21,6 +21,7 @@ let funciones = {
   fcn_solicitar_fel(coddoc,correlativo,nit,nombre,direccion,municipio,departamento,idbtn,fecha){
     
       let btnCertif = document.getElementById(idbtn);
+      nit = funciones.limpiarTexto(nit).toUpperCase();
 
       funciones.Confirmacion('¿Está seguro que desea intentar certificar esta factura?')
       .then((value)=>{
@@ -96,7 +97,8 @@ let funciones = {
       
   },
   fcn_solicitar_fel_directo(coddoc,correlativo,nit,nombre,direccion,municipio,departamento,idbtn,fecha){
-  
+    
+      nit = funciones.limpiarTexto(nit).toUpperCase();
       return new Promise((resolve,reject)=>{
         
         if(FEL.CONFIG_FEL_HABILITADO=='NO'){reject();funciones.AvisoError('No está habilitado para emitir Factura Electrónica');return;};
