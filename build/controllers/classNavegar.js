@@ -75,27 +75,14 @@ let classNavegar = {
                                 <i class="fal fa-box"></i>
                                 DESCARGA PRODUCTOS/PRECIOS
                             </button>   
+                            
+                          
 
+                            <button class="btn btn-outline-danger btn-xl col-12 btn-circle shadow"  id="btnMenuMostrarErrores">
+                                <i class="fal fa-comment"></i>
+                            </button>                           
                             
-                            <button class="btn  btn-lg col-12 shadow card-rounded hand hidden"  id="btnMenu2VendedorSync">
-                                <i class="fal fa-sync"></i>
-                                Descargar catálogos
-                            </button> 
-
-                            <button class="btn btn-danger btn-lg col-12 btn-circle shadow"  id="btnMenuMostrarErrores">
-                                <i class="fal fa-radiation"></i>
-                            </button>
-                            
-                            
-                            <button class="btn  btn-lg col-12 shadow card-rounded hand hidden" id="btnListaP">
-                                <i class="fal fa-search"></i>
-                                Lista de Precios
-                            </button>
-                        
-                            <button class="btn  btn-lg col-12 shadow card-rounded hand hidden" id="btnMenu2Censo">
-                                <i class="fal fa-edit"></i>
-                                Cliente Nuevo
-                            </button>
+                                                  
                             `
 
                     rootMenuFooter.innerHTML = strFooter;
@@ -109,7 +96,9 @@ let classNavegar = {
                     });
 
                     document.getElementById('btnMenuMostrarErrores').addEventListener('click',()=>{
-                        $("modalErrores").modal('show');
+                        $("#modalMenuPrincipal").modal('hide');
+                        console.log('modalErrores')
+                        $("#modalErrores").modal('show');
                     })
 
                     let btnMenu2VendedorClientesMapa = document.getElementById('btnMenu2VendedorClientesMapa');
@@ -129,28 +118,28 @@ let classNavegar = {
                     });
 
                  
-                    let btnMenu2Censo = document.getElementById('btnMenu2Censo');
-                    btnMenu2Censo.addEventListener('click',()=>{
+                    //let btnMenu2Censo = document.getElementById('btnMenu2Censo');
+                    //btnMenu2Censo.addEventListener('click',()=>{
 
-                        $("#modalMenuPrincipal").modal('hide');
-                        classNavegar.inicio_censo();
+                       // $("#modalMenuPrincipal").modal('hide');
+                       // classNavegar.inicio_censo();
 
-                    });
+                    //});
 
-                    let btnMenu2VendedorSync = document.getElementById('btnMenu2VendedorSync');
-                    btnMenu2VendedorSync.addEventListener('click',()=>{
+                    //let btnMenu2VendedorSync = document.getElementById('btnMenu2VendedorSync');
+                    //btnMenu2VendedorSync.addEventListener('click',()=>{
 
-                        $("#modalMenuPrincipal").modal('hide');
-                        $('#modalSync').modal('show');
-                    });
+                        //$("#modalMenuPrincipal").modal('hide');
+                        //$('#modalSync').modal('show');
+                    //});
 
 
-                    let btnListaP = document.getElementById('btnListaP');
-                    btnListaP.addEventListener('click',()=>{
+                    //let btnListaP = document.getElementById('btnListaP');
+                    //btnListaP.addEventListener('click',()=>{
 
-                        $("#modalMenuPrincipal").modal('hide');
-                        $('#modalListaPrecios').modal('show');
-                    });
+                       // $("#modalMenuPrincipal").modal('hide');
+                        //$('#modalListaPrecios').modal('show');
+                    //});
 
                     //boton de descargas
 

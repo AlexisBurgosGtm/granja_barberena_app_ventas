@@ -58,6 +58,9 @@ let funciones = {
                                             }else{
                                               btnCertif.innerHTML = '<i class="fal fa-print"></i>SOLICITAR FACTURA';
                                               btnCertif.disabled = false;
+
+                                              funciones.mostrarErrores(JSON.stringify(data.descripcion_errores));
+
                                               funciones.AvisoError('No se pudo crear la factura');
                                             }
                                     })
@@ -66,6 +69,9 @@ let funciones = {
                                       console.log(error);
                                       btnCertif.innerHTML = '<i class="fal fa-print"></i>SOLICITAR FACTURA';
                                       btnCertif.disabled = false;
+
+                                      funciones.mostrarErrores(error);
+
                                       funciones.AvisoError('No se pudo crear la factura');
                                     })
                                     
@@ -73,18 +79,24 @@ let funciones = {
                                 }else{
                                   btnCertif.innerHTML = '<i class="fal fa-print"></i>SOLICITAR FACTURA';
                                   btnCertif.disabled = false;
-                                  funciones.AvisoError('Factura no se pudo certificar')
+                                                                
+                                  funciones.AvisoError('Factura no se pudo certificar');
+
+                                  funciones.mostrarErrores(data.descripcion);
+
+
+
                                 }
                                 
                             })
                             .catch((error)=>{
                                 console.log(error);
-                                funciones.mostrarErrores(error);
-                                
-
                                 btnCertif.innerHTML = '<i class="fal fa-print"></i>SOLICITAR FACTURA';
                                 btnCertif.disabled = false;
                                 funciones.AvisoError('Error al certificar')
+
+                                funciones.mostrarErrores(error);
+                                                               
                             })
                       })      
               })
@@ -615,6 +627,8 @@ let funciones = {
     }
     },
     mostrarErrores: (deserror)=>{
+      console.log('error:')
+      console.log(deserror);
         rootErrores.innerHTML = deserror;
         $("#modalErrores").modal('show');
     },
