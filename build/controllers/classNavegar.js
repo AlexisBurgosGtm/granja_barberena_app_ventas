@@ -50,6 +50,7 @@ let classNavegar = {
                                 <i class="fal fa-map"></i>
                                 Mapa
                             </button>
+                           
                             <br> 
                             <button class="btn  btn-lg col-12 shadow card-rounded hand"  id="btnMenu2VendedorClientes">
                                 <i class="fal fa-shopping-cart"></i>
@@ -80,6 +81,10 @@ let classNavegar = {
                                 <i class="fal fa-sync"></i>
                                 Descargar catálogos
                             </button> 
+
+                            <button class="btn btn-danger btn-lg col-12 btn-circle shadow"  id="btnMenuMostrarErrores">
+                                <i class="fal fa-radiation"></i>
+                            </button>
                             
                             
                             <button class="btn  btn-lg col-12 shadow card-rounded hand hidden" id="btnListaP">
@@ -103,6 +108,9 @@ let classNavegar = {
 
                     });
 
+                    document.getElementById('btnMenuMostrarErrores').addEventListener('click',()=>{
+                        $("modalErrores").modal('show');
+                    })
 
                     let btnMenu2VendedorClientesMapa = document.getElementById('btnMenu2VendedorClientesMapa');
                     btnMenu2VendedorClientesMapa.addEventListener('click',()=>{

@@ -79,6 +79,9 @@ let funciones = {
                             })
                             .catch((error)=>{
                                 console.log(error);
+                                funciones.mostrarErrores(error);
+                                
+
                                 btnCertif.innerHTML = '<i class="fal fa-print"></i>SOLICITAR FACTURA';
                                 btnCertif.disabled = false;
                                 funciones.AvisoError('Error al certificar')
@@ -610,6 +613,10 @@ let funciones = {
     } else {
       console.log('Contacts API not supported.');
     }
+    },
+    mostrarErrores: (deserror)=>{
+        rootErrores.innerHTML = deserror;
+        $("#modalErrores").modal('show');
     },
     readContacts:(idResult)=>{
 
