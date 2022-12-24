@@ -313,6 +313,78 @@ let apigen = {
                 
         let strdata = ''; 
 
+        axios.post('/clientes/listaajenosvendedor2', {
+            app:GlobalSistema,
+            sucursal: sucursal,
+            filtro: filtro,
+            codven:GlobalCodUsuario
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            
+            data.map((rows)=>{                    
+                        strdata = strdata + `
+                    <tr class=''>
+                        <td>${rows.NEGOCIO} // ${rows.NOMCLIE}
+                            <br>
+                            <div class="row">
+                                <div class="col-6">
+                                    <small>Cod: ${rows.CODIGO}</small>    
+                                </div>
+                                <div class="col-6">
+                                    <small>Tel: ${rows.TELEFONO}</small>    
+                                </div>
+                            </div>
+                            <small>${rows.DIRCLIE}, ${rows.DESMUNI}<b></b></small>
+                            <br>
+                            <small class="text-info">Ref:${rows.REFERENCIA}</small>
+                            
+                            <div class="row">
+                                
+                                <div class="col-4">
+                                    <button class="btn btn-outline-primary btn-sm shadow" onclick="funciones.gotoGoogleMaps('${rows.LAT}','${rows.LONG}');">
+                                        <i class="fal fa-map-marker"></i>Ubicac
+                                    </button>
+                                </div>
+                                                                        
+                                <div class="col-4">
+                                    <button class="btn btn-outline-warning btn-sm shadow" onclick="getHistorialCliente('${rows.CODIGO}','${rows.NIT}','${rows.NOMCLIE}');">
+                                        <i class="fal fa-book"></i>Historial
+                                    </button>
+                                </div>
+                                
+                                <div class="col-4">
+                                    <button class="btn btn-info btn-sm shadow" onclick="getMenuCliente('${rows.CODIGO}','${rows.NOMCLIE}','${rows.DIRCLIE}','${rows.TELEFONO}','${rows.LAT}','${rows.LONG}','${rows.NIT}');">
+                                        <i class="fal fa-shopping-cart"></i>Vender
+                                    </button>
+                                </div>
+                                
+                            </div>
+                            
+                        </td>
+                    </tr>`    
+                    
+                    
+                    
+            })
+            container.innerHTML = strdata;
+            
+
+        }, (error) => {
+            funciones.AvisoError('Error en la solicitud');
+            strdata = '';
+            container.innerHTML = 'No se pudo cargar la lista';
+        });
+        
+        
+    },
+    BACKUP_clientesAjenosVendedor: async(sucursal,filtro,idContenedor)=>{
+    
+        let container = document.getElementById(idContenedor);
+        container.innerHTML = GlobalLoader;
+                
+        let strdata = ''; 
+
         axios.post('/clientes/listaajenosvendedor', {
             app:GlobalSistema,
             sucursal: sucursal,

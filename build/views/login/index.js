@@ -66,11 +66,11 @@ function getView(){
                             </div>
 
                             <div class="form-group" align="left">  
-                                <small class="text-primary">Grupo Buena Vista v1.30</small>
+                                <small class="text-primary">Grupo Buena Vista v1.31</small>
                                 <br>
                                 <small class="negrita text-secondary">Activity Log:</small>
                                 <br>
-                                <small class="text-secondary">- Ventana de errores agregada</small>
+                                <small class="text-secondary">- Muestra solo clientes de vendedor</small>
                                
                             </div>
                         </form>
