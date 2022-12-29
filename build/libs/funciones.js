@@ -373,8 +373,8 @@ let funciones = {
               <dte:Impuesto>
               <dte:NombreCorto>IVA</dte:NombreCorto>
               <dte:CodigoUnidadGravable>1</dte:CodigoUnidadGravable>
-              <dte:MontoGravable>${subtotal.toFixed(2)}</dte:MontoGravable>
-              <dte:MontoImpuesto>${iva.toFixed(2)}</dte:MontoImpuesto>
+              <dte:MontoGravable>${subtotal}</dte:MontoGravable>
+              <dte:MontoImpuesto>${iva}</dte:MontoImpuesto>
               </dte:Impuesto>
             </dte:Impuestos>
             <dte:Total>${(Number(totalprecio)-Number(descuento)).toFixed(2)}</dte:Total>
