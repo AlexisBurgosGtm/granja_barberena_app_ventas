@@ -339,7 +339,7 @@ let funciones = {
                           <dte:TotalImpuestos>
                           <dte:TotalImpuesto NombreCorto="IVA" TotalMontoImpuesto="${Number(totaliva).toFixed(2)}" />
                           </dte:TotalImpuestos>
-                          <dte:GranTotal>${total}</dte:GranTotal>
+                          <dte:GranTotal>${total.toFixed(2)}</dte:GranTotal>
                         </dte:Totales>`;
            xmlstring = encabezado + emisor + receptor + frases + items + totales + footer;
           
@@ -366,18 +366,18 @@ let funciones = {
             <dte:Cantidad>${cantidad}</dte:Cantidad>
             <dte:UnidadMedida>${codmedida.substring(0,3)}</dte:UnidadMedida>
             <dte:Descripcion>${descripcion}</dte:Descripcion>
-            <dte:PrecioUnitario>${precioun}</dte:PrecioUnitario>
-            <dte:Precio>${totalprecio}</dte:Precio>
+            <dte:PrecioUnitario>${precioun.toFixed(2)}</dte:PrecioUnitario>
+            <dte:Precio>${totalprecio.toFixed(2)}</dte:Precio>
             <dte:Descuento>${Number(descuento)}</dte:Descuento>
             <dte:Impuestos>
               <dte:Impuesto>
               <dte:NombreCorto>IVA</dte:NombreCorto>
               <dte:CodigoUnidadGravable>1</dte:CodigoUnidadGravable>
-              <dte:MontoGravable>${subtotal}</dte:MontoGravable>
-              <dte:MontoImpuesto>${iva}</dte:MontoImpuesto>
+              <dte:MontoGravable>${subtotal.toFixed(2)}</dte:MontoGravable>
+              <dte:MontoImpuesto>${iva.toFixed(2)}</dte:MontoImpuesto>
               </dte:Impuesto>
             </dte:Impuestos>
-            <dte:Total>${(Number(totalprecio)-Number(descuento))}</dte:Total>
+            <dte:Total>${(Number(totalprecio)-Number(descuento)).toFixed(2)}</dte:Total>
             </dte:Item>   
           `;
     

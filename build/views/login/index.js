@@ -66,7 +66,7 @@ function getView(){
                             </div>
 
                             <div class="form-group" align="left">  
-                                <small class="text-primary">Grupo Buena Vista v1.31</small>
+                                <small class="text-primary">Grupo Buena Vista v1.32</small>
                                 <br>
                                 <small class="negrita text-secondary">Activity Log:</small>
                                 <br>
