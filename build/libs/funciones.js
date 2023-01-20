@@ -328,7 +328,7 @@ let funciones = {
                     let subtotal = 0;
                     let iva = 0;
                     total = Number(total) + Number(rows.IMPORTE);
-                    iva = (Number(rows.IMPORTE.toFixed(2)) - (Number(rows.IMPORTE.toFixed(2))/1.12)).toFixed(2);
+                    iva = (Number(rows.IMPORTE.toFixed(3)) - (Number(rows.IMPORTE.toFixed(3))/1.12)).toFixed(3);
                     subtotal = (Number(rows.IMPORTE)-iva).toFixed(2);
                     totaliva += Number(iva);
                     strdata += funciones.getStrItem(numerolinea,rows.CANTIDAD,rows.CODMEDIDA,rows.DESPROD,rows.PRECIO,0,subtotal,iva);
@@ -337,12 +337,14 @@ let funciones = {
             console.log('totaliva:' + totaliva);
             totales = ` <dte:Totales>
                           <dte:TotalImpuestos>
-                          <dte:TotalImpuesto NombreCorto="IVA" TotalMontoImpuesto="${Number(totaliva).toFixed(2)}" />
+                          <dte:TotalImpuesto NombreCorto="IVA" TotalMontoImpuesto="${Number(totaliva).toFixed(3)}" />
                           </dte:TotalImpuestos>
-                          <dte:GranTotal>${total.toFixed(2)}</dte:GranTotal>
+                          <dte:GranTotal>${total.toFixed(3)}</dte:GranTotal>
                         </dte:Totales>`;
            xmlstring = encabezado + emisor + receptor + frases + items + totales + footer;
           
+           console.log(xmlstring);
+
            resolve(xmlstring);
         }, (error) => {
             xmlstring='NO';
@@ -366,8 +368,8 @@ let funciones = {
             <dte:Cantidad>${cantidad}</dte:Cantidad>
             <dte:UnidadMedida>${codmedida.substring(0,3)}</dte:UnidadMedida>
             <dte:Descripcion>${descripcion}</dte:Descripcion>
-            <dte:PrecioUnitario>${precioun.toFixed(2)}</dte:PrecioUnitario>
-            <dte:Precio>${totalprecio.toFixed(2)}</dte:Precio>
+            <dte:PrecioUnitario>${precioun.toFixed(3)}</dte:PrecioUnitario>
+            <dte:Precio>${totalprecio.toFixed(3)}</dte:Precio>
             <dte:Descuento>${Number(descuento)}</dte:Descuento>
             <dte:Impuestos>
               <dte:Impuesto>
@@ -377,7 +379,7 @@ let funciones = {
               <dte:MontoImpuesto>${iva}</dte:MontoImpuesto>
               </dte:Impuesto>
             </dte:Impuestos>
-            <dte:Total>${(Number(totalprecio)-Number(descuento)).toFixed(2)}</dte:Total>
+            <dte:Total>${(Number(totalprecio)-Number(descuento)).toFixed(3)}</dte:Total>
             </dte:Item>   
           `;
     
