@@ -66,11 +66,11 @@ function getView(){
                             </div>
 
                             <div class="form-group" align="left">  
-                                <small class="text-primary">Grupo Buena Vista v1.36</small>
+                                <small class="text-primary">Grupo Buena Vista v2.0</small>
                                 <br>
                                 <small class="negrita text-secondary">Activity Log:</small>
                                 <br>
-                                <small class="text-secondary">- Muestra solo clientes de vendedor</small>
+                                <small class="text-secondary">- Integración de DPI en FEL</small>
                                
                             </div>
                         </form>

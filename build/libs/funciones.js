@@ -260,6 +260,8 @@ let funciones = {
   getXmlFel(coddoc,correlativo,nit,nombre,direccion,municipio,departamento,fecha){
       
       let xmlstring = '';
+      let tipoespecial = "";
+      if(nit.length.toString()=='13'){tipoespecial ='TipoEspecial="CUI"'};
 
       return new Promise((resolve,reject)=>{
         let fechaemision = funciones.get_FEL_fecha(fecha); //'2022-11-27T10:49:22.000-06:00';
@@ -283,7 +285,7 @@ let funciones = {
                           </dte:DireccionEmisor>
                         </dte:Emisor>`;
   
-        let receptor = ` <dte:Receptor CorreoReceptor="" IDReceptor="${nit}" NombreReceptor="${nombre}">
+        let receptor = ` <dte:Receptor CorreoReceptor="" IDReceptor="${nit}" NombreReceptor="${nombre}" ${tipoespecial}>
                           <dte:DireccionReceptor>
                             <dte:Direccion>${direccion}</dte:Direccion>
                             <dte:CodigoPostal>0</dte:CodigoPostal>

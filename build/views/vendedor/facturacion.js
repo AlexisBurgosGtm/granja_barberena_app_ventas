@@ -484,7 +484,7 @@ function getView(){
 
                                         <div class="form-group">
                                             <label>Fecha de Facturación:</label>
-                                            <input type="date" class="form-control bg-subtlelight pl-4 text-sm" id="txtFecha">
+                                            <input type="date" class="form-control bg-subtlelight pl-4 text-sm" id="txtFecha" disabled="true">
                                         </div>
                                         
                                         <div class="form-group">
