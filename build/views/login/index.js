@@ -70,7 +70,7 @@ function getView(){
                                 <br>
                                 <small class="negrita text-secondary">Activity Log:</small>
                                 <br>
-                                <small class="text-secondary">- Integración de DPI en FEL</small>
+                                <small class="text-secondary">- Cambio de certificado FEL 05/2023</small>
                                
                             </div>
                         </form>
