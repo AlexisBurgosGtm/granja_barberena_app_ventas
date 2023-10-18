@@ -1668,10 +1668,34 @@ async function fcnFinalizarPedido(){
 
                             }else{
 
+                                //----------- termina el pedido ---------------------
+
+                                hideWaitForm();
+
+                                funciones.Avios('Se envió el pedido pero no se generó factura contable eso debe hacerlo desde la lista de Pedidos');
+                              
+                                document.getElementById('btnEntregaCancelar').click();
+                                $("#ModalFinalizarPedido").modal('hide');                                                          
+                                //actualiza la ubicación del empleado
+                                classEmpleados.updateMyLocation();            
+                                //actualiza la última venta del cliente
+                                apigen.updateClientesLastSale(nit,'VENTA');
+                                //elimina el temp ventas asociado al empleado
+                                deleteTempVenta(GlobalUsuario);
+                                     
+                                //prepara todo para un nuevo pedido
+                                fcnNuevoPedido();
+
+                                //------------termina el pedido------------------------
+                                return;
+
                                 setLog(`<label class="text-info">Pedido enviado, generando factura FEL...</label>`,'rootWait');
                        
                                 funciones.fcn_solicitar_fel_directo(coddoc,funciones.getCorrelativo_isc(correlativoDoc),nitdocumento,ClienteNombre,dirclie,'GUATEMALA','GUATEMALA','SN',fecha)
                                 .then((uudi)=>{
+                                    
+
+
                                     hideWaitForm();
 
                                     funciones.Aviso('Factura Generada Exitosamente !!!')
@@ -1689,6 +1713,7 @@ async function fcnFinalizarPedido(){
                                     fcnNuevoPedido();
                                 })
                                 .catch((error)=>{
+
                                     hideWaitForm();
 
                                     funciones.AvisoError('No se generó la factura. Intente nuevamente desde la lista de Pedidos');
