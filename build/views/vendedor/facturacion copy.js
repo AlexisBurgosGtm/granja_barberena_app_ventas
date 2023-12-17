@@ -291,16 +291,16 @@ function getView(){
                         <div class="modal-body">
                             <div class="row">
                                 <div class="input-group">
-                                    <select class="form-control col-2 shadow border-secondary negrita border-left-0 border-right-0 border-top-0" id="cmbTipoPrecio">
+                                    <select class="form-control col-3 shadow border-secondary negrita border-left-0 border-right-0 border-top-0" id="cmbTipoPrecio">
                                         <option value="P">P</option>
                                         <option value="C">MC</option>
                                         <option value="B">MB</option>
                                         <option value="A">MA</option>
                                        
                                     </select>
-                                    <input id="txtBusqueda" type="text" ref="txtBusqueda" class="bg-amarillo form-control col-8 shadow" placeholder="Buscar código o descripción..." aria-label="" aria-describedby="button-addon4" />
+                                    <input id="txtBusqueda" type="text" ref="txtBusqueda" class="bg-amarillo form-control col-7 shadow" placeholder="Buscar código o descripción..." aria-label="" aria-describedby="button-addon4" />
                                     <div class="input-group-prepend">
-                                        <button class="btn btn-secondary hand btn-rounded waves-effect waves-themed shadow" type="button" id="btnBuscarProducto">
+                                        <button class="btn btn-success btn-rounded waves-effect waves-themed shadow" type="button" id="btnBuscarProducto">
                                             <i class="fal fa-search"></i>
                                         </button>
                                     </div>
@@ -325,8 +325,8 @@ function getView(){
                     </div>
                 </div>
                 <div class="shortcut-menu align-left">
-                    <button class="btn btn-danger btn-xl btn-circle hand shadow" data-dismiss="modal">
-                        <i class="fal fa-arrow-left"></i>
+                    <button class="btn btn-danger btn-sm" data-dismiss="modal">
+                        <i class="fal fa-angle-double-left"></i>Atrás
                     </button>
                 </div>
             </div>
@@ -532,7 +532,7 @@ function getView(){
                 
                                             <div class="col-5">
                                                 <button class="btn btn-info btn-lg btn-pills btn-block waves-effect waves-themed" id="btnFinalizarPedido">
-                                                    <i class="fal fa-paper-plane mr-1"></i>Generar Pedido
+                                                    <i class="fal fa-paper-plane mr-1"></i>Generar Factura
                                                 </button>
                                             </div>
                                             
@@ -1628,242 +1628,6 @@ async function fcnFinalizarPedido(){
                         })
                         .then(async(response) => {
                             const data = response.data;
-
-                            if (Number(data.rowsAffected[0])==0){
-                                
-                                setLog(`<label class="text-info">No se logró Enviar este pedido, se intentará guardarlo en el teléfono</label>`,'rootWait');
-                                                    
-                                insertVenta(datospedido)
-                                .then(async()=>{   
-                                    hideWaitForm();
-                                    document.getElementById('btnEntregaCancelar').click();                                                                                       
-                                    //actualiza la ubicación del empleado
-                                    await classEmpleados.updateMyLocation();           
-                                    //actualiza la última venta del cliente
-                                    apigen.updateClientesLastSale(nit,'VENTA');            
-                                    //elimina el temp ventas asociado al empleado
-                                    deleteTempVenta(GlobalUsuario)
-                                                                    
-                                    funciones.showToast('El pedido será guardado localmente, recuerde enviarlo');
-                                            
-                                    //prepara todo para un nuevo pedido
-                                    fcnNuevoPedido();
-                                })
-                                .catch(()=>{
-                                    hideWaitForm();    
-                                    
-                                    document.getElementById('btnFinalizarPedido').innerHTML = '<i class="fal fa-paper-plane mr-1"></i>Generar Pedido';
-                                    document.getElementById('btnFinalizarPedido').disabled = false;
-
-                                    funciones.AvisoError('No se pudo guardar este pedido');
-                                })
-
-                            }else{
-
-                                //----------- termina el pedido ---------------------
-                                console.log('pedido generado...')
-                                hideWaitForm();
-
-                                funciones.Aviso('Se envió el pedido pero no se generó factura contable eso debe hacerlo desde la lista de Pedidos');
-                              
-                                document.getElementById('btnEntregaCancelar').click();
-                                $("#ModalFinalizarPedido").modal('hide');                                                          
-                                //actualiza la ubicación del empleado
-                                classEmpleados.updateMyLocation();            
-                                //actualiza la última venta del cliente
-                                apigen.updateClientesLastSale(nit,'VENTA');
-                                //elimina el temp ventas asociado al empleado
-                                deleteTempVenta(GlobalUsuario);
-                                     
-                                //prepara todo para un nuevo pedido
-                                fcnNuevoPedido();   
-                                
-                            }
-                        }, (error) => {
-                            console.log(error);
-                            setLog(`<label class="text-info">Ha ocurrido un error y no se pudo enviar, se intentará guardar en el teléfono</label>`,'rootWait');
-                                                                
-                            insertVenta(datospedido)
-                            .then(async()=>{
-                                document.getElementById('btnEntregaCancelar').click();
-                                //actualiza la ubicación del empleado
-                                await classEmpleados.updateMyLocation();
-                                //actualiza la última venta del cliente
-                                apigen.updateClientesLastSale(nit,'VENTA');
-                                //elimina el temp ventas asociado al empleado
-                                deleteTempVenta(GlobalUsuario)                                                                                                               
-                                funciones.showToast('El pedido será guardado localmente, recuerde enviarlo');
-                                //prepara todo para un nuevo pedido
-                                fcnNuevoPedido();                                                    
-                                hideWaitForm();
-                            })
-                            .catch(()=>{
-                                hideWaitForm();
-                                document.getElementById('btnFinalizarPedido').innerHTML = '<i class="fal fa-paper-plane mr-1"></i>Generar Pedido';
-                                document.getElementById('btnFinalizarPedido').disabled = false;
-                                funciones.AvisoError('No se pudo guardar este pedido')
-                            }) 
-                        });        
-
-                    
-                }else{
-                    document.getElementById('btnFinalizarPedido').innerHTML = '<i class="fal fa-paper-plane mr-1"></i>Generar Pedido';
-                    document.getElementById('btnFinalizarPedido').disabled = false;
-                                
-                }
-            })
-
-        })
-        .catch(()=>{
-                                            
-                setLog(`<label class="text-info">No se logró Enviar este pedido, se intentará guardarlo en el teléfono</label>`,'rootWait');
-                $('#modalWait').modal('show');
-                                                                                
-                insertVenta(datospedido)
-                .then(async()=>{
-                    hideWaitForm();
-                    document.getElementById('btnEntregaCancelar').click();                                                                                       
-                    //actualiza la ubicación del empleado
-                    await classEmpleados.updateMyLocation();
-                    //actualiza la última venta del cliente
-                    apigen.updateClientesLastSale(nit,'VENTA');
-                    //elimina el temp ventas asociado al empleado
-                    deleteTempVenta(GlobalUsuario)
-                    funciones.showToast('El pedido será guardado localmente, recuerde enviarlo');
-                    //prepara todo para un nuevo pedido
-                    fcnNuevoPedido();
-                
-                })                    
-        })
-
-    })
-    .catch((error)=>{
-        hideWaitForm();
-        document.getElementById('btnFinalizarPedido').innerHTML = '<i class="fal fa-paper-plane mr-1"></i>Generar Pedido';
-        document.getElementById('btnFinalizarPedido').disabled = false;
-        funciones.AvisoError('No pude crear la tabla de productos del pedido ' + error);
-    })
-  
-};
-
-async function BACKUP_fcnFinalizarPedido(){
-   
-    fcnCargarGridTempVentas('tblGridTempVentas');
-
-
-    if(GlobalSelectedCodCliente.toString()=='SI'){funciones.AvisoError('Datos del cliente incorrectos, por favor, seleccione cliente nuevamente');return;}
-
-    let codcliente = GlobalSelectedCodCliente;
-    let ClienteNombre = document.getElementById('txtNombre').value;
-    let dirclie = document.getElementById('txtDireccion').value; // CAMPO DIR_ENTREGA
-    let obs = document.getElementById('txtEntregaObs').value; 
-    let direntrega = "SN"; //document.getElementById('txtEntregaDireccion').value; //CAMPO MATSOLI
-    let codbodega = GlobalCodBodega;
-    let cmbTipoEntrega = document.getElementById('cmbEntregaConcre').value; //campo TRANSPORTE
-    let txtFecha = new Date(document.getElementById('txtFecha').value);
-    let anio = txtFecha.getFullYear();
-    let mes = txtFecha.getUTCMonth()+1;
-    let d = txtFecha.getUTCDate() 
-    let fecha = anio + '-' + mes + '-' + d; // CAMPO DOC_FECHA
-    let dia = d;
-    let hora = funciones.getHora();
-    let fe = txtFecha;// new Date(document.getElementById('txtEntregaFecha').value);
-    let ae = fe.getFullYear();
-    let me = fe.getUTCMonth()+1;
-    let de = fe.getUTCDate() 
-    let fechaentrega = ae + '-' + me + '-' + de;  // CAMPO DOC_FECHAENT
-    let coddoc = document.getElementById('cmbCoddoc').value;//GlobalCoddoc;
-    let correlativoDoc = document.getElementById('txtCorrelativo').value;
-    let cmbVendedor = document.getElementById('cmbVendedor');
-    let nit = document.getElementById('txtNit').value;
-    let nitdocumento = document.getElementById('txtNitDocumento').value;
-    let latdoc = document.getElementById('lbDocLat').innerText;
-    let longdoc = document.getElementById('lbDocLong').innerText;
-
-
-    document.getElementById('btnFinalizarPedido').innerHTML = '<i class="fal fa-paper-plane mr-1 fa-spin"></i>';
-    document.getElementById('btnFinalizarPedido').disabled = true;
-
-    gettempDocproductos(GlobalUsuario)
-    .then((response)=>{
-        let docproductos_ped = response;  
-
-        //guarda el pedido localmente
-        var datospedido = {
-                CODSUCURSAL:GlobalCodSucursal,
-                EMPNIT: GlobalEmpnit,
-                CODDOC:coddoc,
-                ANIO:anio,
-                MES:mes,
-                DIA:dia,
-                FECHA:fecha,
-                FECHAENTREGA:fechaentrega,
-                FORMAENTREGA:cmbTipoEntrega,
-                CODCLIE: codcliente,
-                NOMCLIE:ClienteNombre,
-                TOTALCOSTO:GlobalTotalCostoDocumento,
-                TOTALPRECIO:GlobalTotalDocumento,
-                NITCLIE:nit,
-                DIRCLIE:dirclie,
-                OBS:obs,
-                DIRENTREGA:direntrega,
-                USUARIO:GlobalUsuario,
-                CODVEN:Number(cmbVendedor.value),
-                LAT:latdoc,
-                LONG:longdoc,
-                FECHA_OPERACION:funciones.getFecha(),
-                JSONPRODUCTOS:JSON.stringify(docproductos_ped)
-        };
-
-        //UNA VEZ OBTENIDO EL DETALLE, PROCEDE A GUARDARSE O ENVIARSE
-
-        //OBTIENE EL CORRELATIVO DEL DOCUMENTO
-        classTipoDocumentos.getCorrelativoDocumento('PED',GlobalCoddoc)
-        .then((correlativo)=>{
-            correlativoDoc = correlativo;             
-          
-            funciones.Confirmacion('¿Está seguro que desea finalizar esta venta?')
-            .then((value)=>{
-                if(value==true){
-
-                    setLog(`<label class="text-danger">Creando el pedido a enviar...</label>`,'rootWait');
-                    $('#modalWait').modal('show');
-                                                
-                    //ENVIANDOLO ONLINE
-                        
-                        setLog(`<label class="text-info">Pedido creado, enviado pedido...</label>`,'rootWait');
-                                    
-                        axios.post('/ventas/insertventa', {
-                            jsondocproductos:JSON.stringify(response),
-                            codsucursal:GlobalCodSucursal,
-                            empnit: GlobalEmpnit,
-                            coddoc:coddoc,
-                            correl: correlativoDoc,
-                            anio:anio,
-                            mes:mes,
-                            dia:dia,
-                            fecha:fecha,
-                            fechaentrega:fechaentrega,
-                            formaentrega:cmbTipoEntrega,
-                            codbodega:codbodega,
-                            codcliente: codcliente,
-                            nomclie:ClienteNombre,
-                            totalcosto:GlobalTotalCostoDocumento,
-                            totalprecio:GlobalTotalDocumento,
-                            nitclie:nit,
-                            dirclie:dirclie,
-                            obs:obs,
-                            direntrega:direntrega,
-                            usuario:GlobalUsuario,
-                            codven:cmbVendedor.value,
-                            lat:latdoc,
-                            long:longdoc,
-                            hora:hora,
-                            nitdoc:nitdocumento,
-                            fecha_operacion:funciones.getFecha()
-                        })
-                        .then(async(response) => {
-                            const data = response.data;
                             if (data.rowsAffected[0]==0){
                                 
                                 setLog(`<label class="text-info">No se logró Enviar este pedido, se intentará guardarlo en el teléfono</label>`,'rootWait');
@@ -1887,7 +1651,7 @@ async function BACKUP_fcnFinalizarPedido(){
                                 .catch(()=>{
                                     hideWaitForm();    
                                     
-                                    document.getElementById('btnFinalizarPedido').innerHTML = '<i class="fal fa-paper-plane mr-1"></i>Generar Pedido';
+                                    document.getElementById('btnFinalizarPedido').innerHTML = '<i class="fal fa-paper-plane mr-1"></i>Solicitar Factura';
                                     document.getElementById('btnFinalizarPedido').disabled = false;
 
                                     funciones.AvisoError('No se pudo guardar este pedido');
@@ -1911,7 +1675,53 @@ async function BACKUP_fcnFinalizarPedido(){
                                 deleteTempVenta(GlobalUsuario);
                                      
                                 //prepara todo para un nuevo pedido
-                                fcnNuevoPedido();   
+                                fcnNuevoPedido();
+
+                                //------------termina el pedido------------------------
+                                return;
+
+                                setLog(`<label class="text-info">Pedido enviado, generando factura FEL...</label>`,'rootWait');
+                       
+                                funciones.fcn_solicitar_fel_directo(coddoc,funciones.getCorrelativo_isc(correlativoDoc),nitdocumento,ClienteNombre,dirclie,'GUATEMALA','GUATEMALA','SN',fecha)
+                                .then((uudi)=>{
+                                    
+
+
+                                    hideWaitForm();
+
+                                    funciones.Aviso('Factura Generada Exitosamente !!!')
+                                    document.getElementById('btnEntregaCancelar').click();                                                           
+                                    //actualiza la ubicación del empleado
+                                    classEmpleados.updateMyLocation();            
+                                    //actualiza la última venta del cliente
+                                    apigen.updateClientesLastSale(nit,'VENTA');
+                                    //elimina el temp ventas asociado al empleado
+                                    deleteTempVenta(GlobalUsuario);
+                                         
+                                    //imprime el pedido
+                                    funciones.imprimirTicket_uudi(uudi);
+                                    //prepara todo para un nuevo pedido
+                                    fcnNuevoPedido();
+                                })
+                                .catch((error)=>{
+
+                                    hideWaitForm();
+
+                                    funciones.AvisoError('No se generó la factura. Intente nuevamente desde la lista de Pedidos');
+                                  
+                                    document.getElementById('btnEntregaCancelar').click();
+                                    $("#ModalFinalizarPedido").modal('hide');                                                          
+                                    //actualiza la ubicación del empleado
+                                    classEmpleados.updateMyLocation();            
+                                    //actualiza la última venta del cliente
+                                    apigen.updateClientesLastSale(nit,'VENTA');
+                                    //elimina el temp ventas asociado al empleado
+                                    deleteTempVenta(GlobalUsuario);
+                                         
+                                    //prepara todo para un nuevo pedido
+                                    fcnNuevoPedido();
+                                })
+                                            
                                 
                             }
                         }, (error) => {
@@ -1934,7 +1744,7 @@ async function BACKUP_fcnFinalizarPedido(){
                             })
                             .catch(()=>{
                                 hideWaitForm();
-                                document.getElementById('btnFinalizarPedido').innerHTML = '<i class="fal fa-paper-plane mr-1"></i>Generar Pedido';
+                                document.getElementById('btnFinalizarPedido').innerHTML = '<i class="fal fa-paper-plane mr-1"></i>Solicitar Factura';
                                 document.getElementById('btnFinalizarPedido').disabled = false;
                                 funciones.AvisoError('No se pudo guardar este pedido')
                             }) 
@@ -1942,7 +1752,7 @@ async function BACKUP_fcnFinalizarPedido(){
 
                     
                 }else{
-                    document.getElementById('btnFinalizarPedido').innerHTML = '<i class="fal fa-paper-plane mr-1"></i>Generar Pedido';
+                    document.getElementById('btnFinalizarPedido').innerHTML = '<i class="fal fa-paper-plane mr-1"></i>Solicitar Factura';
                     document.getElementById('btnFinalizarPedido').disabled = false;
                                 
                 }
@@ -1974,7 +1784,7 @@ async function BACKUP_fcnFinalizarPedido(){
     })
     .catch((error)=>{
         hideWaitForm();
-        document.getElementById('btnFinalizarPedido').innerHTML = '<i class="fal fa-paper-plane mr-1"></i>Generar Pedido';
+        document.getElementById('btnFinalizarPedido').innerHTML = '<i class="fal fa-paper-plane mr-1"></i>Solicitar Factura';
         document.getElementById('btnFinalizarPedido').disabled = false;
         funciones.AvisoError('No pude crear la tabla de productos del pedido ' + error);
     })

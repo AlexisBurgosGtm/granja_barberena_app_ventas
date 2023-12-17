@@ -115,14 +115,10 @@
                             </a>
                         </div>
 
-                                                      
-                        <div class="ml-auto d-flex">
-                                                                        
-
-                                                    
+                        <div class="ml-auto d-flex">                                                      
                             <div>
-
-                                <a data-toggle="" title="" class="header-icon d-flex align-items-center justify-content-center ml-2 btn btn-info btn-lg btn-circle text-white" id="btnMConfig">
+                               
+                                <a data-toggle="" title="" class="header-icon d-flex align-items-center justify-content-center ml-2 btn btn-secondary btn-lg btn-circle text-white hidden" id="btnMConfig2">
                                     <i class="fal fa-bars"></i>
                                 </a>
                              
@@ -142,11 +138,6 @@
                                     
                                     <div id="rootMenu" class="hidden">
                                         
-                                     
-
-
-
-                                    
                                     </div>
                                     
                                     <div class="dropdown-divider m-0"></div>
@@ -178,13 +169,14 @@
 
                     <div class="leftbutton2">
                         <div class="row">
-                            <button class="btn btn-outline-secondary btn-lg btn-icon rounded-circle shadow" id="btnPedidosPend">
+                            <button class="btn btn-outline-secondary btn-lg btn-icon rounded-circle shadow hand" id="btnPedidosPend">
                                 <i class="fal fa-bell"></i>0
                             </button>
                         </div>
+                        
                         <div class="row">
-                            <button class="btn btn-info btn-lg btn-icon hidden rounded-circle shadow" id="btnListaP2">
-                                <i class="fal fa-search"></i>
+                            <button class="btn btn-info btn-lg btn-icon rounded-circle shadow hand" id="btnMConfig">
+                                <i class="fal fa-bars"></i>
                             </button>
                         </div>
 
@@ -348,12 +340,9 @@
         <div class="modal fade modal-with-scroll" id="ModalPendientes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-right" role="document">
                 <div class="modal-content">
+
                     <div class="modal-header">
-                        <label class="modal-title text-info h3" id="">Pedidos Pendientes de Enviar</label>
-                        <small class="negrita text-danger">Para poder editar un pedido, primero debe enviarlo</small>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true"><i class="fal fa-times"></i></span>
-                        </button>
+                        <label class="modal-title text-secondary h3" id="">Pedidos Pendientes de Enviar</label>
                     </div>
                     
                     <div class="modal-body">
@@ -428,8 +417,8 @@
         <!-- WAIT FORM -->
         <div class="modal fade js-modal-settings modal-backdrop-transparent shadow" data-backdrop="static" data-keyboard="false"  tabindex="-1" role="dialog" aria-hidden="true" id="modalWait">
             <div class="modal-dialog modal-dialog-centered modal-sm">
-                <div class="modal-content card-rounded">
-                    <div class="dropdown-header bg-secondary d-flex justify-content-center align-items-center w-100">
+                <div class="modal-content card-rounded bg-secondary">
+                    <div class="dropdown-header d-flex justify-content-center align-items-center w-100">
                         <img width="30" height="30" src="./favicon.png">
                         <h3 class="m-0 text-center color-white">
                             Cargando datos...
@@ -443,13 +432,13 @@
                             
                         </div>
                         <div class="text-center">
-                            <div class="spinner-border text-danger" role="status"><span class="sr-only">Loading...</span></div>
+                            <div class="spinner-border text-white" role="status"><span class="sr-only">Loading...</span></div>
                         </div>
                         
                         <span id="saving"></span>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-secondary" data-dismiss="modal" id="btnCerrarModalWait">
+                        <button class="btn btn-secondary border-white text-white" data-dismiss="modal" id="btnCerrarModalWait">
                             Cerrar Ventana
                         </button>
                     </div>

@@ -4,36 +4,30 @@ function getView(){
             return `
         <div class="row">
      
-            <div class="col-md-4 col-sm-12 col-lg-4 col-lx-4">
+            <div class="col-md-3 col-sm-12 col-lg-3 col-lx-4">
                 
             </div>
 
-            <div class="col-md-4 col-sm-12 col-lg-4 col-lx-4">
+            <div class="col-md-6 col-sm-12 col-lg-6 col-lx-4">
    
-                <div class="card shadow p-2 card-rounded border-primary">
+                <div class="card shadow p-2 card-rounded border-secondary">
 
-                    <div class="card-header text-center bg-white">
+                    <div class="card-body">
                         <div class="row">
-                            <div class="col-12">
-
-                                <img src="./favicon.png" width="140" height="140">                            
-                         
-                               
+                            <div class="col-12 text-center">
+                                <img src="./favicon.png" width="100" height="100">                            
                             </div>    
                         </div>
-                        
-                    </div>
-                    <div class="card-body">
                         <form class="" id="frmLogin" autocomplete="off">
                             <div class="form-group">
-                                <label class="negrita text-primary">Empresa:</label>
+                                <label class="negrita text-secondary">Empresa:</label>
                                 <select class="negrita form-control" id="cmbSucursal">
-                                    
+                                    ${funciones.getComboSucursales()}
                                 </select>
                                 
                             </div>
                             <div class="form-group">
-                                <label class="negrita text-primary">Usuario:</label>
+                                <label class="negrita text-secondary">Usuario:</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">
@@ -46,7 +40,7 @@ function getView(){
                             </div>
 
                             <div class="form-group">
-                                <label class="negrita text-primary">Clave:</label>
+                                <label class="negrita text-secondary">Clave:</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">
@@ -58,20 +52,14 @@ function getView(){
                                         
                             </div>
 
-                            <br>
                             <div class="form-group" align="right">
-                                <button class="btn btn-primary btn-xl shadow btn-circle"  type="submit" id="btnIniciar">
+                                <button class="btn btn-secondary btn-xl shadow btn-circle"  type="submit" id="btnIniciar">
                                     <i class="fal fa-unlock"></i>  
                                 </button>
                             </div>
 
                             <div class="form-group" align="left">  
-                                <small class="text-primary">Grupo Buena Vista v2.0</small>
-                                <br>
-                                <small class="negrita text-secondary">Activity Log:</small>
-                                <br>
-                                <small class="text-secondary">- Cambio de certificado FEL 05/2023</small>
-                               
+                                <small class="text-secondary">Grupo Buena Vista v12.2023</small>
                             </div>
                         </form>
                     </div>
@@ -82,7 +70,7 @@ function getView(){
                 </div>
             </div>
 
-            <div class="col-md-4 col-sm-12 col-lg-4 col-lx-4"></div>
+            <div class="col-md-3 col-sm-12 col-lg-3 col-lx-4"></div>
 
             
      
@@ -97,6 +85,9 @@ function getView(){
 
 function addListeners(){
     
+    //carga las sucursales directamente desde código
+    //document.getElementById('cmbSucursal').innerHTML = funciones.getComboSucursales();
+
       
     let frmLogin = document.getElementById('frmLogin');
     let btnIniciar = document.getElementById('btnIniciar');
@@ -120,15 +111,15 @@ function addListeners(){
     });
 
 
-    //carga las sucursales directamente desde código
-    document.getElementById('cmbSucursal').innerHTML = '<option value="" disabled selected hidden>Selecciona una sede</option>' + funciones.getComboSucursales();
-
+  
     selectDateDownload() //carga la info inicial
     .then(()=>{
         try {
-            document.getElementById('cmbSucursal').value = GlobalCodSucursal;
-            console.log(GlobalCodSucursal);
+            if(GlobalCodSucursal==''){}else{
+                document.getElementById('cmbSucursal').value = GlobalCodSucursal;
+            }
         } catch (error) {
+
             console.log('error al cargar sucursal')
             console.log(error)
         }

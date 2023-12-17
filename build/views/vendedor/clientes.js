@@ -178,14 +178,16 @@ function getView(){
                         </div>
 
                         <div class="tab-pane fade active show" id="panelAjenos" role="tabpanel">
-                                                                                 
+                            <div class="text-center">
+                                <img width="50px" height="50px" src="./favicon.png">
+                            </div>                                        
                             <div class="form-group p-2">
                                 <label class="negrita">Búsqueda de Cliente:</label>
                                 <div class="input-group">               
                             
-                                    <input type="text" class="form-control border-info" id="txtClientesAjenosBuscar" placeholder="Escriba para buscar cliente...">    
+                                    <input type="text" class="form-control border-secondary" id="txtClientesAjenosBuscar" placeholder="Escriba para buscar cliente...">    
                                     <div class="input-group-append">
-                                        <button class="btn btn-md btn-icon btn-info btn-round" id="btnClientesAjenosBuscar">
+                                        <button class="btn btn-md btn-icon btn-secondary btn-round hand" id="btnClientesAjenosBuscar">
                                             <i class="fal fa-search"></i>
                                         </button>    
                                     </div>
@@ -193,13 +195,10 @@ function getView(){
                             </div>
 
                             <div class="table-responsive">
-                                <table class="table table-responsive table-striped table-hover table-bordered" id="">
-                                    <thead class="bg-secondary text-white">
-                                        <tr>
-                                            <td class="negrita">Cliente    /    Dirección</td>
-                                        </tr>
-                                    </thead>
+                                <table class="table table-responsive" id="">
                                     <tbody id="tblClientesAjenos">
+                                        
+                                        
 
                                     </tbody>
                                 </table>
@@ -702,6 +701,7 @@ async function addListeners(){
     let btnClientesAjenosBuscar = document.getElementById('btnClientesAjenosBuscar');
     btnClientesAjenosBuscar.addEventListener('click', async ()=>{
         
+        document.getElementById('tblClientesAjenos').innerHTML = '';
         let txtClientesAjenosBuscar = document.getElementById('txtClientesAjenosBuscar').value;
         await apigen.clientesAjenosVendedor(GlobalCodSucursal,txtClientesAjenosBuscar,'tblClientesAjenos')
 

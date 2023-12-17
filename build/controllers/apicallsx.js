@@ -324,9 +324,9 @@ let apigen = {
             
             data.map((rows)=>{                    
                         strdata = strdata + `
-                    <tr class=''>
-                        <td>${rows.NEGOCIO} // ${rows.NOMCLIE}
-                            <br>
+                    <tr class='card card-rounded shadow border-secondary p-3'>
+                        <td><b>${rows.NEGOCIO} - ${rows.NOMCLIE}</b>
+                            
                             <div class="row">
                                 <div class="col-6">
                                     <small>Cod: ${rows.CODIGO}</small>    
@@ -342,20 +342,20 @@ let apigen = {
                             <div class="row">
                                 
                                 <div class="col-4">
-                                    <button class="btn btn-outline-primary btn-sm shadow" onclick="funciones.gotoGoogleMaps('${rows.LAT}','${rows.LONG}');">
-                                        <i class="fal fa-map-marker"></i>Ubicac
+                                    <button class="col-12 btn btn-secondary btn-sm shadow" onclick="funciones.gotoGoogleMaps('${rows.LAT}','${rows.LONG}');">
+                                        <i class="fal fa-map-marker"></i> Mapa
                                     </button>
                                 </div>
                                                                         
                                 <div class="col-4">
-                                    <button class="btn btn-outline-warning btn-sm shadow" onclick="getHistorialCliente('${rows.CODIGO}','${rows.NIT}','${rows.NOMCLIE}');">
-                                        <i class="fal fa-book"></i>Historial
+                                    <button class="col-12 btn btn-outline-secondary btn-sm shadow" onclick="getHistorialCliente('${rows.CODIGO}','${rows.NIT}','${rows.NOMCLIE}');">
+                                        <i class="fal fa-book"></i> Historial
                                     </button>
                                 </div>
                                 
                                 <div class="col-4">
-                                    <button class="btn btn-info btn-sm shadow" onclick="getMenuCliente('${rows.CODIGO}','${rows.NOMCLIE}','${rows.DIRCLIE}','${rows.TELEFONO}','${rows.LAT}','${rows.LONG}','${rows.NIT}');">
-                                        <i class="fal fa-shopping-cart"></i>Vender
+                                    <button class="col-12 btn btn-success btn-sm shadow" onclick="getMenuCliente('${rows.CODIGO}','${rows.NOMCLIE}','${rows.DIRCLIE}','${rows.TELEFONO}','${rows.LAT}','${rows.LONG}','${rows.NIT}');">
+                                        <i class="fal fa-shopping-cart"></i> (+)Pedido
                                     </button>
                                 </div>
                                 
