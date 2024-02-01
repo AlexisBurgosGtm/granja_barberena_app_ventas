@@ -307,7 +307,8 @@ let apigen = {
            
     },
     clientesAjenosVendedor: async(sucursal,filtro,idContenedor)=>{
-    
+        //búsqueda de clientes
+        
         let container = document.getElementById(idContenedor);
         container.innerHTML = GlobalLoader;
                 
