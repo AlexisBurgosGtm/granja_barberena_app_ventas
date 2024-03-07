@@ -21,7 +21,7 @@ var routerConfig = require('./router/routerConfig.js');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-const PORT = process.env.PORT || 5500;
+const PORT = process.env.PORT || 5501;
 
 //app.use(bodyParser.json());
 app.use(express.json({limit: '25mb'}));

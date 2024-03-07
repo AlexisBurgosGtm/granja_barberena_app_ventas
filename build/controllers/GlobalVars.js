@@ -1,4 +1,4 @@
-let versionapp = 'Modif 01.02.2024';
+let versionapp = 'Modif 07.03.2024';
 
 let root = document.getElementById('root');
 let rootMenu = document.getElementById('rootMenu');
@@ -20,7 +20,7 @@ lbTipo.innerText = "Inicie sesión";
 let GlobalSelectedDiaUpdated  = 0;
 let GlobalObjetivoVenta = 0;
 let GlobalCodUsuario = 99999;
-let GlobalUsuario = 'SANTAFE';
+let GlobalUsuario = 'DESTASERSA';
 let GlobalPassUsuario = '';
 let GlobalNivelUser = 0;
 let GlobalTipoUsuario ='';
@@ -93,18 +93,18 @@ let nowhatsapp = '50257255092';
 
 
 let FEL = {
-    CodigoEstablecimiento:"1",
-    NITEmisor:"88135918",
-    NombreComercial:"GRANJA AVICOLA SANTA FE",
-    NombreEmisor:"GRANJA AVICOLA SANTA FE, S.A.",
-    Direccion:"ALDEA DON GREGORIO ZONA 0",
+    CodigoEstablecimiento:"3",
+    NITEmisor:"98110462",
+    NombreComercial:"DESTASERSA SANTA CRUZ",
+    NombreEmisor:"DESTASERSA SANTA CRUZ",
+    Direccion:"CALLEJON SANTOS ALDEA DON GREGORIO ZONA 0",
     CodigoPostal:"06012",
     Municipio:"SANTA CRUZ NARANJO",
     Departamento:"SANTA ROSA",
-    ACCESO_REQ_NOMBRE:"GRANJAASF",
-    ACCESO_REQ_CLAVE:"259F073DC0CB38A65BEEB1DF0F557830",
-    ACCESO_FIRMA_USUARIO:"GRANJAASF",
-    ACCESO_FIRMA_CLAVE:"8620e9c96eaf43a1e79766cef333a319",
+    ACCESO_REQ_NOMBRE:"98110462",
+    ACCESO_REQ_CLAVE:"6DD51D2CBE93D0F612FC803919589D15",
+    ACCESO_FIRMA_USUARIO:"98110462",
+    ACCESO_FIRMA_CLAVE:"8839be349a79af19f44325cb45e1fcf2",
     URL_REPORT_INFILE: "https://report.feel.com.gt/ingfacereport/ingfacereport_documento?uuid=",
     CONFIG_FEL_HABILITADO: 'SI'
 };

@@ -1,12 +1,12 @@
-let GlobalToken = '8813591-8';
+let GlobalToken = '9811046-2';
 let GlobalCodSucursal = '';
 
-let GlobalEmpnit = '8813591-8';
-let GlobalEmpNombre = 'SANTA FE';
+let GlobalEmpnit = '9811046-2';
+let GlobalEmpNombre = 'DESTASERSA';
 
 
 let GlobalVentaMinima = 1;
 
 let dataEmpresas = [ 
-    {codsucursal:"8813591-8",nomsucursal:"SANTA FE",color:"success"}
+    {codsucursal:"9811046-2",nomsucursal:"DESTASERSA",color:"success"}
   ];
