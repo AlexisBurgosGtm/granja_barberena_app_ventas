@@ -1,4 +1,4 @@
-let versionapp = 'Modif 07.03.2024';
+let versionapp = 'Modif 18.03.2024';
 
 let root = document.getElementById('root');
 let rootMenu = document.getElementById('rootMenu');
@@ -101,10 +101,10 @@ let FEL = {
     CodigoPostal:"06012",
     Municipio:"SANTA CRUZ NARANJO",
     Departamento:"SANTA ROSA",
-    ACCESO_REQ_NOMBRE:"98110462",
-    ACCESO_REQ_CLAVE:"6DD51D2CBE93D0F612FC803919589D15",
-    ACCESO_FIRMA_USUARIO:"98110462",
-    ACCESO_FIRMA_CLAVE:"8839be349a79af19f44325cb45e1fcf2",
+    ACCESO_REQ_NOMBRE:"CANA_PRO", //"98110462",
+    ACCESO_REQ_CLAVE:"6DD51D2CBE93D0F612FC803919589D15", //"6DD51D2CBE93D0F612FC803919589D15",
+    ACCESO_FIRMA_USUARIO:"CANA_PRO",
+    ACCESO_FIRMA_CLAVE:"e7841ecae3f00b0705cbbb3771ffb8e6", //"8839be349a79af19f44325cb45e1fcf2",
     URL_REPORT_INFILE: "https://report.feel.com.gt/ingfacereport/ingfacereport_documento?uuid=",
     CONFIG_FEL_HABILITADO: 'SI'
 };

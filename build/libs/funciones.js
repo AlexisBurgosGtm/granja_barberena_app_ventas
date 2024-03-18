@@ -257,7 +257,7 @@ let funciones = {
           });
     })
   },
-  getXmlFel(coddoc,correlativo,nit,nombre,direccion,municipio,departamento,fecha){
+  BACKUP_getXmlFel(coddoc,correlativo,nit,nombre,direccion,municipio,departamento,fecha){
       
       let xmlstring = '';
       let tipoespecial = "";
@@ -361,7 +361,7 @@ let funciones = {
  
 
   },
-  getStrItem(numerolinea,cantidad,codmedida,descripcion,precioun,descuento,subtotal,iva){
+  BACKUP_getStrItem(numerolinea,cantidad,codmedida,descripcion,precioun,descuento,subtotal,iva){
        
     let totalprecio = (Number(precioun)*Number(cantidad));
    
@@ -386,6 +386,149 @@ let funciones = {
           `;
     
     return str;
+  },
+  getXmlFel(coddoc,correlativo,nit,nombre,direccion,municipio,departamento,fecha){
+      
+      let xmlstring = '';
+      let tipoespecial = "";
+      if(nit.length.toString()=='13'){tipoespecial ='TipoEspecial="CUI"'};
+
+      return new Promise((resolve,reject)=>{
+        let fechaemision = funciones.get_FEL_fecha(fecha); //'2022-11-27T10:49:22.000-06:00';
+
+        let numeroacceso = '400000110';
+
+        let encabezado = `<dte:GTDocumento xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:dte="http://www.sat.gob.gt/dte/fel/0.2.0"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="0.1" xsi:schemaLocation="http://www.sat.gob.gt/dte/fel/0.2.0">
+                            <dte:SAT ClaseDocumento="dte">
+                            <dte:DTE ID="DatosCertificados">
+                              <dte:DatosEmision ID="DatosEmision">
+                              <dte:DatosGenerales CodigoMoneda="GTQ" FechaHoraEmision="${fechaemision}" NumeroAcceso="${numeroacceso}" Tipo="FACT" />
+                            `
+
+        let emisor = `  <dte:Emisor AfiliacionIVA="GEN" CodigoEstablecimiento="${FEL.CodigoEstablecimiento}" CorreoEmisor="" NITEmisor="${FEL.NITEmisor}" NombreComercial="${funciones.limpiar_texto_FEL(FEL.NombreComercial)}" NombreEmisor="${funciones.limpiar_texto_FEL(FEL.NombreEmisor)}">
+                          <dte:DireccionEmisor>
+                            <dte:Direccion>${funciones.limpiar_texto_FEL(FEL.Direccion)}</dte:Direccion>
+                            <dte:CodigoPostal>${FEL.CodigoPostal}</dte:CodigoPostal>
+                            <dte:Municipio>${FEL.Municipio}</dte:Municipio>
+                            <dte:Departamento>${FEL.Departamento}</dte:Departamento>
+                            <dte:Pais>GT</dte:Pais>
+                          </dte:DireccionEmisor>
+                        </dte:Emisor>`;
+
+        let receptor = ` <dte:Receptor CorreoReceptor="" IDReceptor="${nit}" NombreReceptor="${funciones.limpiar_texto_FEL(nombre)}" ${tipoespecial}>
+                          <dte:DireccionReceptor>
+                            <dte:Direccion>${funciones.limpiar_texto_FEL(direccion)}</dte:Direccion>
+                            <dte:CodigoPostal>0</dte:CodigoPostal>
+                            <dte:Municipio>${funciones.limpiar_texto_FEL(municipio)}</dte:Municipio>
+                            <dte:Departamento>${funciones.limpiar_texto_FEL(departamento)}</dte:Departamento>
+                            <dte:Pais>GT</dte:Pais>
+                          </dte:DireccionReceptor>
+                        </dte:Receptor>`;
+                          
+        
+        let frases = ` <dte:Frases>
+                        <dte:Frase CodigoEscenario="1" TipoFrase="1" />
+                        <dte:Frase CodigoEscenario="1" TipoFrase="2" />
+                      </dte:Frases>`
+
+        let totales = '';
+        let items = '';
+
+        let footer = `</dte:DatosEmision>
+                        </dte:DTE>
+                        <dte:Adenda>
+                        <dte:Valor1>${coddoc}</dte:Valor1>
+                        <dte:Valor2>${correlativo}</dte:Valor2>
+                        </dte:Adenda>
+                      </dte:SAT>
+                      </dte:GTDocumento>`
+
+        let strdata ='';
+
+        axios.post('/digitacion/detallepedido3', {
+            sucursal: GlobalCodSucursal,
+            coddoc:coddoc,
+            correlativo:correlativo
+        })
+        .then((response) => {
+            const data = response.data.recordset;
+            let total =0;
+            let totaliva = 0;
+            let numerolinea = 0;
+            data.map((rows)=>{
+                    numerolinea += 1;
+                    let subtotal = 0;
+                    let iva = 0;
+                    total = Number(total) + Number(rows.IMPORTE);
+                    iva = (Number(rows.IMPORTE.toFixed(3)) - (Number(rows.IMPORTE.toFixed(3))/1.12)).toFixed(3);
+                    subtotal = (Number(rows.IMPORTE)-iva).toFixed(2);
+                    totaliva += Number(iva);
+                    strdata += funciones.getStrItem(numerolinea,rows.CANTIDAD,rows.CODMEDIDA,rows.DESPROD,rows.PRECIO,0,subtotal,iva);
+            })
+            items = '<dte:Items>' + strdata + '</dte:Items>';
+            console.log('totaliva:' + totaliva);
+            totales = ` <dte:Totales>
+                          <dte:TotalImpuestos>
+                          <dte:TotalImpuesto NombreCorto="IVA" TotalMontoImpuesto="${Number(totaliva).toFixed(3)}" />
+                          </dte:TotalImpuestos>
+                          <dte:GranTotal>${total.toFixed(3)}</dte:GranTotal>
+                        </dte:Totales>`;
+          xmlstring = encabezado + emisor + receptor + frases + items + totales + footer;
+          
+          console.log(xmlstring);
+
+          resolve(xmlstring);
+        }, (error) => {
+            xmlstring='NO';
+            reject(xmlstring);
+        });
+
+
+      })
+
+    
+
+
+
+  },
+  getStrItem(numerolinea,cantidad,codmedida,descripcion,precioun,descuento,subtotal,iva){
+      
+    let totalprecio = (Number(precioun)*Number(cantidad));
+  
+    let str = ` 
+            <dte:Item BienOServicio="B" NumeroLinea="${numerolinea}">
+            <dte:Cantidad>${cantidad}</dte:Cantidad>
+            <dte:UnidadMedida>${funciones.limpiar_texto_FEL(codmedida.substring(0,3))}</dte:UnidadMedida>
+            <dte:Descripcion>${funciones.limpiar_texto_FEL(descripcion)}</dte:Descripcion>
+            <dte:PrecioUnitario>${precioun.toFixed(3)}</dte:PrecioUnitario>
+            <dte:Precio>${totalprecio.toFixed(3)}</dte:Precio>
+            <dte:Descuento>${Number(descuento)}</dte:Descuento>
+            <dte:Impuestos>
+              <dte:Impuesto>
+              <dte:NombreCorto>IVA</dte:NombreCorto>
+              <dte:CodigoUnidadGravable>1</dte:CodigoUnidadGravable>
+              <dte:MontoGravable>${subtotal}</dte:MontoGravable>
+              <dte:MontoImpuesto>${iva}</dte:MontoImpuesto>
+              </dte:Impuesto>
+            </dte:Impuestos>
+            <dte:Total>${(Number(totalprecio)-Number(descuento)).toFixed(3)}</dte:Total>
+            </dte:Item>   
+          `;
+    
+    return str;
+  },
+  limpiar_texto_FEL:(texto)=>{
+      var ignorarMayMin = true;
+      var reemplazarCon = " pulg";
+      var reemplazarQue = '"';
+      reemplazarQue = reemplazarQue.replace(/[\\^$.|?*+()[{]/g, "\\$&"),
+      reemplazarCon = reemplazarCon.replace(/\$(?=[$&`"'\d])/g, "$$$$"),
+      modif = "g" + (ignorarMayMin ? "i" : ""),
+      regex = new RegExp(reemplazarQue, modif);
+      let resultado = texto.replace(regex,reemplazarCon);
+      resultado = resultado.replace('ñ','n');
+      resultado = resultado.replace('Ñ','N');
+      return resultado;
   },
   imprimirTicket2(coddoc,correlativo,fechaemision,nit,nombre,direccion,fel_uudi,fel_serie,fel_numero,fel_fecha){
 
